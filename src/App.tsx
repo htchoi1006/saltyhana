@@ -12,23 +12,15 @@ import RecommendPage from "./pages/RecommendPage/RecommendPage";
 import TestPage from "./pages/TestPage/TestPage";
 import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
-
-const AppContainer = styled.div`
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-`;
+import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 
 const App: React.FC = () => {
   return (
     <>
       <Router>
-        <AppContainer>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route element={<DashboardLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/goal" element={<GoalPage />} />
@@ -37,8 +29,10 @@ const App: React.FC = () => {
             <Route path="/test" element={<TestPage />} />
             <Route path="/test/consumption" element={<Consumption />} />
             <Route path="/result/consumption" element={<Result />} />
-          </Routes>
-        </AppContainer>
+          </Route>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
       </Router>
     </>
   );
