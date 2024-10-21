@@ -1,6 +1,6 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
-import { HeaderWrapper } from "./styles";
+import { HeaderWrapper, BodyWrapper, StyledNav } from "./styles";
 
 export default function DashboardLayout() {
   return (
@@ -15,9 +15,30 @@ export default function DashboardLayout() {
           </div>
         </HeaderWrapper>
       </header>
-      <div>
-        <Outlet />
-      </div>
+      <BodyWrapper>
+        <StyledNav>
+          <ul>
+            <li>
+              <Link to="/home">홈</Link>
+            </li>
+            <li>
+              <Link to="/calendar">캘린더</Link>
+            </li>
+            <li>
+              <Link to="/goal">목표 설정</Link>
+            </li>
+            <li>
+              <Link to="/assets">개인 자산</Link>
+            </li>
+            <li>
+              <Link to="/recommend">상품 추천</Link>
+            </li>
+          </ul>
+        </StyledNav>
+        <div style={{ flex: 1 }}>
+          <Outlet />
+        </div>
+      </BodyWrapper>
     </>
   );
 }
