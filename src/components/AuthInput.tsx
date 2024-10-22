@@ -1,18 +1,18 @@
-import { forwardRef, ReactNode } from "react";
+import { forwardRef, ReactNode, HTMLInputTypeAttribute } from "react";
 import styled from "styled-components";
 
 interface Props {
   labelName: string;
   placeholder: string;
-  type?: "";
+  type?: HTMLInputTypeAttribute;
   startIcon: ReactNode;
   endIcon?: ReactNode;
+  name: string;
 }
 
 const InputLabel = styled.span`
   color: #757575;
   font-weight: 400;
-  font-size: small;
 `;
 
 const InputWrapper = styled.div`
@@ -30,10 +30,12 @@ const UnstyledInput = styled.input`
   outline: none;
   line-height: 140%;
   background-color: inherit;
+  width: 100%;
+  font-size: inherit;
 `;
 
 const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { labelName, placeholder, startIcon, endIcon, type } = props;
+  const { labelName, placeholder, startIcon, endIcon, type, name } = props;
   return (
     <label>
       <div>
@@ -42,7 +44,12 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
       <InputWrapper>
         <div>{startIcon}</div>
         <div style={{ flex: 1 }}>
-          <UnstyledInput type={type} ref={ref} placeholder={placeholder} />
+          <UnstyledInput
+            type={type}
+            name={name}
+            ref={ref}
+            placeholder={placeholder}
+          />
         </div>
         {endIcon && <div>{endIcon}</div>}
       </InputWrapper>
