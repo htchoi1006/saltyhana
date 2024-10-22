@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import SignupPage from "./pages/SingupPage/SingupPage";
+import SignupPage from "./pages/SignupPage/SignupPage";
 import TeststartPage from "./pages/TeststartPage/TeststartPage";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
@@ -47,8 +47,6 @@ const App: React.FC = () => {
             <Route path="/test/consumption" element={<Consumption />} />
             <Route path="/result/consumption" element={<Result />} />
           </Route>
-          {/* ======= */}
-          {/* >>>>>>> Stashed changes
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/teststart" element={<TeststartPage />} />

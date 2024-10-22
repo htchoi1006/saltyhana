@@ -17,12 +17,7 @@ import trophy from "../../images/trophy.png";
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const navigate = useNavigate();
 
-  //라우팅은 이렇게 하시면 돼요
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
   //라우팅은 이렇게 하시면 돼요
   const handleLoginClick = () => {
     navigate("/login");
