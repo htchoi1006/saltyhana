@@ -4,6 +4,7 @@ import styled from "styled-components";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SingupPage/SingupPage";
+import TeststartPage from "./pages/TeststartPage/TeststartPage";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import GoalPage from "./pages/GoalPage/GoalPage";
@@ -14,10 +15,25 @@ import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 
+const AppContainer = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+
 const App: React.FC = () => {
   return (
     <>
       <Router>
+        {/* <AppContainer>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            
+          </Routes>
+        </AppContainer> */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route element={<DashboardLayout />}>
@@ -32,6 +48,7 @@ const App: React.FC = () => {
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/teststart" element={<TeststartPage />} />
         </Routes>
       </Router>
     </>
