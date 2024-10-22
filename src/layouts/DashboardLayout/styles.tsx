@@ -127,6 +127,11 @@ export const ReservationIcon = styled.img`
   height: 20px;
 `;
 
+export const SettingIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
 export const HanaLogo = styled.img`
   width: 45px;
   height: auto;
