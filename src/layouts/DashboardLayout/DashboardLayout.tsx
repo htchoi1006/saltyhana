@@ -1,13 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
 import * as styled from "./styles";
 import { useNavigate } from "react-router-dom";
-import { Home, Calendar, Settings, LogOut } from "lucide-react";
 import sidebar_home from "../../images/sidebar_home.png";
 import sidebar_calendar from "../../images/sidebar_calendar.png";
 import sidebar_goal from "../../images/sidebar_goal.png";
 import sidebar_assets from "../../images/sidebar_assets.png";
 import sidebar_recommend from "../../images/sidebar_recommend.png";
 import sidebar_reservation from "../../images/sidebar_reservation.png";
+import sidebar_setting from "../../images/sidebar_setting.png";
 import hana_logo from "../../images/hanabank_logo.png";
 
 import { HeaderWrapper, BodyWrapper } from "./styles";
@@ -90,8 +90,8 @@ export default function DashboardLayout() {
 
           <styled.SettingsSection>
             <styled.MenuItem>
-              <Settings />
-              <span>로그아웃</span>
+              <styled.SettingIcon src={sidebar_setting} />
+              <span style={{ color: "#b1b1b1" }}>로그아웃</span>
             </styled.MenuItem>
           </styled.SettingsSection>
         </styled.SidebarContainer>
