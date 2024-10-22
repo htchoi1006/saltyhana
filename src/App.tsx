@@ -4,6 +4,7 @@ import styled from "styled-components";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SingupPage/SingupPage";
+// <<<<<<< Updated upstream
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import GoalPage from "./pages/GoalPage/GoalPage";
@@ -13,6 +14,15 @@ import TestPage from "./pages/TestPage/TestPage";
 import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
+// =======
+
+const AppContainer = styled.div`
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+`;
+// >>>>>>> Stashed changes
 
 const App: React.FC = () => {
   return (
@@ -20,6 +30,7 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          {/* <<<<<<< Updated upstream */}
           <Route element={<DashboardLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
@@ -30,8 +41,10 @@ const App: React.FC = () => {
             <Route path="/test/consumption" element={<Consumption />} />
             <Route path="/result/consumption" element={<Result />} />
           </Route>
+          {/* ======= */}
+          {/* >>>>>>> Stashed changes
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signup" element={<SignupPage />} /> */}
         </Routes>
       </Router>
     </>
