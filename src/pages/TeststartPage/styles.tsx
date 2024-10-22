@@ -30,21 +30,20 @@ export const Container = styled.div`
 `;
 
 export const Logo = styled.div`
-  /*자산을 하나로*/
-  position: absolute;
-  width: 228px;
-  height: 60px;
-  left: 23px;
-  top: 22px;
-
-  font-family: "Noto Sans KR";
+  font-family: “Noto Sans KR”;
   font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: px;
+  font-weight: 900;
+  font-size: 26px;
+  line-height: 41px;
+  margin-left: 10px;
+  color: #000000;
+`;
+export const HanaLogo = styled.img`
+  width: 45;
+  height: auto;
 `;
 
-export const Button = styled.button`
+export const ButtonWrapper = styled.div`
   /* 시작하기 Button */
   display: flex;
   flex-direction: row;
@@ -110,11 +109,16 @@ export const Element3 = styled.div`
   width: 339px;
   height: 277px;
   left: 1138px;
-  top: 420px;
+  top: 435px;
 
   font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 600;
   font-size: 27px;
   line-height: px;
+`;
+
+export const ElementImg = styled.img`
+  width: 245px;
+  height: 215px;
 `;
