@@ -36,6 +36,7 @@ const App: React.FC = () => {
         </AppContainer> */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          {/* <<<<<<< Updated upstream */}
           <Route element={<DashboardLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
@@ -46,6 +47,8 @@ const App: React.FC = () => {
             <Route path="/test/consumption" element={<Consumption />} />
             <Route path="/result/consumption" element={<Result />} />
           </Route>
+          {/* ======= */}
+          {/* >>>>>>> Stashed changes
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/teststart" element={<TeststartPage />} />
