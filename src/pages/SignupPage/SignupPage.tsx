@@ -52,6 +52,7 @@ export default function SignupPage() {
                 labelName="이메일"
                 placeholder="이메일을 입력해주세요."
                 name="email"
+                autoComplete="email"
                 startIcon={<img src={EmailIcon} alt="email icon" />}
                 ref={emailInputRef}
               />
@@ -59,6 +60,7 @@ export default function SignupPage() {
                 labelName="아이디"
                 placeholder="아이디를 입력해주세요."
                 name="id"
+                autoComplete="username"
                 startIcon={<img src={EmailIcon} alt="email icon" />}
                 ref={idInputRef}
               />
@@ -67,6 +69,7 @@ export default function SignupPage() {
                 placeholder="비밀번호를 입력해주세요."
                 name="password"
                 type="password"
+                autoComplete="new-password"
                 startIcon={
                   <img src={LockPasswordIcon} alt="lock-password icon" />
                 }
@@ -76,6 +79,7 @@ export default function SignupPage() {
                 labelName="생년월일"
                 placeholder="생년월일을 입력해주세요."
                 name="birth"
+                autoComplete="off"
                 startIcon={<img src={SmartphoneIcon} alt="smartphone icon" />}
                 ref={birthInputRef}
               />

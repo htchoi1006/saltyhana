@@ -11,6 +11,7 @@ export const Container = styled.div`
 
 export const Paper = styled.div`
   min-width: 320px;
+  max-width: 450px;
   width: 100%;
   margin: 0 25px;
   background: #f6f6f6;
@@ -46,12 +47,6 @@ export const FormWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 `;
 
 export const InputsWrapper = styled.div`
