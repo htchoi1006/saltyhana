@@ -21,7 +21,6 @@ export const Con = styled.div`
 `;
 
 export const Container1 = styled.div`
-  //2. 어떤 컴포넌트에 대해 스타일을 선언할 때는 [export const 이름 = styled.div] 로 선언합니다.
   background-color: #e9edf08f;
   h1 {
     color: #333;
@@ -189,7 +188,6 @@ export const Con2DivforImage = styled.img`
 `;
 
 export const Box = styled.div`
-  /* position: absolute; */
   width: 150px;
   height: 152px;
 
