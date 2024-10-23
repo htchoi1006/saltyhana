@@ -5,6 +5,9 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import TeststartPage from "./pages/TeststartPage/TeststartPage";
+import TestresultPage1 from "./pages/TestResultPage/TestresultPage1";
+import TestresultPage2 from "./pages/TestResultPage/TestresultPage2";
+import TestresultPage3 from "./pages/TestResultPage/TestresultPage3";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import GoalPage from "./pages/GoalPage/GoalPage";
@@ -50,6 +53,9 @@ const App: React.FC = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/teststart" element={<TeststartPage />} />
+          <Route path="/testresult1" element={<TestresultPage1 />} />
+          <Route path="/testresult2" element={<TestresultPage2 />} />
+          <Route path="/testresult3" element={<TestresultPage3 />} />
         </Routes>
       </Router>
     </>
