@@ -1,4 +1,9 @@
-import { forwardRef, ReactNode, HTMLInputTypeAttribute } from "react";
+import {
+  forwardRef,
+  ReactNode,
+  HTMLInputTypeAttribute,
+  HTMLInputAutoCompleteAttribute,
+} from "react";
 import styled from "styled-components";
 
 interface Props {
@@ -8,6 +13,7 @@ interface Props {
   startIcon: ReactNode;
   endIcon?: ReactNode;
   name: string;
+  autoComplete?: HTMLInputAutoCompleteAttribute;
 }
 
 const InputLabel = styled.span`
@@ -35,7 +41,15 @@ const UnstyledInput = styled.input`
 `;
 
 const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { labelName, placeholder, startIcon, endIcon, type, name } = props;
+  const {
+    labelName,
+    placeholder,
+    startIcon,
+    endIcon,
+    type,
+    name,
+    autoComplete,
+  } = props;
   return (
     <label>
       <div>
@@ -49,6 +63,7 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
             name={name}
             ref={ref}
             placeholder={placeholder}
+            autoComplete={autoComplete}
           />
         </div>
         {endIcon && <div>{endIcon}</div>}
