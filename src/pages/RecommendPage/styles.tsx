@@ -17,9 +17,7 @@ export const ProductList = styled.div`
   max-width: 1728px;
   justify-content: space-between;
   row-gap: 85px; /* 세로 줄 간의 간격을 조정 */
-  margin-left: 42px;
-  margin-top: 40px;
-  margin-right: 132px;
+  margin: 42px 42px 40px;
 `;
 
 // 상품 카드와 제목을 감싸는 래퍼
