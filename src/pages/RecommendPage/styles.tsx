@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 // 페이지 본문
 export const BodyWrapper = styled.div`
   display: flex;
