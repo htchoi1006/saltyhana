@@ -93,8 +93,10 @@ export const MenuSection = styled.div`
 `;
 
 export const SettingsSection = styled.div`
-  margin-top: auto;
+  /* margin-top: auto; */
   color: #b1b1b1;
+  position: fixed;
+  bottom: 10px;
 `;
 
 export const HomeIcon = styled.img`

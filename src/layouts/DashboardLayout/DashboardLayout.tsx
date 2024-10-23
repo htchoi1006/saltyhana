@@ -86,7 +86,7 @@ export default function DashboardLayout() {
             </styled.MenuItem>
           </styled.MenuSection>
 
-          <styled.Divider />
+          {/* <styled.Divider /> */}
 
           <styled.SettingsSection>
             <styled.MenuItem>
