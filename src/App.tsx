@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import SignupPage from "./pages/SingupPage/SingupPage";
+import SignupPage from "./pages/SignupPage/SignupPage";
 import TeststartPage from "./pages/TeststartPage/TeststartPage";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
@@ -16,17 +16,17 @@ import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 
 const AppContainer = styled.div`
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+	font-family: Arial, sans-serif;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
 `;
 
 const App: React.FC = () => {
-  return (
-    <>
-      <Router>
-        {/* <AppContainer>
+	return (
+		<>
+			<Router>
+				{/* <AppContainer>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -34,25 +34,31 @@ const App: React.FC = () => {
             
           </Routes>
         </AppContainer> */}
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route element={<DashboardLayout />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/goal" element={<GoalPage />} />
-            <Route path="/assets" element={<AssetsPage />} />
-            <Route path="/recommend" element={<RecommendPage />} />
-            <Route path="/test" element={<TestPage />} />
-            <Route path="/test/consumption" element={<Consumption />} />
-            <Route path="/result/consumption" element={<Result />} />
-          </Route>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/teststart" element={<TeststartPage />} />
-        </Routes>
-      </Router>
-    </>
-  );
+				<Routes>
+					<Route path="/" element={<LandingPage />} />
+					<Route element={<DashboardLayout />}>
+						<Route path="/home" element={<HomePage />} />
+						<Route path="/calendar" element={<CalendarPage />} />
+						<Route path="/goal" element={<GoalPage />} />
+						<Route path="/assets" element={<AssetsPage />} />
+						<Route path="/recommend" element={<RecommendPage />} />
+						<Route path="/test" element={<TestPage />} />
+						<Route
+							path="/test/consumption"
+							element={<Consumption />}
+						/>
+						<Route
+							path="/result/consumption"
+							element={<Result />}
+						/>
+					</Route>
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/signup" element={<SignupPage />} />
+					<Route path="/teststart" element={<TeststartPage />} />
+				</Routes>
+			</Router>
+		</>
+	);
 };
 
 export default App;
