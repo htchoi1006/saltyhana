@@ -36,6 +36,7 @@ const App: React.FC = () => {
         </AppContainer> */}
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          {/* <<<<<<< Updated upstream */}
           <Route element={<DashboardLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
