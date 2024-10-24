@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as styled from "./styles";
 import travelLogImage from "../../images/recommend_travellog.png";
@@ -8,8 +8,21 @@ import counselIcon from "../../images/recommend_counsel.png";
 import { ReactComponent as WalletIcon } from "../../images/recommend_wallet.svg";
 import { ReactComponent as RecommendIcon } from "../../images/recommend_producticon.svg";
 
+import ChatModal from "../../components/ChatModal/ChatModal"; // 모달 컴포넌트 임포트
+
 // RecommendPage 컴포넌트: 추천 페이지를 렌더링하는 함수형 컴포넌트
 const RecommendPage: React.FC = () => {
+  // 채팅 모달 구현을 위한 것
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       {/* 전체 페이지의 레이아웃 */}
@@ -56,20 +69,6 @@ const RecommendPage: React.FC = () => {
             </styled.ProductCard>
             <styled.ProductTitle>달달하나 적금</styled.ProductTitle>
           </styled.ProductWrapper>
-
-          {/* 이미지 크기 수정 요망 */}
-          {/* 
-          <styled.ProductWrapper>
-            <styled.ProductCard >
-              <styled.ProductCardTitle>달달 하나</styled.ProductCardTitle>
-              <styled.ProductInfo>
-                혜택(2백만원까지)
-                <br />
-                기본 0.10%~최고 3.00%(연, 세전)
-              </styled.ProductInfo>
-            </styled.ProductCard>
-            <styled.ProductTitle>달달하나 적금</styled.ProductTitle>
-          </styled.ProductWrapper> */}
 
           {/* 하나 청년도약 계좌 */}
           <styled.ProductWrapper>
@@ -119,7 +118,7 @@ const RecommendPage: React.FC = () => {
           </styled.TestCard>
 
           {/* 고객센터 버튼 */}
-          <styled.CounselBox>
+          <styled.CounselBox onClick={openModal}>
             <styled.IconWrapper>
               {/* 고객센터 아이콘 */}
               <styled.IconImage src={counselIcon} alt="고객센터 아이콘" />
@@ -127,6 +126,9 @@ const RecommendPage: React.FC = () => {
             {/* 고객센터 텍스트 */}
             <styled.CounselText>고객센터</styled.CounselText>
           </styled.CounselBox>
+
+          {/* 모달 랜더링 */}
+          <ChatModal isOpen={isModalOpen} onClose={closeModal} />
         </styled.ProductList>
       </styled.BodyWrapper>
     </div>
