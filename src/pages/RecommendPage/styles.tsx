@@ -222,7 +222,7 @@ export const CounselBox = styled.div`
   cursor: pointer;
   gap: 10px; /* 아이콘과 텍스트 간격 */
   margin-top: 60px;
-  margin-left: auto; /* 화면 오른쪽으로 붙임 */
+  margin-left: auto; /* 화면 왼쪽으로 붙임 */
   transition: transform 0.5s ease; /* 부드러운 전환 효과 추가 */
 
   &:hover {
