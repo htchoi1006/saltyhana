@@ -2,13 +2,11 @@ import { useState } from "react";
 import icon_left from "../../images/modal_leftscroll.png";
 import icon_right from "../../images/modal_rightscroll.png";
 import icon_search from "../../images/modal_search.png";
-import BankLocation from "../BankLocation";
-import { Bank } from "../BankLocation";
+import BankLocation from "../Maps/BankLocation";
+import { Bank } from "../Maps/BankLocation";
 import ModalsOk from "./ModalsOk";
 
 import {
-  BgModal,
-  ModalContainer,
   MapContainer,
   LocationButtonContainer,
   SearchBox,
@@ -21,8 +19,13 @@ import {
   TimeButtonContainer,
   ScrollButton,
 } from "./styles";
+import ModalsBackground from "./ModalsBackground";
 
-const Modals = () => {
+interface ModalsProps {
+  onClose: () => void; // 전달받은 모달 닫기 함수
+}
+
+const Modals = ({ onClose }: ModalsProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [startIndex, setStartIndex] = useState(0); // 현재 시작 인덱스
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -43,14 +46,10 @@ const Modals = () => {
 
   // 모달 닫기 함수
   const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  // 모달 바깥을 클릭하면 모달 닫기
-  const handleBgClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      handleClose();
+    if (!isReservationConfirmed) {
+      setIsOpen(false); // 모달 닫기
     }
+    onClose();
   };
 
   // 예약하기 버튼 클릭 처리
@@ -162,117 +161,118 @@ const Modals = () => {
   return (
     <>
       {isOpen && (
-        <BgModal onClick={handleBgClick}>
-          <ModalContainer>
-            <div>
-              <MapContainer>
-                <BankLocation onSelectBank={handleSelectBank} />
-              </MapContainer>
+        <ModalsBackground onClose={onClose}>
+          <div>
+            <MapContainer>
+              <BankLocation onSelectBank={handleSelectBank} />
+            </MapContainer>
 
-              {/* 지점 및 시간 선택을 위한 레이아웃 */}
-              <LocationButtonContainer>
-                <SearchBox>
-                  <input type="text" placeholder="지점을 검색하세요" />
-                  <img src={icon_search} alt="Search" />
-                </SearchBox>
-                <LocationButton>
-                  {selectedBank ? selectedBank : "지점을 선택하세요"}{" "}
-                  {/* 은행 이름 또는 기본 텍스트 */}
-                </LocationButton>
-              </LocationButtonContainer>
-            </div>
+            {/* 지점 및 시간 선택을 위한 레이아웃 */}
+            <LocationButtonContainer>
+              <SearchBox>
+                <input type="text" placeholder="지점을 검색하세요" />
+                <img src={icon_search} alt="Search" />
+              </SearchBox>
+              <LocationButton>
+                {selectedBank ? selectedBank : "지점을 선택하세요"}{" "}
+                {/* 은행 이름 또는 기본 텍스트 */}
+              </LocationButton>
+            </LocationButtonContainer>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              width: "88%",
+            }}
+          >
+            <p style={{ justifyContent: "start", marginLeft: "10px" }}>
+              예약할 날짜와 시간을 선택해주세요.
+            </p>
+
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                width: "88%",
+                alignItems: "center",
+                marginBottom: "10px",
               }}
             >
-              <p style={{ justifyContent: "start", marginLeft: "10px" }}>
-                예약할 날짜와 시간을 선택해주세요.
-              </p>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
-                }}
+              <DateSelector
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
               >
-                <DateSelector
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
-                >
-                  {years}
-                </DateSelector>
-                <span style={{ marginLeft: "5px" }}>년</span>
-                <DateSelector
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                >
-                  {generateMonths()}
-                </DateSelector>{" "}
-                <span style={{ marginLeft: "5px" }}>월</span>
-                <DateSelector
-                  value={selectedDay}
-                  onChange={(e) => setSelectedDay(Number(e.target.value))}
-                >
-                  {generateDays()}
-                </DateSelector>
-                <span style={{ marginLeft: "5px" }}>일</span>
-              </div>
+                {years}
+              </DateSelector>
+              <span style={{ marginLeft: "5px" }}>년</span>
+              <DateSelector
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+              >
+                {generateMonths()}
+              </DateSelector>{" "}
+              <span style={{ marginLeft: "5px" }}>월</span>
+              <DateSelector
+                value={selectedDay}
+                onChange={(e) => setSelectedDay(Number(e.target.value))}
+              >
+                {generateDays()}
+              </DateSelector>
+              <span style={{ marginLeft: "5px" }}>일</span>
             </div>
+          </div>
 
-            <div style={{ display: "flex" }}>
-              {/* 왼쪽 버튼 */}
-              <ScrollButton
-                onClick={handleLeftClick}
-                style={{ visibility: startIndex > 0 ? "visible" : "hidden" }} // 버튼이 사라져도 공간 유지
-              >
-                <img
-                  src={icon_left}
-                  alt="Left Scroll"
-                  style={{ width: "15px" }}
-                />
-              </ScrollButton>
+          <div style={{ display: "flex" }}>
+            {/* 왼쪽 버튼 */}
+            <ScrollButton
+              onClick={handleLeftClick}
+              style={{ visibility: startIndex > 0 ? "visible" : "hidden" }} // 버튼이 사라져도 공간 유지
+            >
+              <img
+                src={icon_left}
+                alt="Left Scroll"
+                style={{ width: "15px" }}
+              />
+            </ScrollButton>
 
-              {/* 시간 선택 버튼 */}
-              <TimeButtonContainer>
-                {generateTimeSlots().slice(startIndex, startIndex + 7)}
-              </TimeButtonContainer>
+            {/* 시간 선택 버튼 */}
+            <TimeButtonContainer>
+              {generateTimeSlots().slice(startIndex, startIndex + 7)}
+            </TimeButtonContainer>
 
-              {/* 오른쪽 버튼 */}
-              <ScrollButton
-                onClick={handleRightClick}
-                style={{
-                  visibility:
-                    startIndex < generateTimeSlots().length - 7
-                      ? "visible"
-                      : "hidden",
-                }} // 버튼이 사라져도 공간 유지
-              >
-                <img
-                  src={icon_right}
-                  alt="Right Scroll"
-                  style={{ width: "15px" }}
-                />
-              </ScrollButton>
-            </div>
-            {/* 예약 및 닫기 버튼 */}
-            <ButtonContainer>
-              <CloseButton onClick={handleClose}>닫기</CloseButton>
-              <ReserveButton onClick={handleReserve}>예약하기</ReserveButton>
-            </ButtonContainer>
-          </ModalContainer>
-        </BgModal>
+            {/* 오른쪽 버튼 */}
+            <ScrollButton
+              onClick={handleRightClick}
+              style={{
+                visibility:
+                  startIndex < generateTimeSlots().length - 7
+                    ? "visible"
+                    : "hidden",
+              }} // 버튼이 사라져도 공간 유지
+            >
+              <img
+                src={icon_right}
+                alt="Right Scroll"
+                style={{ width: "15px" }}
+              />
+            </ScrollButton>
+          </div>
+          {/* 예약 및 닫기 버튼 */}
+          <ButtonContainer>
+            <CloseButton onClick={handleClose}>닫기</CloseButton>
+            <ReserveButton onClick={handleReserve}>예약하기</ReserveButton>
+          </ButtonContainer>
+        </ModalsBackground>
       )}
       {isReservationConfirmed && (
         <ModalsOk
-          onClose={() => setIsReservationConfirmed(false)}
-          selectedBank={selectedBank} // 선택된 은행
-          selectedDate={`${selectedYear}-${selectedMonth}-${selectedDay}`} // 선택된 날짜
-          selectedTime={selectedTime} // 선택된 시간
+          onClose={() => {
+            setIsReservationConfirmed(false);
+            onClose();
+          }}
+          selectedBank={selectedBank}
+          selectedDate={`${selectedYear}-${selectedMonth}-${selectedDay}`}
+          selectedTime={selectedTime}
         />
       )}
     </>

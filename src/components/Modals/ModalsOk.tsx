@@ -3,11 +3,11 @@ import icon_ok from "../../images/modal_ok.png";
 import React, { FC } from "react";
 
 interface ModalsOkProps {
-  onClose: () => void; // Define the type for the onClose prop
+  onClose: () => void;
 }
 
 interface ModalsOkProps {
-  onClose: () => void; // onClose prop type
+  onClose: () => void; // onClose
   selectedBank: string | null; // 추가: 선택된 은행
   selectedDate: string; // 추가: 선택된 날짜
   selectedTime: string | null; // 추가: 선택된 시간

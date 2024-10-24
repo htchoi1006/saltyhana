@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 import * as styled from "./styles";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +12,11 @@ import sidebar_setting from "../../images/sidebar_setting.png";
 import hana_logo from "../../images/hanabank_logo.png";
 
 import { HeaderWrapper, BodyWrapper } from "./styles";
+import Modals from "../../components/Modals/Modals";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleHomeClick = () => {
     navigate("/home");
@@ -33,6 +36,15 @@ export default function DashboardLayout() {
 
   const handleRecommendClick = () => {
     navigate("/recommend");
+  };
+
+  //모달 관리
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -80,10 +92,11 @@ export default function DashboardLayout() {
               <span>상품 추천</span>
             </styled.MenuItem>
 
-            <styled.MenuItem>
+            <styled.MenuItem onClick={handleOpenModal}>
               <styled.ReservationIcon src={sidebar_reservation} />
               <span>창구 예약</span>
             </styled.MenuItem>
+            {isModalOpen && <Modals onClose={handleCloseModals} />}
           </styled.MenuSection>
 
           {/* <styled.Divider /> */}
