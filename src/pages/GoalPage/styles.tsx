@@ -89,7 +89,7 @@ export const UnitText = styled.span`
 `;
 
 export const SubText = styled.p`
-	font-size: 14px;
+	font-size: 16px;
 	color: #666;
 	margin-top: 12px;
 `;
