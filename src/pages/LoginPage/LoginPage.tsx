@@ -1,19 +1,78 @@
-import React from "react";
-import styled from "styled-components";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
 
-const Container = styled.div`
-	h1 {
-		color: #444;
-	}
-`;
+import {
+  Container,
+  ImgWrapper,
+  Paper,
+  FormWrapper,
+  InputsWrapper,
+  StyledButton,
+  FooterParagraph,
+} from "../SignupPage/styles";
+import { StyledLink } from "./styles";
+import authImage from "../../images/AuthImg.png";
+import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
+import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
+import AuthInput from "../../components/AuthInput";
 
-const LoginPage: React.FC = () => {
-	return (
-		<Container>
-			<h1>로그인 페이지</h1>
-			<p>로그인 페이지 입니다 </p>
-		</Container>
-	);
-};
+export default function LoginPage() {
+  const idInputRef = useRef<HTMLInputElement | null>(null);
+  const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
-export default LoginPage;
+  return (
+    <Container>
+      <FormWrapper>
+        <Paper>
+          <h2>쉽게 들이는 저축 습관</h2>
+          <h1>자산을 하나로</h1>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log(idInputRef.current?.value);
+              console.log(passwordInputRef.current?.value);
+            }}
+          >
+            <InputsWrapper>
+              <AuthInput
+                labelName="아이디"
+                placeholder="아이디를 입력해주세요."
+                name="id"
+                autoComplete="username"
+                startIcon={<img src={EmailIcon} alt="email icon" />}
+                ref={idInputRef}
+              />
+              <AuthInput
+                labelName="비밀번호"
+                placeholder="비밀번호를 입력해주세요."
+                name="password"
+                type="password"
+                autoComplete="password"
+                startIcon={
+                  <img src={LockPasswordIcon} alt="lock-password icon" />
+                }
+                ref={passwordInputRef}
+              />
+            </InputsWrapper>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                margin: "5px 0",
+              }}
+            >
+              <StyledLink to="/">비밀번호를 잊어버리셨나요?</StyledLink>
+            </div>
+            <StyledButton type="submit">로그인</StyledButton>
+          </form>
+          <FooterParagraph>
+            회원이 아니신가요? <Link to="/signup">회원가입</Link>
+          </FooterParagraph>
+        </Paper>
+      </FormWrapper>
+      <ImgWrapper>
+        <img src={authImage} style={{ maxWidth: "50vw", maxHeight: "100vh" }} />
+      </ImgWrapper>
+    </Container>
+  );
+}
