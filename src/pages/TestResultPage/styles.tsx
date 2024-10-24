@@ -77,13 +77,13 @@ export const YourTypeTag1 = styled.div`
     width: 750px;
     height: 78px;
     left: 469px;
-    top: 835px;
+    top: 845px;
 
     font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 500;
     font-size: 30px;
-    line-height: 130%;
+    line-height: 150%;
     /* or 39px */
     display: flex;
     align-items: center;
@@ -158,6 +158,15 @@ export const Retry = styled.div`
     font-weight: 600;
     font-size: 30px;
   }
+
+  /* Hover 효과 추가 */
+  transition: background-color 0.5s;
+  &:hover {
+    background-color: #ffffff; /* hover 시 색상 */
+    p {
+      color: #008485; /* 텍스트 색상 변경 */
+    }
+  }
 `;
 
 export const ToMain = styled.div`
@@ -186,6 +195,14 @@ export const ToMain = styled.div`
     font-style: normal;
     font-weight: 600;
     font-size: 30px;
+  }
+  /* Hover 효과 추가 */
+  transition: background-color 0.5s;
+  &:hover {
+    background-color: #ffffff; /* hover 시 색상 */
+    p {
+      color: #008485; /* 텍스트 색상 변경 */
+    }
   }
 `;
 
