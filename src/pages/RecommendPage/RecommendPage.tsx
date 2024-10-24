@@ -7,9 +7,10 @@ import youthAccountImage from "../../images/recommend_youthaccount.png";
 import counselIcon from "../../images/recommend_counsel.png";
 import { ReactComponent as WalletIcon } from "../../images/recommend_wallet.svg";
 import { ReactComponent as RecommendIcon } from "../../images/recommend_producticon.svg";
+import CounselButton from "../../components/CounselButton/CounselButton"; // 고객센터 버튼 컴포넌트
 
 import ChatModal from "../../components/ChatModal/ChatModal"; // 모달 컴포넌트 임포트
-
+// import Loading from '../../components/LoadingModal/LoadingModal';
 // RecommendPage 컴포넌트: 추천 페이지를 렌더링하는 함수형 컴포넌트
 const RecommendPage: React.FC = () => {
   // 채팅 모달 구현을 위한 것
@@ -117,17 +118,8 @@ const RecommendPage: React.FC = () => {
             <WalletIcon />
           </styled.TestCard>
 
-          {/* 고객센터 버튼 */}
-          <styled.CounselBox onClick={openModal}>
-            <styled.IconWrapper>
-              {/* 고객센터 아이콘 */}
-              <styled.IconImage src={counselIcon} alt="고객센터 아이콘" />
-            </styled.IconWrapper>
-            {/* 고객센터 텍스트 */}
-            <styled.CounselText>고객센터</styled.CounselText>
-          </styled.CounselBox>
-
-          {/* 모달 랜더링 */}
+          <CounselButton onClick={openModal} />
+          {/* 상담 모달 */}
           <ChatModal isOpen={isModalOpen} onClose={closeModal} />
         </styled.ProductList>
       </styled.BodyWrapper>
