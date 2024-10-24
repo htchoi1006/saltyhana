@@ -14,7 +14,7 @@ interface CalendarEvent {
 }
 
 const Calendar: React.FC = () => {
-  const apiKey = "AIzaSyDK1a0AFVqigb5YxHKcc0ZZTjdFUl7zMqo";
+  const apiKey = process.env.REACT_APP_CAL_API_KEY;
   const calendarRef = React.useRef<FullCalendar>(null);
   // 현재 날짜로 초기화
   const today = new Date();
