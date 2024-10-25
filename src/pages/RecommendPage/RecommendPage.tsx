@@ -8,8 +8,8 @@ import counselIcon from "../../images/recommend_counsel.png";
 import { ReactComponent as WalletIcon } from "../../images/recommend_wallet.svg";
 import { ReactComponent as RecommendIcon } from "../../images/recommend_producticon.svg";
 import CounselButton from "../../components/CounselButton/CounselButton"; // 고객센터 버튼 컴포넌트
-
 import ChatModal from "../../components/ChatModal/ChatModal"; // 모달 컴포넌트 임포트
+
 // import Loading from '../../components/LoadingModal/LoadingModal';
 // RecommendPage 컴포넌트: 추천 페이지를 렌더링하는 함수형 컴포넌트
 const RecommendPage: React.FC = () => {
@@ -117,10 +117,6 @@ const RecommendPage: React.FC = () => {
             </styled.TestCardText>
             <WalletIcon />
           </styled.TestCard>
-
-          <CounselButton onClick={openModal} />
-          {/* 상담 모달 */}
-          <ChatModal isOpen={isModalOpen} onClose={closeModal} />
         </styled.ProductList>
       </styled.BodyWrapper>
     </div>

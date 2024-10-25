@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import * as styled from "./styles";
 
 import hana_logo from "../../images/hanabank_logo.png";
 import Sidebar from "../../components/Sidebar/Sidebar";
+
+import CounselButton from "../../components/CounselButton/CounselButton"; // 고객센터 버튼 컴포넌트
+import ChatModal from "../../components/ChatModal/ChatModal"; // 모달 컴포넌트 임포트
 
 import {
   FixedHeader,
@@ -14,6 +18,16 @@ import {
 } from "./styles";
 
 export default function DashboardLayout() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <FixedHeader>
@@ -37,6 +51,12 @@ export default function DashboardLayout() {
         <div style={{ flex: 1 }}>
           <HeaderOffset></HeaderOffset>
           <Outlet />
+        </div>
+
+        <div style={{}}>
+          {/* 상담 모달 */}
+          <CounselButton onClick={openModal} />
+          <ChatModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
       </Main>
     </>
