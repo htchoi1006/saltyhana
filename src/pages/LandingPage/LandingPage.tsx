@@ -1,17 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as styled from "./styles";
+import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
+
 import Header from "../../layouts/LandingPageLayout/header";
 import hand from "../../images/꿈돌이손.png";
-import beer from "../../images/beer.png";
-import car from "../../images/car.png";
-import carrier from "../../images/carrier.png";
-import cart from "../../images/cart.png";
-import clothes from "../../images/clothes.png";
-import gift from "../../images/gift.png";
-import house from "../../images/house.png";
-import meet from "../../images/meet.png";
-import money from "../../images/money.png";
 import flag from "../../images/flag.png";
 import thumb from "../../images/thumb.png";
 import trophy from "../../images/trophy.png";
@@ -27,9 +20,6 @@ const LandingPage: React.FC = () => {
   const handleSignupClick = () => {
     navigate("/signup");
   };
-
-  const boxes = Array(9).fill(null);
-  const images = [beer, car, carrier, cart, clothes, gift, house, meet, money];
 
   return (
     <>
@@ -54,45 +44,13 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </styled.Container1>
-        {/* Landing 2 */}
-        <styled.Container2>
-          <div>
-            <div>
-              <styled.Con2MainText>
-                매일매일
-                <br />
-                목표로
-                <br /> 차근차근
-              </styled.Con2MainText>
-              <div>
-                <styled.Con2SubText>
-                  목표를 내가 등록할 수 있어요. <br />
-                  금액은 자유롭게 선택할 수 있어요.
-                </styled.Con2SubText>
-              </div>
-            </div>
-
-            <styled.Con2DivforBox>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)", // 3열로 설정
-                  gap: "30px", // 박스 간격
-                }}
-              >
-                {images.map((imgSrc, index) => (
-                  <styled.Box key={index}>
-                    <styled.Con2DivforImage
-                      src={imgSrc}
-                      alt={`아이템 ${index + 1}`}
-                    />
-                  </styled.Box>
-                ))}
-              </div>
-            </styled.Con2DivforBox>
-          </div>
-        </styled.Container2>
-        {/* Landing 3 */}
+      </styled.Con>
+      {/* Landing 2 */}
+      <div>
+        <LandingPageSlider />
+      </div>
+      {/* Landing 3 */}
+      <styled.Con>
         <styled.Container3>
           <div>
             <styled.Con3SubText>꾸준히 도전하고 성취감까지!</styled.Con3SubText>
