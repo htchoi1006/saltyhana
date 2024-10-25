@@ -1,15 +1,52 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 interface AccountProps {
   accountNumber: string;
+  accountName: string;
   balance: number;
 }
 
-export const PageContainer = styled.div`
-  height: 100%;
-  min-height: 100vh;
-  margin: 42px 42px 40px;
+export const AccountListContainer = styled.div`
+  display: flex;
   flex-direction: column;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  width: 200px;
+  height: 170px;
+  overflow-y: auto; // Enable vertical scrolling when list exceeds height
+  box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
+  font-family:
+    Noto Sans KR,
+    sans-serif;
+`;
+
+export const AccountItem = styled.div`
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #ffffff;
+  }
+
+  &.active {
+    background-color: #ffffff;
+    font-weight: bold;
+    color: #2a9d8f;
+  }
+`;
+
+export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
   font-family:
     Noto Sans KR,
     sans-serif;
@@ -20,6 +57,7 @@ const AccountDiv = styled.div`
   padding: 30px;
   color: white;
   border-radius: 10px;
+  margin-right: 20px;
   margin-bottom: 30px;
   justify-content: space-around;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
@@ -43,10 +81,14 @@ const AccountBalance = styled.p`
   margin-top: 30px;
 `;
 
-export const Account: React.FC<AccountProps> = ({ accountNumber, balance }) => {
+export const Account: React.FC<AccountProps> = ({
+  accountNumber,
+  accountName,
+  balance,
+}) => {
   return (
     <AccountDiv>
-      <AccountName>HANARO Account</AccountName>
+      <AccountName>{accountName}</AccountName>
       <AccountNumber>{accountNumber}</AccountNumber>
       <AccountBalance>{balance.toLocaleString()}원</AccountBalance>
     </AccountDiv>
@@ -55,10 +97,12 @@ export const Account: React.FC<AccountProps> = ({ accountNumber, balance }) => {
 
 export const ChartsContainer = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
-  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
-  max-width: 1000px;
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 const ChartBox = styled.div`
@@ -82,23 +126,18 @@ export const CumulativeSum = styled.div`
   font-size: 20px;
   font-weight: bold;
   color: #264653;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   margin-top: 20px;
 `;
 
 export const CharacterIcon = styled.img.attrs({ alt: "이미지" })`
   width: 160px;
   height: 160px;
-  background-size: cover;
-  margin-left: auto;
-  margin-top: 13px;
-  margin-right: 10px;
 `;
 
 export const AssetDiv = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const AssetGuideDiv = styled.div`

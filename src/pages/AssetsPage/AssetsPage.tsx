@@ -16,7 +16,6 @@ import {
   Filler,
   ChartOptions,
 } from "chart.js";
-
 import {
   Account,
   AssetDescription,
@@ -29,6 +28,8 @@ import {
   LineChartContainer,
   PageContainer,
   Title,
+  AccountListContainer,
+  AccountItem,
 } from "./styles";
 
 ChartJS.register(
@@ -45,25 +46,42 @@ ChartJS.register(
 );
 
 const AssetsPage: React.FC = () => {
+  const accounts = [
+    {
+      accountNumber: "352-000-0000-01",
+      accountName: "주거래 하나 통장",
+      balance: 2005333,
+    },
+    {
+      accountNumber: "352-000-0000-02",
+      accountName: "369 정기예금",
+      balance: 1523000,
+    },
+    {
+      accountNumber: "352-000-0000-03",
+      accountName: "부자씨 적금",
+      balance: 780000,
+    },
+  ]; // sample accounts
+
+  const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
   const [lineData, setLineData] = useState<any>(null);
   const [cumulativeSum, setCumulativeSum] = useState<number>(0);
-  const [zoomedRange, setZoomedRange] = useState<string>(""); // 기간을 저장하는 state 추가
+  const [zoomedRange, setZoomedRange] = useState<string>("");
 
   const generateLineData = () => {
     let labels = [];
     let endDate = new Date();
     let startDate = subDays(endDate, 30);
-
     const diffDays = Math.ceil(
       (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
     );
     labels = Array.from({ length: diffDays }, (_, i) =>
       format(subDays(endDate, diffDays - i - 1), "MMM dd"),
     );
-
-    const data = labels.map(() => Math.floor(Math.random() * 1000));
+    const data = labels.map(() => Math.floor(Math.random() * 1000000));
     const sum = data.reduce((a, b) => a + b, 0);
-    setCumulativeSum(sum);
+    setCumulativeSum(sum - (sum % 100));
 
     const minDate = format(new Date(labels[0]), "M월 dd일");
     const maxDate = format(new Date(labels[labels.length - 1]), "M월 dd일");
@@ -78,6 +96,7 @@ const AssetsPage: React.FC = () => {
           fill: true,
           borderColor: "#2A9D8F",
           backgroundColor: "rgba(42, 157, 143, 0.3)",
+          tension: 0.4, // 곡선 정도
         },
       ],
     };
@@ -122,10 +141,8 @@ const AssetsPage: React.FC = () => {
 
             const minIndex = Math.floor(xScale.min);
             const maxIndex = Math.ceil(xScale.max);
-
             const validMinIndex = Math.max(0, minIndex);
             const validMaxIndex = Math.min(yData.length - 1, maxIndex);
-
             const sum = yData
               .slice(validMinIndex, validMaxIndex + 1)
               .reduce(
@@ -133,9 +150,8 @@ const AssetsPage: React.FC = () => {
                 0,
               );
 
-            setCumulativeSum(sum);
+            setCumulativeSum(sum - (sum % 100));
 
-            // 한국어 형식으로 기간을 출력
             const minDate = format(new Date(labels[validMinIndex]), "M월 dd일");
             const maxDate = format(new Date(labels[validMaxIndex]), "M월 dd일");
             setZoomedRange(`${minDate}부터 ${maxDate}까지`);
@@ -156,33 +172,62 @@ const AssetsPage: React.FC = () => {
 
   return (
     <PageContainer>
-      <Account accountNumber={"352-000-0000-01"} balance={2005333} />
-      <ChartsContainer>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginRight: "auto",
-          }}
-        >
-          <AssetDiv>
-            <CharacterIcon src={character} />
-            <AssetGuideDiv>
-              <AssetTitle>돈을 얼마나 썼을까?</AssetTitle>
-              <AssetDescription>
-                확인하고 싶은 기간을 드래그하여 지출 금액을 확인하세요!
-              </AssetDescription>
-              <CumulativeSum>
-                {zoomedRange} 총 {cumulativeSum.toLocaleString()}원을 쓰셨네요
-              </CumulativeSum>
-            </AssetGuideDiv>
-          </AssetDiv>
+      <div style={{ flex: 1 }}>
+        <div style={{ display: "flex", flex: 1, width: "100%" }}>
+          <div style={{ flex: 1.5, paddingRight: "10px" }}>
+            {/* 계좌 박스 */}
+            <Account
+              accountNumber={selectedAccount.accountNumber}
+              accountName={selectedAccount.accountName}
+              balance={selectedAccount.balance}
+            />
+          </div>
+          <div style={{ flex: 0.5, paddingLeft: "10px" }}>
+            {/* 계좌 리스트 박스 */}
+            <AccountListContainer>
+              {accounts.map((account) => (
+                <AccountItem
+                  key={account.accountNumber}
+                  className={
+                    selectedAccount.accountNumber === account.accountNumber
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() => setSelectedAccount(account)}
+                >
+                  {account.accountName}
+                  <br></br>
+                  {account.accountNumber}
+                </AccountItem>
+              ))}
+            </AccountListContainer>
+          </div>
         </div>
-        <LineChartContainer>
-          <Title></Title>
-          {lineData && <Line data={lineData} options={lineOptions} />}
-        </LineChartContainer>
-      </ChartsContainer>
+
+        {/* 선택된 계좌 지출 그래프 컨테이너 */}
+        <ChartsContainer>
+          <div style={{ display: "flex", width: "100%" }}>
+            <AssetDiv>
+              <CharacterIcon src={character} />
+              <AssetGuideDiv>
+                <AssetTitle>돈을 얼마나 썼을까?</AssetTitle>
+                <AssetDescription>
+                  확인하고 싶은 기간을 드래그하여 지출 금액을 확인하세요!
+                </AssetDescription>
+                <CumulativeSum>
+                  {zoomedRange}
+                  <br></br>총 {cumulativeSum.toLocaleString()}원을 쓰셨네요
+                </CumulativeSum>
+              </AssetGuideDiv>
+            </AssetDiv>
+            {/* 라인 그래프 컨테이너 */}
+            <LineChartContainer style={{ flex: 1 }}>
+              <Title></Title>
+              {lineData && <Line data={lineData} options={lineOptions} />}
+            </LineChartContainer>
+          </div>
+        </ChartsContainer>
+      </div>
     </PageContainer>
   );
 };
