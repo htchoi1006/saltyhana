@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import * as styled from "./styles";
@@ -9,14 +10,22 @@ import sidebar_recommend from "../../images/sidebar_recommend.png";
 import sidebar_reservation from "../../images/sidebar_reservation.png";
 import sidebar_setting from "../../images/sidebar_setting.png";
 
+import ModalManager from "../Modals/ModalManager";
+
 interface INav {
   to: string;
   imgSrc: string;
   displayName: string;
 }
 
+interface ModalManagerType {
+  openModal: (modalName: string) => void;
+  closeModal: () => void;
+}
+
 export default function Sidebar() {
   const navigate = useNavigate();
+  const modalManagerRef = useRef<ModalManagerType>(null);
 
   const NavItems: INav[] = [
     { to: "/home", imgSrc: sidebar_home, displayName: "Home" },
@@ -29,6 +38,10 @@ export default function Sidebar() {
       displayName: "상품 추천",
     },
   ];
+
+  const handleOpenModal = () => {
+    modalManagerRef.current?.openModal("창구예약");
+  };
 
   const handleLogout = () => {
     // 로컬 스토리지에서 사용자 정보 가져오기
@@ -60,10 +73,11 @@ export default function Sidebar() {
             )}
           </styled.NavItemLink>
         ))}
-        <styled.MenuItem>
+        <styled.MenuItem onClick={handleOpenModal}>
           <styled.ReservationIcon src={sidebar_reservation} />
           <span>창구 예약</span>
         </styled.MenuItem>
+        <ModalManager ref={modalManagerRef} />
       </styled.MenuSection>
       <styled.SettingsSection>
         <styled.MenuItem onClick={handleLogout}>
