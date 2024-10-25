@@ -17,19 +17,20 @@ import TestPage from "./pages/TestPage/TestPage";
 import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
+import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccountPage";
 
 const AppContainer = styled.div`
-	font-family: Arial, sans-serif;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 `;
 
 const App: React.FC = () => {
-	return (
-		<>
-			<Router>
-				{/* <AppContainer>
+  return (
+    <>
+      <Router>
+        {/* <AppContainer>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -56,6 +57,10 @@ const App: React.FC = () => {
           <Route path="/testresult1" element={<TestresultPage1 />} />
           <Route path="/testresult2" element={<TestresultPage2 />} />
           <Route path="/testresult3" element={<TestresultPage3 />} />
+          <Route
+            path="/connecting-account"
+            element={<ConnectingAccountPage />}
+          />
         </Routes>
       </Router>
     </>
