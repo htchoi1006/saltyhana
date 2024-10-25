@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import * as styled from "./ModalStyles";
+import * as styled from "./ChatModalStyles";
 import icon from "../../images/chatmodal_counsel.png";
 import closeIcon from "../../images/chatmodal_exit.png";
 
@@ -19,11 +19,11 @@ const predefinedResponses: { [key: string]: string } = {
 };
 
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
-  // 메시지 목록 관리
   const [messages, setMessages] = useState<
     { text: string; isUser: boolean; timestamp: string }[]
   >([]);
   const [currentMessage, setCurrentMessage] = useState("");
+  const [isClosing, setIsClosing] = useState(false); // 모달 닫기 애니메이션 상태
 
   // 스크롤을 관리하기 위한 Ref
   const chatAreaRef = useRef<HTMLDivElement>(null);
@@ -89,15 +89,24 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     }
   }, [messages]);
 
+  // 모달 닫기
+  const handleCloseModal = () => {
+    setIsClosing(true); // 닫기 애니메이션 실행
+    setTimeout(() => {
+      onClose(); // 애니메이션 후 모달 닫기
+      setIsClosing(false); // 애니메이션 리셋
+    }, 300); // 애니메이션 지속 시간과 동일하게 설정
+  };
+
   if (!isOpen) return null;
 
   return (
     <styled.ModalOverlay>
-      <styled.ModalContent>
+      <styled.ModalContent closing={isClosing}>
         {/* 헤더 부분 */}
         <styled.Header>
           <styled.ChatIcon src={icon} />
-          <styled.CloseImg src={closeIcon} onClick={onClose} />
+          <styled.CloseImg src={closeIcon} onClick={handleCloseModal} />
         </styled.Header>
 
         {/* 채팅 부분 */}
