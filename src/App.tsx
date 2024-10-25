@@ -17,6 +17,7 @@ import TestPage from "./pages/TestPage/TestPage";
 import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
+import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccountPage";
 
 const AppContainer = styled.div`
   font-family: Arial, sans-serif;
@@ -56,6 +57,10 @@ const App: React.FC = () => {
           <Route path="/testresult1" element={<TestresultPage1 />} />
           <Route path="/testresult2" element={<TestresultPage2 />} />
           <Route path="/testresult3" element={<TestresultPage3 />} />
+          <Route
+            path="/connecting-account"
+            element={<ConnectingAccountPage />}
+          />
         </Routes>
       </Router>
     </>

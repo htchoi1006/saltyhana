@@ -31,6 +31,11 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
           (position) => {
             const { latitude, longitude } = position.coords;
             const newPosition = { lat: latitude, lng: longitude };
+
+            // 현재 위치와 마킹된 위치를 콘솔에 출력
+            console.log("현재 위치:", newPosition);
+            console.log("마킹된 위치:", initialPosition);
+
             setInitialPosition(newPosition); // 초기 위치를 사용자의 현재 위치로 설정
             setCurrentPosition(newPosition); // 지도 중심도 현재 위치로 설정
             onUpdatePosition(newPosition); // 부모에게 위치 정보 전달
@@ -52,6 +57,7 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
                 break;
             }
           },
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }, // 정확도 높이기 위해 설정 추가
         );
       } else {
         console.log("이 브라우저에서는 Geolocation을 지원하지 않습니다.");
@@ -75,9 +81,8 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
           image={{
             src: nowlocation, // 사용자 정의 이미지 URL
             size: {
-              // 기본: 300*435px
-              width: 45, // 이미지 너비
-              height: 65, // 이미지 높이
+              width: 45,
+              height: 65,
             },
           }}
         />
