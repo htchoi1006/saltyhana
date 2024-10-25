@@ -12,7 +12,7 @@ export const AccountListContainer = styled.div`
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 8px;
-  width: 200px;
+  width: 250px;
   height: 170px;
   overflow-y: auto; // Enable vertical scrolling when list exceeds height
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
@@ -113,8 +113,9 @@ export const LineChartContainer = styled(ChartBox)`
   padding: 20px;
   border-radius: 10px;
   height: 400px;
-  width: 100%;
+  width: 69%;
   justify-content: space-around;
+  margin-left: 30px;
 `;
 
 export const Title = styled.h3`
@@ -127,11 +128,16 @@ export const CumulativeSum = styled.div`
   font-weight: bold;
   color: #264653;
   margin-top: 20px;
+
+  > span {
+    color: #008485;
+    font-weight: 900;
+  }
 `;
 
 export const CharacterIcon = styled.img.attrs({ alt: "이미지" })`
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
 `;
 
 export const AssetDiv = styled.div`
