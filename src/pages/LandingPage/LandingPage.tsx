@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import * as styled from "./styles";
 import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
 
-import Header from "../../layouts/LandingPageLayout/header";
 import hand from "../../images/꿈돌이손.png";
 import flag from "../../images/flag.png";
 import thumb from "../../images/thumb.png";
@@ -23,7 +22,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      {/* <Header /> */}
       <styled.Con>
         {/* Landing 1 */}
 
