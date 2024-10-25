@@ -6,7 +6,7 @@ export const BodyWrapper = styled.div`
   flex-direction: column;
   padding: 20px;
   height: 100%;
-  background-color: #f0f0f0;
+  // background-color: #f0f0f0;
 `;
 
 // 상품 리스트 스타일
@@ -246,12 +246,4 @@ export const IconWrapper = styled.div`
 export const IconImage = styled.img`
   width: 35px; /* 아이콘 크기 */
   height: auto;
-`;
-
-// 고객센터 텍스트
-export const CounselText = styled.span`
-  font-family: "Noto Sans KR", sans-serif;
-  font-size: 24px;
-  font-weight: bold;
-  color: white;
 `;

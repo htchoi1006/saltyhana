@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 import * as styled from "./styles";
 import sidebar_home from "../../images/sidebar_home.png";
@@ -9,10 +9,16 @@ import sidebar_recommend from "../../images/sidebar_recommend.png";
 import sidebar_reservation from "../../images/sidebar_reservation.png";
 import sidebar_setting from "../../images/sidebar_setting.png";
 
+import ModalManager from "../Modals/ModalManager";
+
 interface INav {
   to: string;
   imgSrc: string;
   displayName: string;
+}
+interface ModalManagerType {
+  openModal: (modalName: string) => void;
+  closeModal: () => void;
 }
 
 export default function Sidebar() {
@@ -23,6 +29,12 @@ export default function Sidebar() {
     { to: "/assets", imgSrc: sidebar_assets, displayName: "개인 자산" },
     { to: "/recommend", imgSrc: sidebar_recommend, displayName: "상품 추천" },
   ];
+
+  const modalManagerRef = useRef<ModalManagerType>(null);
+
+  const handleOpenModal = () => {
+    modalManagerRef.current?.openModal("창구예약");
+  };
 
   return (
     <styled.SidebarContainer>
@@ -37,10 +49,11 @@ export default function Sidebar() {
             )}
           </styled.NavItemLink>
         ))}
-        <styled.MenuItem>
+        <styled.MenuItem onClick={handleOpenModal}>
           <styled.ReservationIcon src={sidebar_reservation} />
           <span>창구 예약</span>
         </styled.MenuItem>
+        <ModalManager ref={modalManagerRef} />
       </styled.MenuSection>
       {/* <styled.Divider /> */}
       <styled.SettingsSection>
