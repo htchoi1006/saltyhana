@@ -28,6 +28,12 @@ const RecommendPage: React.FC = () => {
     <div>
       {/* 전체 페이지의 레이아웃 */}
       <styled.BodyWrapper>
+        <styled.PageTitle>
+          <span>맞춤형 상품 추천</span>
+        </styled.PageTitle>
+        <styled.PageDescription>
+          <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
+        </styled.PageDescription>
         {/* 상품 리스트가 표시되는 섹션 */}
         <styled.ProductList>
           {/* 트래블로그 여행 적금 카드 */}
