@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import { subDays, format } from "date-fns";
+import character from "../../images/personal_asset_character.svg";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -18,6 +19,11 @@ import {
 
 import {
   Account,
+  AssetDescription,
+  AssetDiv,
+  AssetGuideDiv,
+  AssetTitle,
+  CharacterIcon,
   ChartsContainer,
   CumulativeSum,
   LineChartContainer,
@@ -41,6 +47,7 @@ ChartJS.register(
 const AssetsPage: React.FC = () => {
   const [lineData, setLineData] = useState<any>(null);
   const [cumulativeSum, setCumulativeSum] = useState<number>(0);
+  const [zoomedRange, setZoomedRange] = useState<string>(""); // 기간을 저장하는 state 추가
 
   const generateLineData = () => {
     let labels = [];
@@ -58,6 +65,10 @@ const AssetsPage: React.FC = () => {
     const sum = data.reduce((a, b) => a + b, 0);
     setCumulativeSum(sum);
 
+    const minDate = format(new Date(labels[0]), "M월 dd일");
+    const maxDate = format(new Date(labels[labels.length - 1]), "M월 dd일");
+    setZoomedRange(`${minDate}부터 ${maxDate}까지`);
+
     return {
       labels,
       datasets: [
@@ -72,55 +83,66 @@ const AssetsPage: React.FC = () => {
     };
   };
 
-  // const calculateCumulativeSum = (e: any) => {
-  //   const xScale = e.chart.scales.x as any; // Cast to any type for easier access
-  //   const yData = e.chart.data.datasets[0].data as number[];
-
-  //   // Get the indices of the visible X-axis range
-  //   const minIndex = Math.floor(xScale.min);
-  //   const maxIndex = Math.ceil(xScale.max);
-
-  //   // Ensure indices are within valid range
-  //   const validMinIndex = Math.max(0, minIndex);
-  //   const validMaxIndex = Math.min(yData.length - 1, maxIndex);
-
-  //   // Calculate the sum of Y values in the visible range
-  //   const sum = yData.slice(validMinIndex, validMaxIndex + 1)
-  //     .reduce((acc, val) => acc + (typeof val === 'number' ? val : 0), 0);
-
-  //   setCumulativeSum(sum);
-  // };
-
   const lineOptions: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
     layout: {
       padding: {
-        top: 40,
-        bottom: 40,
-        left: 30,
-        right: 30,
+        bottom: 20,
+        left: 10,
+        right: 10,
       },
     },
     scales: {
       x: {
         type: "category",
         ticks: {
-          padding: 10,
+          padding: 5,
         },
       },
       y: {
         ticks: {
-          padding: 10,
+          padding: 5,
         },
       },
     },
     plugins: {
       zoom: {
         zoom: {
-          wheel: {
+          drag: {
             enabled: true,
+            backgroundColor: "rgba(42, 157, 143, 0.2)",
+            borderColor: "rgba(42, 157, 143, 1)",
           },
+          mode: "x",
+          onZoomComplete: (e) => {
+            const xScale = e.chart.scales.x as any;
+            const yData = e.chart.data.datasets[0].data as number[];
+            const labels = e.chart.data.labels as string[];
+
+            const minIndex = Math.floor(xScale.min);
+            const maxIndex = Math.ceil(xScale.max);
+
+            const validMinIndex = Math.max(0, minIndex);
+            const validMaxIndex = Math.min(yData.length - 1, maxIndex);
+
+            const sum = yData
+              .slice(validMinIndex, validMaxIndex + 1)
+              .reduce(
+                (acc, val) => acc + (typeof val === "number" ? val : 0),
+                0,
+              );
+
+            setCumulativeSum(sum);
+
+            // 한국어 형식으로 기간을 출력
+            const minDate = format(new Date(labels[validMinIndex]), "M월 dd일");
+            const maxDate = format(new Date(labels[validMaxIndex]), "M월 dd일");
+            setZoomedRange(`${minDate}부터 ${maxDate}까지`);
+          },
+        },
+        pan: {
+          enabled: true,
           mode: "x",
         },
       },
@@ -136,14 +158,31 @@ const AssetsPage: React.FC = () => {
     <PageContainer>
       <Account accountNumber={"352-000-0000-01"} balance={2005333} />
       <ChartsContainer>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginRight: "auto",
+          }}
+        >
+          <AssetDiv>
+            <CharacterIcon src={character} />
+            <AssetGuideDiv>
+              <AssetTitle>돈을 얼마나 썼을까?</AssetTitle>
+              <AssetDescription>
+                확인하고 싶은 기간을 드래그하여 지출 금액을 확인하세요!
+              </AssetDescription>
+              <CumulativeSum>
+                {zoomedRange} 총 {cumulativeSum.toLocaleString()}원을 쓰셨네요
+              </CumulativeSum>
+            </AssetGuideDiv>
+          </AssetDiv>
+        </div>
         <LineChartContainer>
-          <Title>Asset Change Over Time</Title>
+          <Title></Title>
           {lineData && <Line data={lineData} options={lineOptions} />}
         </LineChartContainer>
       </ChartsContainer>
-      <CumulativeSum>
-        Cumulative Sum of Visible Data: {cumulativeSum}
-      </CumulativeSum>
     </PageContainer>
   );
 };
