@@ -12,6 +12,7 @@ export const BgModal = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1500;
 `;
 
 //모달 레이아웃
@@ -33,7 +34,7 @@ export const ModalContainer = styled.div`
 export const MapContainer = styled.div`
   width: 480px;
   height: 250px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: center;
 
@@ -47,6 +48,7 @@ export const MapContainer = styled.div`
 export const LocationButtonContainer = styled.div`
   display: flex;
   align-items: center;
+  width: 85%;
 `;
 
 export const SearchBox = styled.div`
@@ -57,7 +59,7 @@ export const SearchBox = styled.div`
   border-radius: 10px;
   padding: 11px;
   margin-top: 5px;
-  flex: 1.5;
+  flex: 1.2;
 
   input {
     border: none; /* 테두리 제거 */
@@ -85,8 +87,6 @@ export const LocationButton = styled.button`
 
 // 00 지점 text
 export const LocationText = styled.div`
-  padding: 10px;
-  margin: 5px;
   font-size: 9pt;
 `;
 
@@ -101,8 +101,27 @@ export const TimeButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   overflow-x: none;
-  padding: 5px;
   width: 90%;
+`;
+
+// 날짜 선택 전체 레이아웃
+export const DateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 88%;
+`;
+
+export const DateSelectorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+// 날짜 선택 안내 텍스트
+export const DateSelectorText = styled.p`
+  margin-left: 10px;
+  margin-bottom: 5px;
 `;
 
 // 시간 버튼

@@ -18,7 +18,7 @@ const LandingSlider = () => {
     autoplay: true,
     autoplaySpeed: 3000, // 3초마다 전환
     pauseOnHover: false,
-  };
+};
 
   return (
     <styled.Container>
