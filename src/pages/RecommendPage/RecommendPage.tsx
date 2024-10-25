@@ -104,19 +104,19 @@ const RecommendPage: React.FC = () => {
           </styled.RecommendProduct>
 
           {/* 소비성향 테스트 */}
-          <styled.TestCard>
-            <styled.TestCardText>
-              <Link
-                to="/test/consumption"
-                style={{ color: "white", textDecoration: "none" }}
-              >
+          <Link
+            to="/teststart"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            <styled.TestCard>
+              <styled.TestCardText>
                 소비성향
                 <br />
                 Test
-              </Link>
-            </styled.TestCardText>
-            <WalletIcon />
-          </styled.TestCard>
+              </styled.TestCardText>
+              <WalletIcon />
+            </styled.TestCard>
+          </Link>
         </styled.ProductList>
       </styled.BodyWrapper>
     </div>
