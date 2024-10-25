@@ -23,7 +23,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <styled.Con>
         {/* Landing 1 */}
 
