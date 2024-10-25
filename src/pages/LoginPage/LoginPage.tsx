@@ -23,8 +23,8 @@ export default function LoginPage() {
   return (
     <Container>
       <FormWrapper>
-        <Paper>
-          <h2>쉽게 들이는 저축 습관</h2>
+        <Paper style={{ height: "560px" }}>
+          <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
           <h1>자산을 하나로</h1>
           <form
             onSubmit={(e) => {
@@ -61,17 +61,32 @@ export default function LoginPage() {
                 margin: "5px 0",
               }}
             >
-              <StyledLink to="/">비밀번호를 잊어버리셨나요?</StyledLink>
+              <StyledLink to="/" style={{ marginTop: "8px", color: "#424242" }}>
+                비밀번호를 잊어버리셨나요?
+              </StyledLink>
             </div>
-            <StyledButton type="submit">로그인</StyledButton>
+            <StyledButton
+              type="submit"
+              style={{ marginTop: "45px", marginBottom: "10px" }}
+            >
+              <span>로그인</span>
+            </StyledButton>
+            <Link
+              to="/signup"
+              style={{ width: "100%", textDecoration: "none" }}
+            >
+              <StyledButton type="submit">
+                <span>회원가입</span>
+              </StyledButton>
+            </Link>
           </form>
-          <FooterParagraph>
-            회원이 아니신가요? <Link to="/signup">회원가입</Link>
-          </FooterParagraph>
+          {/* <FooterParagraph>
+						회원이 아니신가요? <Link to="/signup">회원가입</Link>
+					</FooterParagraph> */}
         </Paper>
       </FormWrapper>
       <ImgWrapper>
-        <img src={authImage} style={{ maxWidth: "50vw", maxHeight: "100vh" }} />
+        <img src={authImage} style={{ maxWidth: "45vw", maxHeight: "100vh" }} />
       </ImgWrapper>
     </Container>
   );

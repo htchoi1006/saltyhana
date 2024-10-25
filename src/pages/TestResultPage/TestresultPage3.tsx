@@ -34,8 +34,8 @@ const TestresultPage3: React.FC = () => {
         <styled.YourTypeTag1>
           <h3>#YONO</h3>
           <p>
-            당장 사고 싶은 것을 바로 사야 만족하는 욜로족입니다.
-            <br /> 자산을 모으긴 어려워 보입니다.
+            목표를 달성하기 위해 당장의 소비를 잘 참는 당신
+            <br /> 부자가 될 자격이 있습니다!
           </p>
         </styled.YourTypeTag1>
         <styled.YourTypeTag2>

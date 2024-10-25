@@ -1,30 +1,70 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
+
+// 튀어나오는 애니메이션 정의
+const growFromButton = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+// 축소되는 애니메이션 정의 (닫힐 때)
+const shrinkToButton = keyframes`
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+`;
 
 // 모달 배경 오버레이
 export const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  position: fixed; // 스크롤 시에도 고정된 위치에 있게 만듦
+  bottom: 20px; // 화면 하단에서 20px 위에 배치
+  right: 20px; // 화면 오른쪽에서 20px 떨어진 위치에 배치
+  width: 400px; // 고정된 너비
+  //   height: 100%;
+
+  z-index: 1001; // 다른 요소들 위에 나타나도록 설정
+  background: transparent; // 배경은 투명
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
 `;
 
 // 모달 내용 컨테이너
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ closing: boolean }>`
   background: #ffffff;
-  height: 70%;
-  width: 500px;
+  width: 100%;
+  height: 500px; // 고정된 높이
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  z-index: 1002;
+
+  /* 열릴 때와 닫힐 때의 애니메이션 구분 */
+  animation: ${({ closing }) =>
+    closing
+      ? css`
+          ${shrinkToButton} 0.3s ease-in-out forwards;
+        `
+      : css`
+          ${growFromButton} 0.3s ease-in-out forwards;
+        `};
 `;
 
 // 모달 헤더
@@ -43,14 +83,6 @@ export const ChatIcon = styled.img`
 `;
 
 // 닫기 버튼
-export const CloseButton = styled.button`
-  background: none;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-`;
-
-// 모달 닫기 이미지 아이콘
 export const CloseImg = styled.img`
   width: 35px;
   height: 35px;
@@ -68,7 +100,6 @@ export const ChatArea = styled.div`
   flex-direction: column;
   gap: 10px;
   max-height: 95%;
-  overflow-y: auto;
   flex-shrink: 1;
 `;
 
@@ -78,7 +109,7 @@ export const MessageWrapper = styled.div<{ isUser: boolean }>`
   flex-direction: column;
   align-items: ${({ isUser }) =>
     isUser ? "flex-end" : "flex-start"}; /* isUser에 따라 정렬 */
-  position: relative; /* Timestamp를 메시지의 아래에 배치할 수 있도록 relative 설정 */
+  position: relative;
 `;
 
 // 메시지 스타일
@@ -94,7 +125,7 @@ export const Message = styled.p<{ isUser: boolean }>`
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
 
-  transition: transform 0.2s ease; /* 부드러운 전환 효과 */
+  transition: transform 0.2s ease;
 
   &:hover {
     transform: scale(1.1);
@@ -135,6 +166,6 @@ export const Timestamp = styled.span<{ isUser: boolean }>`
   font-size: 12px;
   color: #888;
   position: absolute;
-  bottom: -5px; /* 메시지 하단에 배치 */
+  bottom: -5px;
   margin: ${({ isUser }) => (isUser ? "0px 2% 0px 0px" : "0px 0px 0px 2%")};
 `;

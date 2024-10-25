@@ -10,9 +10,7 @@ interface GoalContainerProps {
 }
 
 export const PageContainer = styled.div`
-  padding: 20px;
   height: 100%;
-  background-color: #f9f9f9;
   min-height: 100vh;
   margin: 42px 42px 40px;
 `;
@@ -153,7 +151,7 @@ const CalendarDay = styled.div<{ isActive: boolean }>`
   font-size: 18px;
   color: ${({ isActive }) => (isActive ? "#00bfa5" : "#333")};
   border: ${({ isActive }) => (isActive ? "2px solid #00bfa5" : "none")};
-  background-color: ${({ isActive }) => (isActive ? "transparent" : "#f9f9f9")};
+  background-color: ${({ isActive }) => (isActive ? "transparent" : "white")};
   cursor: pointer;
 `;
 
