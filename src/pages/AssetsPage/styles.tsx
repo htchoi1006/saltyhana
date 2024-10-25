@@ -10,6 +10,9 @@ export const PageContainer = styled.div`
   min-height: 100vh;
   margin: 42px 42px 40px;
   flex-direction: column;
+  font-family:
+    Noto Sans KR,
+    sans-serif;
 `;
 
 const AccountDiv = styled.div`
@@ -20,9 +23,6 @@ const AccountDiv = styled.div`
   margin-bottom: 30px;
   justify-content: space-around;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
-  font-family:
-    Noto Sans KR,
-    sans-serif;
   font-size: 15px;
   font-weight: 700;
   height: 150px;
@@ -56,6 +56,7 @@ export const Account: React.FC<AccountProps> = ({ accountNumber, balance }) => {
 export const ChartsContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  flex-direction: column;
   width: 100%;
   max-width: 1000px;
 `;
@@ -68,8 +69,8 @@ export const LineChartContainer = styled(ChartBox)`
   padding: 20px;
   border-radius: 10px;
   height: 400px;
-  width: 70%;
-  margin-right: auto;
+  width: 100%;
+  justify-content: space-around;
 `;
 
 export const Title = styled.h3`
@@ -78,8 +79,41 @@ export const Title = styled.h3`
 `;
 
 export const CumulativeSum = styled.div`
-  margin-top: 20px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: #264653;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const CharacterIcon = styled.img.attrs({ alt: "이미지" })`
+  width: 160px;
+  height: 160px;
+  background-size: cover;
+  margin-left: auto;
+  margin-top: 13px;
+  margin-right: 10px;
+`;
+
+export const AssetDiv = styled.div`
+  display: flex;
+`;
+
+export const AssetGuideDiv = styled.div`
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+export const AssetTitle = styled.h3`
+  font-size: 30px;
+  margin: 0px;
+`;
+
+export const AssetDescription = styled.h3`
+  font-size: 15px;
+  margin: 0px;
 `;
