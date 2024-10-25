@@ -15,6 +15,9 @@ const LandingSlider = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true, // 자동 재생 설정
+    autoplaySpeed: 3000, // 3초마다 전환
+    pauseOnHover: false, // 마우스를 올려도 멈추지 않도록 설정
   };
 
   return (
