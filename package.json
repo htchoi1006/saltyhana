@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@emotion/unitless": "^0.10.0",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/google-calendar": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,9 +17,13 @@
     "@types/react-dom": "^18.3.1",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.34",
+    "chartjs-plugin-zoom": "^2.0.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.453.0",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
+    "react-kakao-maps-sdk": "^1.1.27",
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
@@ -51,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3"

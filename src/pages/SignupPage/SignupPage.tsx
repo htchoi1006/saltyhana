@@ -30,12 +30,16 @@ export default function SignupPage() {
         <img
           src={authImage}
           alt="auth-money-image"
-          style={{ maxWidth: "50vw", maxHeight: "100vh" }}
+          style={{
+            marginLeft: "100px",
+            maxWidth: "45vw",
+            maxHeight: "100vh",
+          }}
         />
       </ImgWrapper>
       <FormWrapper>
-        <Paper>
-          <h2>쉽게 들이는 저축 습관</h2>
+        <Paper style={{ height: "700px", marginRight: "30px" }}>
+          <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
           <h1>자산을 하나로</h1>
           <form
             onSubmit={(e) => {
@@ -84,7 +88,9 @@ export default function SignupPage() {
                 ref={birthInputRef}
               />
             </InputsWrapper>
-            <AgreementCheckWrapper>
+            <AgreementCheckWrapper
+              style={{ marginTop: "10px", marginBottom: "45px" }}
+            >
               <input type="checkbox" ref={checkInputRef} />
               <label>
                 <span>이용약관</span>에 동의합니다.
@@ -92,7 +98,7 @@ export default function SignupPage() {
             </AgreementCheckWrapper>
             <StyledButton>회원가입</StyledButton>
           </form>
-          <FooterParagraph>
+          <FooterParagraph style={{ fontSize: "14px" }}>
             이미 계정이 있으신가요? <Link to="/login">로그인</Link>
           </FooterParagraph>
         </Paper>

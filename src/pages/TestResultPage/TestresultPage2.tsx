@@ -31,8 +31,8 @@ const TestresultPage2: React.FC = () => {
           <h3>#YOLO</h3>
           <h4>_S_P</h4>
           <p>
-            당장 사고 싶은 것을 바로 사야 만족하는 욜로족입니다.
-            <br /> 자산을 모으긴 어려워 보입니다.
+            진정으로 원하는 소비를 위해 당장의 소비는 잘 참으시는군요!
+            <br /> 하지만 자산을 모으기엔 한계가 있어 보입니다..
           </p>
         </styled.YourTypeTag1>
         <styled.YourTypeTag2>
