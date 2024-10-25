@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import * as styled from "./styles";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
-import step from "../../images/TestStepper.png";
+import { Link, useNavigate } from "react-router-dom";
+import step1 from "../../images/TestStepperProgressBar1.png";
+import step2 from "../../images/TestStepperProgressBar2.png";
+import step3 from "../../images/TestStepperProgressBar3.png";
+import step4 from "../../images/TestStepperProgressBar4.png";
+import step5 from "../../images/TestStepperProgressBar5.png";
+import step6 from "../../images/TestStepperProgressBar6.png";
+import step7 from "../../images/TestStepperProgressBar7.png";
+import step8 from "../../images/TestStepperProgressBar8.png";
+import step9 from "../../images/TestStepperProgressBar9.png";
+import step10 from "../../images/TestStepperProgressBar10.png";
 import before from "../../images/TestBefore.png";
 
 const questions = [
@@ -69,45 +78,82 @@ const questions = [
 
 const TestPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 현재 질문 번호
-  const [score, setScore] = useState(0); // 점수 상태 추가
+  const [score, setScore] = useState(0); // Q1~Q6 점수만 반영
+  const [answers, setAnswers] = useState<number[]>(
+    Array(questions.length).fill(null),
+  ); // 질문별 점수 상태
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
 
-  const handleSelectionClick = (points: number) => {
-    // 소비성향 점수 계산 (Q1~Q6에만 적용)
-    if (currentQuestionIndex < 6) {
-      setScore(score + points);
+  // 각 질문에 맞는 ProgressBar 이미지를 반환하는 함수
+  const getStepperImage = () => {
+    switch (currentQuestionIndex + 1) {
+      case 1:
+        return step1;
+      case 2:
+        return step2;
+      case 3:
+        return step3;
+      case 4:
+        return step4;
+      case 5:
+        return step5;
+      case 6:
+        return step6;
+      case 7:
+        return step7;
+      case 8:
+        return step8;
+      case 9:
+        return step9;
+      case 10:
+        return step10;
+      default:
+        return step1; // 기본값으로 1단계 이미지 사용
     }
+  };
+
+  // 선택지 클릭 시 점수 처리 함수
+  const handleSelectionClick = (points: number) => {
+    const updatedAnswers = [...answers];
+
+    if (currentQuestionIndex < 6) {
+      // Q1~Q6까지만 점수 계산
+      if (updatedAnswers[currentQuestionIndex] !== null) {
+        setScore(score - updatedAnswers[currentQuestionIndex] + points);
+      } else {
+        setScore(score + points); // 새로 추가
+      }
+    }
+
+    updatedAnswers[currentQuestionIndex] = points;
+    setAnswers(updatedAnswers);
 
     // 마지막 질문이면 결과 페이지로 이동
     if (currentQuestionIndex === questions.length - 1) {
       if (score >= 50) {
-        //50점 이상인 경우
-        navigate("/TestResult3"); //"마지막에 웃는 진짜 승리자!" 유형
+        navigate("/TestResult3"); // "마지막에 웃는 진짜 승리자!" 유형
       } else if (score >= 40 && score < 50) {
-        //40점 이상인 경우
-        navigate("/TestResult2"); //"나에게 주는 선물" 유형
+        navigate("/TestResult2"); // "나에게 주는 선물" 유형
       } else {
         navigate("/TestResult1");
       }
     } else {
-      // 선택 시 다음 질문으로 이동
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
 
+  // 이전 질문으로 돌아갈 때 점수 처리
   const handleBeforeClick = () => {
-    // 현재 질문이 Q1이면 /teststart로 이동
     if (currentQuestionIndex === 0) {
       navigate("/teststart");
     } else {
-      // Q1이 아니면 이전 질문으로 돌아감
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
   return (
     <>
-      <styled.Stepper src={step} />
+      <styled.Stepper src={getStepperImage()} />
       <styled.Question>
         <h1>Q{currentQuestionIndex + 1}</h1>
         <p>{questions[currentQuestionIndex].question}</p>
