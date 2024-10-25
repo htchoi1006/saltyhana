@@ -3,8 +3,11 @@ import styled from "styled-components";
 // 스타일 정의
 export const FloatingButton = styled.div`
   position: fixed;
+
+  // 플로팅 위치 수정 필요
   bottom: 30px; /* 페이지 하단에서의 위치 */
   right: 30px; /* 페이지 오른쪽에서의 위치 */
+
   width: 60px;
   height: 60px;
   background-color: #dff6f2;
