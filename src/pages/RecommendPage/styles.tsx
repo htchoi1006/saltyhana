@@ -9,6 +9,24 @@ export const BodyWrapper = styled.div`
   // background-color: #f0f0f0;
 `;
 
+export const PageTitle = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: bold;
+  font-weight: 700;
+  font-size: 36px;
+  text-align: left;
+  margin-left: 42px;
+`;
+
+export const PageDescription = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  text-align: left;
+  margin-left: 42px;
+`;
+
 // 상품 리스트 스타일
 export const ProductList = styled.div`
   position: relative;
@@ -29,7 +47,7 @@ export const ProductWrapper = styled.div`
 
 // 개별 상품 스타일
 export const ProductCard = styled.div`
-  width: 396px;
+  width: 440px;
   height: 223px;
   background-color: #f0f0f0;
   color: #333;
@@ -129,7 +147,7 @@ export const ProductInfo = styled.p`
 
 // 상품 이미지
 export const ProductCardImage = styled.img`
-  width: 396px;
+  width: 100%;
   height: 223px;
   border-radius: 20px;
   object-fit: cover;
@@ -151,15 +169,16 @@ export const ProductTitle = styled.p`
 
 // 맞춤 상품 스타일
 export const RecommendProduct = styled.div`
-  width: 619px;
-  height: 232px;
+  width: 660px;
+  height: 250px;
   background: #e8e8e8;
   color: black;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 10px 7px 6px;
+  border-radius: 30px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 180px;
   transition: transform 0.5s ease; /* 부드러운 전환 효과 추가 */
 
@@ -175,19 +194,21 @@ export const RecommendProductText = styled.div`
   font-weight: 900;
   text-align: left;
   line-height: 1.3;
-  margin: 40px 0 40px 40px;
+  /* margin: 40px 0 40px 40px; */
 `;
 
 // 소비성향 테스트 카드
 export const TestCard = styled.div`
-  width: 619px;
-  height: 232px;
+  width: 660px;
+  height: 250px;
   background: #446864;
   color: white;
-  border-radius: 10px;
+  /* border-radius: 10px; */
+  border-radius: 30px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  justify-content: center;
   align-items: center;
   gap: 10px;
   transition: transform 0.5s ease; /* 부드러운 전환 효과 추가 */
@@ -204,7 +225,8 @@ export const TestCardText = styled.div`
   font-weight: bold;
   text-align: left;
   line-height: 1.3;
-  margin: 40px 0 40px 40px;
+  /* margin: 40px 0 40px 70px; */
+  margin-left: 30px;
 `;
 
 // 고객센터 버튼
