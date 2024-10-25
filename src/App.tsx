@@ -18,6 +18,7 @@ import Consumption from "./pages/ConsumptionPage/ConsumptionPage";
 import Result from "./pages/ResultPage/ResultPage";
 import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccountPage";
+import MainLayout from "./layouts/MainLayout/MainLayout";
 
 const AppContainer = styled.div`
   font-family: Arial, sans-serif;
@@ -39,8 +40,12 @@ const App: React.FC = () => {
           </Routes>
         </AppContainer> */}
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          {/* <<<<<<< Updated upstream */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route
+            path="/connecting-account"
+            element={<ConnectingAccountPage />}
+          />
           <Route element={<DashboardLayout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/calendar" element={<CalendarPage />} />
@@ -50,17 +55,14 @@ const App: React.FC = () => {
             <Route path="/test/consumption" element={<Consumption />} />
             <Route path="/result/consumption" element={<Result />} />
           </Route>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/teststart" element={<TeststartPage />} />
-          <Route path="/test" element={<TestPage />} />
-          <Route path="/testresult1" element={<TestresultPage1 />} />
-          <Route path="/testresult2" element={<TestresultPage2 />} />
-          <Route path="/testresult3" element={<TestresultPage3 />} />
-          <Route
-            path="/connecting-account"
-            element={<ConnectingAccountPage />}
-          />
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/teststart" element={<TeststartPage />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="/testresult1" element={<TestresultPage1 />} />
+            <Route path="/testresult2" element={<TestresultPage2 />} />
+            <Route path="/testresult3" element={<TestresultPage3 />} />
+          </Route>
         </Routes>
       </Router>
     </>
