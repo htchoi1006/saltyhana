@@ -125,39 +125,62 @@ export const StyleDiv = styled.div`
 `;
 
 export const Container2 = styled.div`
+  position: relative;
   background-color: #006b6b;
+  height: 100vh; // 이 값을 추가하여 내부 내용이 잘 보이도록 조정
+  width: 100vw;
   h1 {
     color: #333;
   }
 `;
 
-export const Con2MainText = styled.p`
-  position: absolute;
-  width: 327px;
-  height: 348px;
+export const Container22 = styled.div`
+  position: relative;
+  background-color: #0063b2;
+  height: 100vh; // 이 값을 추가하여 내부 내용이 잘 보이도록 조정
+  width: 100wh;
+  h1 {
+    color: #333;
+  }
+`;
 
-  left: 26%;
-  transform: translateX(-50%);
-  top: 110%;
+export const Con22Box = styled.div`
+  position: relative;
+  left: 45%;
+  top: -65.5%;
+  width: 680px;
+  height: 479px;
+
+  background-color: #ffffff;
+  border-radius: 20px;
+`;
+
+export const Con2MainText = styled.p`
+  position: relative;
+  padding-top: 7%;
+  width: 327px;
+  height: 200px;
+
+  left: 15%;
+  top: -30%;
 
   font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 900;
   font-size: 80px;
-  line-height: 116px;
+  line-height: 105px;
   letter-spacing: -0.02em;
 
   color: #ffffff;
 `;
 
 export const Con2SubText = styled.p`
-  position: absolute;
+  position: relative;
+  padding-top: 6%;
   width: 327px;
-  height: 60px;
-
-  left: 26%;
-  transform: translateX(-50%);
-  top: 165%;
+  height: 20px;
+  left: 15%;
+  top: 90%;
 
   font-family: "Noto Sans KR";
   font-style: normal;
@@ -169,22 +192,160 @@ export const Con2SubText = styled.p`
   color: #ffffff;
 `;
 
+export const Con22SubText = styled.p`
+  position: relative;
+  width: 400px;
+  height: 60px;
+  padding-top: 5%;
+  left: 28.5%;
+  transform: translateX(-50%);
+  top: 105%;
+  line-height: 1.5; // 예시
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: -0.02em;
+
+  color: #ffffff;
+`;
+
+export const Element1 = styled.div`
+  /*8개 질문으로 간단하게!*/
+
+  position: relative;
+  width: 250px;
+  height: 200px;
+  left: 1%;
+  top: -7%;
+  margin: 20px; /* 모든 방향에 20px의 마진 추가 */
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.5px;
+`;
+
+export const Element2 = styled.div`
+  /* Group 481560 */
+
+  position: relative;
+  width: 247px;
+  height: 275px;
+  left: 35%;
+  top: -52.5%;
+  margin: 20px; /* 모든 방향에 20px의 마진 추가 */
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.5px;
+`;
+
+export const Con22p2 = styled.p`
+  margin-left: 20px;
+`;
+
+export const Element3 = styled.div`
+  /* 맞춤형 금융 상품 추천까지! */
+
+  position: relative;
+  width: 339px;
+  height: 277px;
+  left: 66%;
+  top: -114%;
+  margin: 20px; /* 모든 방향에 20px의 마진 추가 */
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.5%;
+`;
+
+export const ElementImg = styled.img`
+  width: 165px;
+  height: 135px;
+`;
+
+export const Con22Button = styled.button`
+  position: absolute;
+  width: 342.78px;
+  height: 62.74px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 84%;
+  /* margin-top: 40px; */
+  border: none;
+  background: #008485;
+  border-radius: 20px;
+
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 35px;
+
+  color: #ffffff;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+
+  &:hover {
+    background: #006f6f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+`;
+
 export const Con2DivforBox = styled.div`
   position: absolute;
   width: 150px;
   height: 152px;
 
   left: 54%;
-  top: 120%;
+  top: 10%;
 
   background-color: #ffffff;
   border-radius: 20px;
 `;
 
 export const Con2DivforImage = styled.img`
-  /* position: absolute; */
   width: 150px;
   height: 152px;
+  object-fit: cover; // 비율 유지하면서 크기 조정
+`;
+
+export const Con22h1 = styled.h1`
+  position: relative;
+  width: 459px;
+  height: 89px;
+  left: 19%;
+  top: 8%;
+
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 93px;
+
+  color: #000000;
+`;
+
+export const Con22p = styled.p`
+  position: relative;
+  width: 600px;
+  height: 89px;
+  left: 11%;
+  top: 2%;
+
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 15px;
+
+  color: #000000;
 `;
 
 export const Box = styled.div`
@@ -205,7 +366,7 @@ export const Con3SubText = styled.p`
   height: 28px;
   left: 55%;
   transform: translateX(-50%);
-  top: 210%;
+  top: 220%;
 
   font-family: "Noto Sans KR";
   font-style: normal;
@@ -218,17 +379,17 @@ export const Con3SubText = styled.p`
 `;
 
 export const Con3StyleDiv = styled.div`
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 350px;
   left: 0px;
-  top: 242%;
+  top: 20%;
   background: #2e3c7e;
 
   font-family: "Noto Sans KR";
   font-style: normal;
-  font-weight: 700;
-  font-size: 57px;
+  font-weight: 1000;
+  font-size: 52px;
   line-height: 64px;
   /* or 107% */
 
@@ -248,7 +409,7 @@ export const Con3StyleDiv2 = styled.div`
 export const Con3Img1 = styled.img`
   position: absolute;
   transform: translateX(-50%);
-  left: 66%;
+  left: 67%;
   top: 20%;
 
   width: 100px;
@@ -258,7 +419,7 @@ export const Con3Img1 = styled.img`
 export const Con3Img2 = styled.img`
   position: absolute;
   transform: translateX(-50%);
-  left: 89.5%;
+  left: 91%;
   top: 20%;
 
   width: 100px;
@@ -288,7 +449,7 @@ export const Con3Img4 = styled.img`
 export const Con3Img5 = styled.img`
   position: absolute;
   transform: translateX(-50%);
-  left: 96%;
+  left: 97%;
   top: 49%;
 
   width: 100px;
