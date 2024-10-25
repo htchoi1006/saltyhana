@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Container,
@@ -17,8 +17,34 @@ import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const id = idInputRef.current?.value;
+    const password = passwordInputRef.current?.value;
+
+    // 입력값 검증
+    if (!id || !password) {
+      alert("아이디와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
+    // 계정 정보를 로컬 스토리지에 저장
+    const userInfo = {
+      id,
+      password,
+      isLoggedIn: true,
+    };
+
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+    // home으로 라우팅
+    navigate("/home");
+  };
 
   return (
     <Container>
@@ -26,13 +52,7 @@ export default function LoginPage() {
         <Paper style={{ height: "560px" }}>
           <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
           <h1>자산을 하나로</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log(idInputRef.current?.value);
-              console.log(passwordInputRef.current?.value);
-            }}
-          >
+          <form onSubmit={handleLogin}>
             <InputsWrapper>
               <AuthInput
                 labelName="아이디"
@@ -80,9 +100,6 @@ export default function LoginPage() {
               </StyledButton>
             </Link>
           </form>
-          {/* <FooterParagraph>
-						회원이 아니신가요? <Link to="/signup">회원가입</Link>
-					</FooterParagraph> */}
         </Paper>
       </FormWrapper>
       <ImgWrapper>
