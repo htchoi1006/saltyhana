@@ -20,7 +20,7 @@ export const Stepper = styled.img`
   left: 123px;
   top: 102px;
 
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  clip-path: inset(0%); /* 이미지 가장자리를 5% 잘라냄 */
 `;
 
 export const Question = styled.div`
