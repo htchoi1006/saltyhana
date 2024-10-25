@@ -208,20 +208,21 @@ const AssetsPage: React.FC = () => {
         <ChartsContainer>
           <div style={{ display: "flex", width: "100%" }}>
             <AssetDiv>
-              <CharacterIcon src={character} />
               <AssetGuideDiv>
+                <CharacterIcon src={character} />
                 <AssetTitle>돈을 얼마나 썼을까?</AssetTitle>
                 <AssetDescription>
                   확인하고 싶은 기간을 드래그하여 지출 금액을 확인하세요!
                 </AssetDescription>
                 <CumulativeSum>
                   {zoomedRange}
-                  <br></br>총 {cumulativeSum.toLocaleString()}원을 쓰셨네요
+                  <br></br>총 <span>{cumulativeSum.toLocaleString()}</span>
+                  원을 쓰셨네요
                 </CumulativeSum>
               </AssetGuideDiv>
             </AssetDiv>
             {/* 라인 그래프 컨테이너 */}
-            <LineChartContainer style={{ flex: 1 }}>
+            <LineChartContainer>
               <Title></Title>
               {lineData && <Line data={lineData} options={lineOptions} />}
             </LineChartContainer>
