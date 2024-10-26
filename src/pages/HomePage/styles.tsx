@@ -10,9 +10,9 @@ interface GoalContainerProps {
 }
 
 export const PageContainer = styled.div`
-  height: 100%;
-  min-height: 100vh;
-  margin: 42px 42px 40px;
+  padding: 42px 42px 40px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledGoalContainer = styled.div`
@@ -173,7 +173,7 @@ export const Calendar = () => {
     <CalendarContainer>
       <CalendarMonthDiv>
         <CalendarIcon src={calendar} />
-        <CalendarMonth>{`${now.getMonth()}월`}</CalendarMonth>
+        <CalendarMonth>{`${now.getMonth() + 1}월`}</CalendarMonth>
       </CalendarMonthDiv>
       <CalendarWeek>
         {days.map((day, index) => (
