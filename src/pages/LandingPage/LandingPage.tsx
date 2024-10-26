@@ -1,83 +1,144 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import * as styled from "./styles";
-import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import {
+  Container,
+  SectionWrapper,
+  CenterFlexBox,
+  Stack,
+  StyledMainText,
+  SubText,
+  Con1Link,
+  Con3StyleDiv,
+  Con3SubText,
+  Con3Img,
+} from "./styles";
+import { CenterFlexContainer } from "../ConnectingAccoutPage/styles";
+import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
 import hand from "../../images/꿈돌이손.png";
 import flag from "../../images/flag.png";
 import thumb from "../../images/thumb.png";
 import trophy from "../../images/trophy.png";
 
 const LandingPage: React.FC = () => {
-  const navigate = useNavigate();
-
-  //라우팅은 이렇게 하시면 돼요
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-
-  const handleSignupClick = () => {
-    navigate("/signup");
+  const settings = {
+    dots: false,
+    draggable: false,
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    autoplay: true,
+    speed: 5000,
+    autoplaySpeed: 5000,
+    variableWidth: true,
+    cssEase: "linear",
+    arrows: false,
   };
 
   return (
-    <>
-      <styled.Con>
-        {/* Landing 1 */}
-
-        <styled.Container1>
-          <div>
-            <div>
-              <styled.StyledMainText>자산을 하나로</styled.StyledMainText>
-              <styled.SubText>
-                오늘도 부자될 생각만 하셨나요?
-                <br /> 당신의 자산을 하나로 관리하세요.
-              </styled.SubText>
-              <styled.Con1Button onClick={handleLoginClick}>
-                시작하기
-              </styled.Con1Button>
-            </div>
-            <div>
-              <styled.Img src={hand} />
-            </div>
+    <Container>
+      <SectionWrapper>
+        <div
+          style={{
+            width: "inherit",
+            height: "100%",
+            display: "flex",
+            flexWrap: "wrap-reverse",
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <CenterFlexBox>
+              <Stack>
+                <StyledMainText>자산을 하나로</StyledMainText>
+                <SubText>
+                  오늘도 부자될 생각만 하셨나요?
+                  <br /> 당신의 자산을 하나로 관리하세요.
+                </SubText>
+                <Con1Link to="/login">시작하기</Con1Link>
+              </Stack>
+            </CenterFlexBox>
           </div>
-        </styled.Container1>
-      </styled.Con>
-      {/* Landing 2 */}
-      <div>
+          <div style={{ flex: 1 }}>
+            <CenterFlexBox>
+              <div>
+                <img src={hand} />
+              </div>
+            </CenterFlexBox>
+          </div>
+        </div>
+      </SectionWrapper>
+      <SectionWrapper>
         <LandingPageSlider />
-      </div>
-      {/* Landing 3 */}
-      <styled.Con>
-        <styled.Container3>
+      </SectionWrapper>
+      <SectionWrapper>
+        <CenterFlexContainer style={{ width: "100%", height: "50%" }}>
+          <Con3SubText>꾸준히 도전하고 성취감까지!</Con3SubText>
+        </CenterFlexContainer>
+        <Con3StyleDiv>
           <div>
-            <styled.Con3SubText>꾸준히 도전하고 성취감까지!</styled.Con3SubText>
+            <Slider {...settings}>
+              <span>함께 </span>
+              <span>도전하고 </span>
+              <span>목표를 </span>
+              <span>이루어 </span>
+              <span>성취감까지 </span>
+              <span>
+                <Con3Img src={thumb} />
+              </span>
+              <span>즐거운</span>
+              <span>도전</span>
+              <span>
+                <Con3Img src={trophy} />
+              </span>
+              <span>함께 </span>
+              <span>도전하고 </span>
+              <span>목표를 </span>
+              <span>이루어 </span>
+              <span>성취감까지 </span>
+              <span>
+                <Con3Img src={thumb} />
+              </span>
+              <span>즐거운</span>
+              <span>도전</span>
+              <span>
+                <Con3Img src={trophy} />
+              </span>
+            </Slider>
           </div>
-
-          <styled.Con3StyleDiv>
-            <styled.Con3StyleDiv1>
+          <div>
+            <Slider {...settings}>
               <span>
-                함께 도전하고 목표를 이루어 성취감까지&nbsp;&nbsp;&nbsp;&nbsp;{" "}
+                <Con3Img src={thumb} />
               </span>
-              <styled.Con3Img1 src={thumb} />
-              <span>즐거운 도전&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <styled.Con3Img2 src={trophy} />
-              <span>함께</span>
-            </styled.Con3StyleDiv1>
-
-            <styled.Con3StyleDiv2>
-              <styled.Con3Img3 src={thumb} />
+              <span>즐거운</span>
+              <span>도전</span>
               <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;즐거운 도전&nbsp;&nbsp;&nbsp;&nbsp;
+                <Con3Img src={trophy} />
               </span>
-              <styled.Con3Img4 src={trophy} />
-              <span>함께 도전하고 목표를 이루어 성취감까지</span>
-              <styled.Con3Img5 src={flag} />
-            </styled.Con3StyleDiv2>
-          </styled.Con3StyleDiv>
-        </styled.Container3>
-      </styled.Con>
-    </>
+              <span>도전하고 </span>
+              <span>목표를 </span>
+              <span>이루어 </span>
+              <span>성취감까지 </span>
+              <span>
+                <Con3Img src={thumb} />
+              </span>
+              <span>즐거운</span>
+              <span>도전</span>
+              <span>
+                <Con3Img src={trophy} />
+              </span>
+              <span>도전하고 </span>
+              <span>목표를 </span>
+              <span>이루어 </span>
+              <span>성취감까지 </span>
+            </Slider>
+          </div>
+        </Con3StyleDiv>
+      </SectionWrapper>
+    </Container>
   );
 };
 
