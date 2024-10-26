@@ -1,16 +1,14 @@
-import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import * as styled from "./styles";
-import { useNavigate } from "react-router-dom";
+import { Container } from "./styles";
 
 import Carousel1 from "../../pages/LandingPage/Carousel1";
 import Carousel2 from "../../pages/LandingPage/Carousel2";
 
-const LandingSlider = () => {
+export default function LandingSlider() {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -18,16 +16,15 @@ const LandingSlider = () => {
     autoplay: true,
     autoplaySpeed: 3000, // 3초마다 전환
     pauseOnHover: false,
-};
+    arrows: false,
+  };
 
   return (
-    <styled.Container>
+    <Container>
       <Slider {...settings}>
         <Carousel1 />
         <Carousel2 />
       </Slider>
-    </styled.Container>
+    </Container>
   );
-};
-
-export default LandingSlider;
+}
