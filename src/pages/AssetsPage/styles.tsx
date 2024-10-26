@@ -59,20 +59,23 @@ const AccountDiv = styled.div`
   border-radius: 10px;
   margin-right: 20px;
   margin-bottom: 30px;
-  justify-content: space-around;
+  justify-content: center;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   font-size: 15px;
   font-weight: 700;
   height: 150px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const AccountName = styled.h2`
-  font-size: 20px;
-  margin-top: 0px;
+  font-size: 30px;
+  margin-top: 30px;
   margin-bottom: 10px;
 `;
 
 const AccountNumber = styled.p`
+  font-size: 20px;
   margin: 0px;
 `;
 
