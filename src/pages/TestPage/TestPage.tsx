@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import * as styled from "./styles";
-import { Link, useNavigate } from "react-router-dom";
-import step1 from "../../images/TestStepperProgressBar1.png";
-import step2 from "../../images/TestStepperProgressBar2.png";
-import step3 from "../../images/TestStepperProgressBar3.png";
-import step4 from "../../images/TestStepperProgressBar4.png";
-import step5 from "../../images/TestStepperProgressBar5.png";
-import step6 from "../../images/TestStepperProgressBar6.png";
-import step7 from "../../images/TestStepperProgressBar7.png";
-import step8 from "../../images/TestStepperProgressBar8.png";
-import step9 from "../../images/TestStepperProgressBar9.png";
-import step10 from "../../images/TestStepperProgressBar10.png";
-import before from "../../images/TestBefore.png";
+import { useNavigate } from "react-router-dom";
+
+import Stepper from "../../components/Stepper/Stepper";
+import { HeaderOffset } from "../../components/Header/styles";
+import { SelectionWrapper, Question, BeforeQuestion } from "./styles";
 
 const questions = [
   {
@@ -77,40 +69,12 @@ const questions = [
 ];
 
 const TestPage: React.FC = () => {
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 현재 질문 번호
   const [score, setScore] = useState(0); // Q1~Q6 점수만 반영
   const [answers, setAnswers] = useState<number[]>(
     Array(questions.length).fill(null),
   ); // 질문별 점수 상태
-  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
-
-  // 각 질문에 맞는 ProgressBar 이미지를 반환하는 함수
-  const getStepperImage = () => {
-    switch (currentQuestionIndex + 1) {
-      case 1:
-        return step1;
-      case 2:
-        return step2;
-      case 3:
-        return step3;
-      case 4:
-        return step4;
-      case 5:
-        return step5;
-      case 6:
-        return step6;
-      case 7:
-        return step7;
-      case 8:
-        return step8;
-      case 9:
-        return step9;
-      case 10:
-        return step10;
-      default:
-        return step1; // 기본값으로 1단계 이미지 사용
-    }
-  };
 
   // 선택지 클릭 시 점수 처리 함수
   const handleSelectionClick = (points: number) => {
@@ -152,29 +116,46 @@ const TestPage: React.FC = () => {
   };
 
   return (
-    <>
-      <styled.Stepper src={getStepperImage()} />
-      <styled.Question>
-        <h1>Q{currentQuestionIndex + 1}</h1>
-        <p>{questions[currentQuestionIndex].question}</p>
-      </styled.Question>
-      <styled.Selection1 onClick={() => handleSelectionClick(10)}>
-        <p>{questions[currentQuestionIndex].selection1}</p>
-      </styled.Selection1>
-      <styled.Selection2 onClick={() => handleSelectionClick(5)}>
-        <p>{questions[currentQuestionIndex].selection2}</p>
-      </styled.Selection2>
-      <styled.Selection3 onClick={() => handleSelectionClick(0)}>
-        <p>{questions[currentQuestionIndex].selection3}</p>
-      </styled.Selection3>
-      {currentQuestionIndex === 0 ? (
-        <Link to="/teststart">
-          <styled.BeforeQuestion />
-        </Link>
-      ) : (
-        <styled.BeforeQuestion onClick={handleBeforeClick} />
-      )}
-    </>
+    <div
+      style={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div style={{ flex: "none" }}>
+        <HeaderOffset></HeaderOffset>
+        <div style={{ padding: "65px 80px" }}>
+          <Stepper curCount={currentQuestionIndex} maxCount={10} />
+        </div>
+      </div>
+      <div
+        style={{
+          flex: 1,
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Question>
+          <h1>Q{currentQuestionIndex + 1}</h1>
+          <p>{questions[currentQuestionIndex].question}</p>
+        </Question>
+        <SelectionWrapper>
+          <button onClick={() => handleSelectionClick(10)}>
+            <span>{questions[currentQuestionIndex].selection1}</span>
+          </button>
+          <button onClick={() => handleSelectionClick(5)}>
+            <span>{questions[currentQuestionIndex].selection2}</span>
+          </button>
+          <button onClick={() => handleSelectionClick(0)}>
+            <span>{questions[currentQuestionIndex].selection3}</span>
+          </button>
+        </SelectionWrapper>
+        <BeforeQuestion onClick={handleBeforeClick} />
+      </div>
+    </div>
   );
 };
 
