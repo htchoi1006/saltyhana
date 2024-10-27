@@ -19,7 +19,6 @@ import {
 import { CenterFlexContainer } from "../ConnectingAccoutPage/styles";
 import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
 import hand from "../../images/꿈돌이손.png";
-import flag from "../../images/flag.png";
 import thumb from "../../images/thumb.png";
 import trophy from "../../images/trophy.png";
 
@@ -30,7 +29,7 @@ const LandingPage: React.FC = () => {
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 4,
-    // autoplay: true,
+    autoplay: true,
     speed: 5000,
     autoplaySpeed: 5000,
     variableWidth: true,
@@ -72,9 +71,7 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </SectionWrapper>
-      <SectionWrapper>
-        <LandingPageSlider />
-      </SectionWrapper>
+      <LandingPageSlider />
       <SectionWrapper>
         <CenterFlexContainer style={{ width: "100%", height: "50%" }}>
           <Con3SubText>꾸준히 도전하고 성취감까지!</Con3SubText>
