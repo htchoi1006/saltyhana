@@ -13,7 +13,7 @@ export default function LandingSlider() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    // autoplay: true,
     autoplaySpeed: 3000, // 3초마다 전환
     pauseOnHover: false,
     arrows: false,

@@ -30,7 +30,7 @@ const LandingPage: React.FC = () => {
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 4,
-    autoplay: true,
+    // autoplay: true,
     speed: 5000,
     autoplaySpeed: 5000,
     variableWidth: true,
@@ -57,7 +57,9 @@ const LandingPage: React.FC = () => {
                   오늘도 부자될 생각만 하셨나요?
                   <br /> 당신의 자산을 하나로 관리하세요.
                 </SubText>
-                <Con1Link to="/login">시작하기</Con1Link>
+                <Con1Link to="/login">
+                  <span>시작하기</span>
+                </Con1Link>
               </Stack>
             </CenterFlexBox>
           </div>
@@ -78,30 +80,30 @@ const LandingPage: React.FC = () => {
           <Con3SubText>꾸준히 도전하고 성취감까지!</Con3SubText>
         </CenterFlexContainer>
         <Con3StyleDiv>
-          <div>
+          <div style={{ marginTop: "40px" }}>
             <Slider {...settings}>
-              <span>함께 </span>
-              <span>도전하고 </span>
-              <span>목표를 </span>
-              <span>이루어 </span>
+              <span>함께&nbsp;</span>
+              <span>도전하고&nbsp;</span>
+              <span>목표를&nbsp;</span>
+              <span>이루어&nbsp;</span>
               <span>성취감까지 </span>
               <span>
                 <Con3Img src={thumb} />
               </span>
-              <span>즐거운</span>
+              <span>즐거운&nbsp;</span>
               <span>도전</span>
               <span>
                 <Con3Img src={trophy} />
               </span>
-              <span>함께 </span>
-              <span>도전하고 </span>
-              <span>목표를 </span>
-              <span>이루어 </span>
-              <span>성취감까지 </span>
+              <span>함께&nbsp;</span>
+              <span>도전하고&nbsp;</span>
+              <span>목표를&nbsp;</span>
+              <span>이루어&nbsp;</span>
+              <span>성취감까지</span>
               <span>
                 <Con3Img src={thumb} />
               </span>
-              <span>즐거운</span>
+              <span>즐거운&nbsp;</span>
               <span>도전</span>
               <span>
                 <Con3Img src={trophy} />
@@ -118,22 +120,22 @@ const LandingPage: React.FC = () => {
               <span>
                 <Con3Img src={trophy} />
               </span>
-              <span>도전하고 </span>
-              <span>목표를 </span>
-              <span>이루어 </span>
-              <span>성취감까지 </span>
+              <span>도전하고&nbsp;</span>
+              <span>목표를&nbsp;</span>
+              <span>이루어&nbsp;</span>
+              <span>성취감까지</span>
               <span>
                 <Con3Img src={thumb} />
               </span>
-              <span>즐거운</span>
+              <span>즐거운&nbsp;</span>
               <span>도전</span>
               <span>
                 <Con3Img src={trophy} />
               </span>
-              <span>도전하고 </span>
-              <span>목표를 </span>
-              <span>이루어 </span>
-              <span>성취감까지 </span>
+              <span>도전하고&nbsp;</span>
+              <span>목표를&nbsp;</span>
+              <span>이루어&nbsp;</span>
+              <span>성취감까지</span>
             </Slider>
           </div>
         </Con3StyleDiv>

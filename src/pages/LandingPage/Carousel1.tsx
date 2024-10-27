@@ -27,7 +27,7 @@ const Carousel1: React.FC = () => {
 
   return (
     <Container>
-      <SectionWrapper style={{ backgroundColor: "#006b6b" }}>
+      <SectionWrapper style={{ backgroundColor: "#006b6b", height: "80vh" }}>
         <div style={{ width: "100%", height: "100%", display: "flex" }}>
           <div style={{ flex: 1 }}>
             <CenterFlexBox>
