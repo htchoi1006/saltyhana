@@ -123,7 +123,6 @@ const Calendar: React.FC = () => {
             className="progress-bar"
             style={{
               width: `${progress}%`,
-              backgroundColor: goal.color,
             }}
           />
         </div>
@@ -174,7 +173,7 @@ const Calendar: React.FC = () => {
           dayCellContent={(args: DayCellContentArg) => {
             const dayNumber = args.dayNumberText.replace("일", "");
             return (
-              <div>
+              <div style={{ height: "100%", position: "relative" }}>
                 <div>{dayNumber}</div>
                 {renderProgressBar(args)}
               </div>
