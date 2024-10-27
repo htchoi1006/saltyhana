@@ -44,12 +44,12 @@ const Carousel2: React.FC = () => {
             </Stack>
           </CenterFlexBox>
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, marginRight: "150px" }}>
           <CenterFlexBox>
             <ConsumptionTestWrapper>
               <Con22h1>내 소비 성향 찾기</Con22h1>
               <Con22p>
-                내 소비 성향을 찾고 맞춤형 금융 상품을 찾을 수 있어요
+                내 소비 성향을 찾고 맞춤형 금융 상품을 찾을 수 있어요.
               </Con22p>
               <ElementsWrapper>
                 <Stack>
