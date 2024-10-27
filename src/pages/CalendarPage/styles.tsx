@@ -133,12 +133,12 @@ export const FullCalendarWrapper = styled.div`
     }
 
     .progress-event {
-      position: relative;
+      position: absolute;
+      bottom: 0;
+      left: 0;
       width: 100%;
-      height: 6px; // 프로그레스 바 높이
-      background: #e5e7eb; // 배경색
-      border-radius: 3px;
-      margin: 2px 0;
+      height: 6px;
+      background: #e5e7eb;
     }
 
     .progress-bar {
@@ -146,8 +146,7 @@ export const FullCalendarWrapper = styled.div`
       left: 0;
       top: 0;
       height: 100%;
-      background: #3b82f6; // 진행률 표시 색상
-      border-radius: 3px;
+      background: #3b82f6;
       transition: width 0.3s ease;
     }
 
