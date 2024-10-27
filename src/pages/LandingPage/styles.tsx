@@ -5,16 +5,15 @@ import styled from "styled-components"; //1. styled-component를 import 합니�
 
 export const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
   font-family: "Noto Sans KR";
 `;
 
-export const SectionWrapper = styled.section`
+export const CarouselWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 80vh;
 `;
 
-export const SectionWrapper2 = styled.section`
+export const SectionWrapper = styled.section`
   width: 100%;
   height: 100vh;
 `;
@@ -66,8 +65,6 @@ export const Container1 = styled.div`
 `;
 
 export const Con1Link = styled(Link)`
-  padding: 5px 16px;
-
   width: 342.78px;
   height: 62.74px;
 
@@ -82,6 +79,12 @@ export const Con1Link = styled(Link)`
 
   text-decoration: none;
   text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: #ffffff;
 
   &:hover {
     background: #006f6f;
