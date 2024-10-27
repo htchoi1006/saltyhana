@@ -96,7 +96,7 @@ const Progress = styled.div`
 const ProgressContainer = styled.div`
   position: relative;
   width: 100%;
-  margin-top: 50px;
+  margin-top: 30px;
 `;
 
 const ProgressPercentage = styled.div`
