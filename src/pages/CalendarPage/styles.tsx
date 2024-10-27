@@ -98,6 +98,18 @@ export const FullCalendarWrapper = styled.div`
       }
     }
 
+    // 오늘 날짜 스타일링
+    .fc-day-today {
+      background-color: white !important;
+
+      .fc-daygrid-day-number {
+        background-color: #3b82f6;
+        color: white !important;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+      }
+    }
+
     // 날짜 셀 스타일링
     .fc-daygrid-day {
       height: 30px !important;
@@ -120,33 +132,29 @@ export const FullCalendarWrapper = styled.div`
       }
     }
 
-    // 오늘 날짜 스타일링
-    .fc-day-today {
-      background-color: white !important;
-
-      .fc-daygrid-day-number {
-        background-color: #3b82f6;
-        color: white !important;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-      }
+    .day-cell-content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .progress-event {
-      position: absolute;
-      bottom: 0;
-      left: 0;
+      position: relative;
       width: 100%;
-      height: 6px;
-      background: #e5e7eb;
+      height: 6px; // 프로그레스 바 높이
+      background: #e5e7eb; // 배경색
+      border-radius: 3px;
+      margin: 2px 0;
     }
 
     .progress-bar {
       position: absolute;
       left: 0;
-      top: 0;
       height: 100%;
-      background: #3b82f6;
+      background: #3b82f6; // 진행률 표시 색상
+      border-radius: 3px;
       transition: width 0.3s ease;
     }
 
