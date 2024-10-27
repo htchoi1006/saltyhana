@@ -43,7 +43,7 @@ const Carousel1: React.FC = () => {
             </Stack>
           </CenterFlexBox>
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, marginRight: "40px" }}>
           <CenterFlexBox>
             <div
               style={{

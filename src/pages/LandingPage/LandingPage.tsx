@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <Container>
-      <SectionWrapper>
+      <SectionWrapper style={{ height: "88vh" }}>
         <div
           style={{
             width: "inherit",
