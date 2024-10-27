@@ -92,7 +92,7 @@ const AssetsPage: React.FC = () => {
       labels,
       datasets: [
         {
-          label: "출금 내역",
+          label: `${minDate}부터 ${maxDate}까지의 지출 내역`,
           data: data,
           fill: true,
           borderColor: "#2A9D8F",
