@@ -47,6 +47,18 @@ const fadeIn = keyframes`
   }
 `;
 
+const float = keyframes`
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+`;
+
 const AnimatedMainText = styled(StyledMainText)`
   opacity: 0;
   animation: ${fadeIn} 1s ease-out forwards;
@@ -66,10 +78,12 @@ const AnimatedLink = styled(Con1Link)`
 `;
 
 // 이미지를 위한 래퍼 컴포넌트
-const ImageWrapper = styled.div`
+const FloatingImageWrapper = styled.div`
   opacity: 0;
-  animation: ${fadeIn} 1s ease-out forwards;
-  animation-delay: 0.6s; // 서브 텍스트와 동시에
+  animation:
+    ${fadeIn} 1s ease-out forwards,
+    ${float} 3s ease-in-out infinite;
+  animation-delay: 0.6s;
 
   img {
     width: 100%;
@@ -77,7 +91,6 @@ const ImageWrapper = styled.div`
     object-fit: contain;
   }
 `;
-
 interface AnimatedTextProps {
   opacity: number;
   translateY: number;
@@ -162,8 +175,8 @@ const LandingPage: React.FC = () => {
     dots: false,
     draggable: false,
     infinite: true,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 3,
+    slidesToScroll: 3,
     autoplay: true,
     speed: 5000,
     autoplaySpeed: 5000,
@@ -199,9 +212,9 @@ const LandingPage: React.FC = () => {
           </div>
           <div style={{ flex: 1 }}>
             <CenterFlexBox>
-              <ImageWrapper>
+              <FloatingImageWrapper>
                 <img src={hand} alt="hand" />
-              </ImageWrapper>
+              </FloatingImageWrapper>
             </CenterFlexBox>
           </div>
         </div>
