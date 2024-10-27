@@ -49,7 +49,7 @@ const AssetsPage: React.FC = () => {
   const accounts = [
     {
       accountNumber: "352-000-0000-01",
-      accountName: "주거래 하나 통장",
+      accountName: "주거래 하나 통장*",
       balance: 2005333,
     },
     {
@@ -77,9 +77,10 @@ const AssetsPage: React.FC = () => {
       (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
     );
     labels = Array.from({ length: diffDays }, (_, i) =>
-      format(subDays(endDate, diffDays - i - 1), "MMM dd"),
+      // format(subDays(endDate, diffDays - i - 1), "MMM dd")
+      subDays(endDate, diffDays - i - 1),
     );
-    const data = labels.map(() => Math.floor(Math.random() * 1000000));
+    const data = labels.map(() => Math.floor(Math.random() * 100000));
     const sum = data.reduce((a, b) => a + b, 0);
     setCumulativeSum(sum - (sum % 100));
 
@@ -91,12 +92,12 @@ const AssetsPage: React.FC = () => {
       labels,
       datasets: [
         {
-          label: "Asset Change",
+          label: "출금 내역",
           data: data,
           fill: true,
           borderColor: "#2A9D8F",
           backgroundColor: "rgba(42, 157, 143, 0.3)",
-          tension: 0.4, // 곡선 정도
+          tension: 0.5, // 곡선 정도
         },
       ],
     };
@@ -115,8 +116,16 @@ const AssetsPage: React.FC = () => {
     scales: {
       x: {
         type: "category",
+        // ticks: {
+        // 	padding: 5,
+        // },
         ticks: {
           padding: 5,
+          callback: (value, index) => {
+            // x축 레이블 포맷
+            const date = new Date(lineData.labels[index]);
+            return format(date, "M월 dd일");
+          },
         },
       },
       y: {
@@ -152,8 +161,16 @@ const AssetsPage: React.FC = () => {
 
             setCumulativeSum(sum - (sum % 100));
 
-            const minDate = format(new Date(labels[validMinIndex]), "M월 dd일");
-            const maxDate = format(new Date(labels[validMaxIndex]), "M월 dd일");
+            // const minDate = format(
+            // 	new Date(labels[validMinIndex]),
+            // 	"M월 dd일"
+            // );
+            // const maxDate = format(
+            // 	new Date(labels[validMaxIndex]),
+            // 	"M월 dd일"
+            // );
+            const minDate = format(labels[validMinIndex], "M월 dd일");
+            const maxDate = format(labels[validMaxIndex], "M월 dd일");
             setZoomedRange(`${minDate}부터 ${maxDate}까지`);
           },
         },
