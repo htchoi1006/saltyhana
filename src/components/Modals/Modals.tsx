@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import ModalsOk from "./ModalsOk";
 import ModalsBackground from "./ModalsBackground";
-import MapSection from "./MapSection";
 import DateSelector from "./DateSelector";
 import TimeSelector from "./TimeSelector";
 import ButtonsSection from "./ButtonsSection";
 import { Bank } from "../Maps/BankLocation";
+import BankLocation from "../Maps/BankLocation";
+import BankSearch from "./BankSearch";
+import BankList from "./BankList";
 import {
+  MapContainer,
+  LeftContainer,
+  RightContainer,
+  UnderMapContainer,
   DateContainer,
-  DateSelectorContainer,
-  DateSelectorText,
+  Left2Container,
 } from "./styles";
 
 interface ModalsProps {
@@ -20,7 +25,8 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [startIndex, setStartIndex] = useState(0); // 현재 시작 인덱스
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [selectedBank, setSelectedBank] = useState<string | null>(null);
+  const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
+  const [nearbyBanks, setNearbyBanks] = useState<Bank[]>([]);
   const [isReservationConfirmed, setIsReservationConfirmed] = useState(false); // 예약 완료 버튼 누르고 나오는 모달 상태
 
   // 기본 날짜 세팅
@@ -30,8 +36,7 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
   const [selectedDay, setSelectedDay] = useState(today.getDate());
 
   const handleSelectBank = (bank: Bank) => {
-    setSelectedBank(bank.name);
-    console.log("선택된 은행:", bank.name);
+    setSelectedBank(bank);
   };
 
   const handleReserve = () => {
@@ -55,34 +60,48 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
     <>
       {isOpen && (
         <ModalsBackground onClose={onClose}>
-          {/* MapSection */}
-          <MapSection
-            selectedBank={selectedBank}
-            onSelectBank={handleSelectBank}
-          />
+          <MapContainer>
+            <BankLocation
+              onSelectBank={setSelectedBank}
+              setNearbyBanks={setNearbyBanks}
+              selectedBank={selectedBank}
+              setSelectedBank={setSelectedBank}
+            />
+          </MapContainer>
 
-          <DateContainer>
-            <DateSelectorText>
-              예약할 날짜와 시간을 선택해주세요.
-            </DateSelectorText>
-            <DateSelectorContainer>
-              <DateSelector
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                selectedDay={selectedDay}
-                setSelectedYear={setSelectedYear}
-                setSelectedMonth={setSelectedMonth}
-                setSelectedDay={setSelectedDay}
+          <UnderMapContainer>
+            <LeftContainer>
+              <Left2Container>
+                <BankSearch />
+
+                <DateContainer>
+                  <DateSelector
+                    selectedYear={selectedYear}
+                    selectedMonth={selectedMonth}
+                    selectedDay={selectedDay}
+                    setSelectedYear={setSelectedYear}
+                    setSelectedMonth={setSelectedMonth}
+                    setSelectedDay={setSelectedDay}
+                  />
+                </DateContainer>
+              </Left2Container>
+
+              <TimeSelector
+                selectedTime={selectedTime}
+                handleTimeSelect={handleTimeSelect}
+                startIndex={startIndex}
+                setStartIndex={setStartIndex}
               />
-            </DateSelectorContainer>
-          </DateContainer>
+            </LeftContainer>
 
-          <TimeSelector
-            selectedTime={selectedTime}
-            handleTimeSelect={handleTimeSelect}
-            startIndex={startIndex}
-            setStartIndex={setStartIndex}
-          />
+            <RightContainer>
+              <BankList
+                banks={nearbyBanks}
+                onSelectBank={setSelectedBank}
+                selectedBank={selectedBank}
+              />
+            </RightContainer>
+          </UnderMapContainer>
 
           <ButtonsSection onClose={onClose} handleReserve={handleReserve} />
         </ModalsBackground>
@@ -93,7 +112,7 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
             setIsReservationConfirmed(false);
             onClose();
           }}
-          selectedBank={selectedBank}
+          selectedBank={selectedBank ? selectedBank.name : null}
           selectedDate={`${selectedYear}-${selectedMonth}-${selectedDay}`}
           selectedTime={selectedTime}
         />

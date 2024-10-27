@@ -10,6 +10,8 @@ import nowlocation from "../../images/modal_nowlocation.png";
 interface KakaoMapProps {
   children: React.ReactNode;
   onUpdatePosition: (position: { lat: number; lng: number }) => void;
+  onMapDragStart: () => void;
+  onMapDragEnd: (position: { lat: number; lng: number }) => void;
 }
 
 interface KakaoMapRef {
@@ -17,13 +19,12 @@ interface KakaoMapRef {
 }
 
 const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
-  ({ children, onUpdatePosition }, ref) => {
+  ({ children, onUpdatePosition, onMapDragStart, onMapDragEnd }, ref) => {
     // 기본 위치: 하나은행 본점
     const defaultPosition = { lat: 37.5663, lng: 126.9819 };
-
-    // 초기 위치와 children에서 받은 위치로 중심 이동
     const [initialPosition, setInitialPosition] = useState(defaultPosition);
     const [currentPosition, setCurrentPosition] = useState(defaultPosition);
+    const [showUserMarker, setShowUserMarker] = useState(false); // 사용자 마커 표시 여부
 
     useEffect(() => {
       if (navigator.geolocation) {
@@ -32,13 +33,13 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
             const { latitude, longitude } = position.coords;
             const newPosition = { lat: latitude, lng: longitude };
 
-            // 현재 위치와 마킹된 위치를 콘솔에 출력
             console.log("현재 위치:", newPosition);
             console.log("마킹된 위치:", initialPosition);
 
             setInitialPosition(newPosition); // 초기 위치를 사용자의 현재 위치로 설정
             setCurrentPosition(newPosition); // 지도 중심도 현재 위치로 설정
             onUpdatePosition(newPosition); // 부모에게 위치 정보 전달
+            setShowUserMarker(true); // 사용자 마커 표시
           },
           (error) => {
             switch (error.code) {
@@ -56,11 +57,19 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
                 console.error("알 수 없는 오류가 발생했습니다.");
                 break;
             }
+            // 위치 정보를 가져오지 못할 경우 기본 위치로 설정
+            setCurrentPosition(defaultPosition);
+            onUpdatePosition(defaultPosition);
+            setShowUserMarker(false); // 사용자 마커 표시하지 않음
           },
-          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }, // 정확도 높이기 위해 설정 추가
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
         );
       } else {
         console.log("이 브라우저에서는 Geolocation을 지원하지 않습니다.");
+        // Geolocation을 지원하지 않을 경우 기본 위치 설정
+        setCurrentPosition(defaultPosition);
+        onUpdatePosition(defaultPosition);
+        setShowUserMarker(false); // 사용자 마커 표시하지 않음
       }
     }, []);
 
@@ -70,22 +79,33 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
       },
     }));
 
+    const handleDragEnd = (map: any) => {
+      const center = map.getCenter();
+      const newPosition = { lat: center.getLat(), lng: center.getLng() };
+      setCurrentPosition(newPosition);
+      onMapDragEnd(newPosition);
+    };
+
     return (
       <Map
         center={{ lat: currentPosition.lat, lng: currentPosition.lng }}
         style={{ width: "100%", height: "100%" }}
-        level={6}
+        level={7}
+        onDragStart={onMapDragStart}
+        onDragEnd={handleDragEnd}
       >
-        <MapMarker
-          position={{ lat: initialPosition.lat, lng: initialPosition.lng }}
-          image={{
-            src: nowlocation, // 사용자 정의 이미지 URL
-            size: {
-              width: 45,
-              height: 65,
-            },
-          }}
-        />
+        {showUserMarker && (
+          <MapMarker
+            position={{ lat: initialPosition.lat, lng: initialPosition.lng }}
+            image={{
+              src: nowlocation, // 사용자 정의 이미지 URL
+              size: {
+                width: 45,
+                height: 65,
+              },
+            }}
+          />
+        )}
         {children} {/* Render children here */}
       </Map>
     );
