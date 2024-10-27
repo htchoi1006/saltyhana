@@ -1,5 +1,10 @@
 import React from "react";
-import { DateSelector as StyledDateSelector } from "./styles";
+import {
+  DateSelector as StyledDateSelector,
+  DateContainer,
+  DateSelectorContainer,
+  DateSelectorText,
+} from "./styles";
 
 interface DateSelectorProps {
   selectedYear: number;
@@ -41,29 +46,32 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <StyledDateSelector
-        value={selectedYear}
-        onChange={(e) => setSelectedYear(Number(e.target.value))}
-      >
-        {years}
-      </StyledDateSelector>
-      <span style={{ marginLeft: "5px" }}>년</span>
-      <StyledDateSelector
-        value={selectedMonth}
-        onChange={(e) => setSelectedMonth(Number(e.target.value))}
-      >
-        {generateMonths()}
-      </StyledDateSelector>
-      <span style={{ marginLeft: "5px" }}>월</span>
-      <StyledDateSelector
-        value={selectedDay}
-        onChange={(e) => setSelectedDay(Number(e.target.value))}
-      >
-        {generateDays()}
-      </StyledDateSelector>
-      <span style={{ marginLeft: "5px" }}>일</span>
-    </div>
+    <DateContainer>
+      <DateSelectorText>예약할 날짜와 시간을 선택해주세요.</DateSelectorText>
+      <DateSelectorContainer>
+        <StyledDateSelector
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(Number(e.target.value))}
+        >
+          {years}
+        </StyledDateSelector>
+        <span style={{ marginLeft: "3px", marginRight: "10px" }}>년</span>
+        <StyledDateSelector
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(Number(e.target.value))}
+        >
+          {generateMonths()}
+        </StyledDateSelector>
+        <span style={{ marginLeft: "3px", marginRight: "10px" }}>월</span>
+        <StyledDateSelector
+          value={selectedDay}
+          onChange={(e) => setSelectedDay(Number(e.target.value))}
+        >
+          {generateDays()}
+        </StyledDateSelector>
+        <span style={{ marginLeft: "3px" }}>일</span>
+      </DateSelectorContainer>
+    </DateContainer>
   );
 };
 

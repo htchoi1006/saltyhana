@@ -48,21 +48,3 @@ export const CloseButton = styled.button`
   color: #888;
   font-size: 15px;
 `;
-
-// 맵의 위치 마커 텍스트 레이아웃
-export const MarkerText = styled.div`
-  padding: 6px 6px;
-  align-items: center;
-  text-align: center;
-  font-size: 12px;
-  max-width: 100%;
-  position: relative;
-`;
-
-export const MarkerLayout = styled.div`
-  background-color: white;
-  padding: 6px 6px;
-  border-radius: 5px;
-  align-items: center;
-  text-align: center;
-`;

@@ -22,7 +22,7 @@ const CustomOverlay: React.FC<CustomOverlayProps> = ({
 }) => {
   return (
     <OverlayContainer
-      style={{ left: position.lng + 90, top: position.lat + 110 }}
+      style={{ right: position.lng - 45, top: position.lat + 70 }}
     >
       <CloseButton onClick={onClose} title="닫기">
         ✖
