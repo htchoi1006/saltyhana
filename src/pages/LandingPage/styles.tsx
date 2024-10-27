@@ -123,7 +123,10 @@ export const SubText = styled.span`
 `;
 
 export const StyledMainText2 = styled(StyledMainText)`
+  font-size: 80px;
   color: #ffffff;
+  line-height: 95px;
+  margin-bottom: 50px;
 `;
 
 export const SubText2 = styled(SubText)`
@@ -167,6 +170,8 @@ export const Con2MainText = styled.p`
   font-size: 80px;
   line-height: 105px;
   letter-spacing: -0.02em;
+  margin-top: 0;
+  margin-bottom: 30px;
 
   color: #ffffff;
 `;
@@ -193,20 +198,27 @@ export const Con22SubText = styled.p`
 `;
 
 export const Con22p2 = styled.p`
-  font-weight: bold;
-  font-size: 21px;
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
 `;
 
 export const ElementImg = styled.img`
   aspect-ratio: 1;
-  width: calc(100% - 20px);
+  /* width: calc(100% - 20px); */
+  width: 80%;
+  height: auto;
 `;
 
 export const ConsumptionTestWrapper = styled(Stack)`
   margin: 0 5%;
   background-color: #ffffff;
   border-radius: 20px;
-  padding: 20px;
+  padding: 20px 30px 40px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   * {
     text-align: center;
@@ -216,7 +228,7 @@ export const ConsumptionTestWrapper = styled(Stack)`
 export const ElementsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 15px;
+  gap: 1px;
   justify-content: center;
   > div {
     align-items: center;
@@ -263,17 +275,23 @@ export const Con2DivforImage = styled.img`
 `;
 
 export const Con22h1 = styled.h1`
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 50px;
+  margin-top: 20px;
+  margin-bottom: 0;
 
   color: #000000;
 `;
 
 export const Con22p = styled.p`
+  font-family: "Noto Sans KR";
   font-style: normal;
-  font-weight: 800;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 60px;
 
   color: #000000;
 `;
@@ -302,7 +320,7 @@ export const Con3SubText = styled.p`
 
 export const Con3StyleDiv = styled.div`
   width: 100%;
-  height: 40%;
+  height: 38%;
   background: #2e3c7e;
 
   display: flex;
