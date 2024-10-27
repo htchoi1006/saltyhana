@@ -6,9 +6,15 @@ import styled from "styled-components"; //1. styled-component를 import 합니�
 export const Container = styled.div`
   width: 100%;
   min-height: 100vh;
+  font-family: "Noto Sans KR";
 `;
 
 export const SectionWrapper = styled.section`
+  width: 100%;
+  height: 100vh;
+`;
+
+export const SectionWrapper2 = styled.section`
   width: 100%;
   height: 100vh;
 `;
@@ -70,27 +76,36 @@ export const Con1Link = styled(Link)`
   background: #008485;
   border-radius: 20px;
 
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   text-decoration: none;
   text-align: center;
-
-  color: #ffffff;
 
   &:hover {
     background: #006f6f;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
+
+  > span {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 35px;
+
+    color: #ffffff;
+  }
 `;
 
 export const StyledMainText = styled.span`
+  font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 700;
   font-size: 72px;
   line-height: 87px;
   letter-spacing: -0.02em;
+  margin-bottom: 20px;
 
   color: #000000;
 `;
@@ -268,9 +283,9 @@ export const Box = styled.div`
   border-radius: 20px;
 `;
 
-export const Container3 = styled.div`
-  background-color: #e9edf08f;
-`;
+// export const Container3 = styled.div`
+// 	background-color: #e9edf08f;
+// `;
 
 export const Con3SubText = styled.p`
   font-style: normal;
@@ -284,7 +299,7 @@ export const Con3SubText = styled.p`
 
 export const Con3StyleDiv = styled.div`
   width: 100%;
-  height: 50%;
+  height: 40%;
   background: #2e3c7e;
 
   display: flex;
