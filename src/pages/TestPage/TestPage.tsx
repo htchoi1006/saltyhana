@@ -95,11 +95,11 @@ const TestPage: React.FC = () => {
     // 마지막 질문이면 결과 페이지로 이동
     if (currentQuestionIndex === questions.length - 1) {
       if (score >= 50) {
-        navigate("/TestResult3"); // "마지막에 웃는 진짜 승리자!" 유형
+        navigate(`/result/consumption?result=${3}`); // "마지막에 웃는 진짜 승리자!" 유형
       } else if (score >= 40 && score < 50) {
-        navigate("/TestResult2"); // "나에게 주는 선물" 유형
+        navigate(`/result/consumption?result=${2}`); // "나에게 주는 선물" 유형
       } else {
-        navigate("/TestResult1");
+        navigate(`/result/consumption?result=${1}`);
       }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -127,7 +127,10 @@ const TestPage: React.FC = () => {
       <div style={{ flex: "none" }}>
         <HeaderOffset></HeaderOffset>
         <div style={{ padding: "65px 80px" }}>
-          <Stepper curCount={currentQuestionIndex} maxCount={10} />
+          <Stepper
+            curCount={currentQuestionIndex}
+            maxCount={questions.length}
+          />
         </div>
       </div>
       <div
