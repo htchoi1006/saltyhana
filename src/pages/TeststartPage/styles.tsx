@@ -7,7 +7,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-top: 20px;
+  /* padding-top: 20px; */
 `;
 
 export const Header = styled.div`
@@ -16,6 +16,7 @@ export const Header = styled.div`
   font-weight: 700;
   font-size: 56px;
   line-height: 0px;
+  padding-top: 20px;
 
   color: #000000;
 `;
@@ -35,7 +36,8 @@ export const ElementDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 70%;
-  margin-top: 150px;
+  margin-top: 130px;
+  padding-left: 15px;
 `;
 
 export const Element = styled.div`
@@ -83,6 +85,7 @@ export const ButtonWrapper = styled.div`
   font-weight: 700;
   font-size: 25px;
   margin-top: 100px;
+  margin-bottom: 0;
   cursor: pointer;
 
   text-decoration: none;
