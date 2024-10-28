@@ -1,27 +1,27 @@
 import styled from "styled-components";
 
-export const ModalBackdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`;
-
 export const ModalContainer = styled.div`
   background-color: #fff;
-  width: 40%;
-  height: 50%;
-  max-width: 100%;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   overflow-y: scroll;
+  margin-top: 30px;
+
+  /*스크롤바 css*/
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f5f5f5; /* 스크롤바 트랙 배경색 */
+    border-radius: 4px; /* 둥근 모서리 */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0; /* 스크롤바 색상 */
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #a0a0a0; /* hover 시 색상 */
+  }
 `;
 
 export const ModalTitle = styled.h2`
@@ -104,4 +104,15 @@ export const RoundCheckboxWrapper = styled.div`
     cursor: pointer;
     user-select: none;
   }
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 20px;
 `;
