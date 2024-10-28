@@ -55,7 +55,7 @@ export const HeaderDescription = styled.div`
   font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 15px;
   margin-left: 20px;
 `;
 
