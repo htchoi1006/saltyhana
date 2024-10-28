@@ -41,7 +41,10 @@ const HomePage: React.FC = () => {
         progress={80}
       />
       {/* 주간 캘린더 레이아웃 */}
-      <Calendar showStamp={[true, false, false, false, false, false, false]} />
+      <Calendar
+        showStamp={[true, false, false, false, false, false, false]}
+        birthday={"2024/10/31"}
+      />
       {/* 상품 리스트가 표시되는 섹션 */}
       <styled.ProductList>
         {productList.current.map((v, i) => (
