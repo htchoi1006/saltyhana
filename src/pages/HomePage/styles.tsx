@@ -250,8 +250,8 @@ const CalendarIcon = styled.img.attrs({ alt: "달력 이미지" })`
 `;
 
 const StampIcon = styled.img.attrs({ alt: "스탬프 이미지" })`
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: auto;
   position: absolute;
   top: 50%;
   left: 50%;
