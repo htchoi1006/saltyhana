@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
         progress={80}
       />
       {/* 주간 캘린더 레이아웃 */}
-      <Calendar />
+      <Calendar showStamp={[true, false, false, false, false, false, false]} />
       {/* 상품 리스트가 표시되는 섹션 */}
       <styled.ProductList>
         {/* 트래블로그 여행 적금 카드 */}
