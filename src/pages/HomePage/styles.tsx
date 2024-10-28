@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import cake from "../../images/cake.png";
 import travel from "../../images/travel.svg";
 import calendar from "../../images/calendar.svg";
 import set_goal_stamp from "../../images/set_goal_stamp.png";
+
 interface GoalContainerProps {
   goal: string;
   startdate: string;
@@ -189,7 +191,8 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
 };
 
 const CalendarContainer = styled.div`
-  margin-top: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   display: flex;
 `;
 
@@ -259,13 +262,22 @@ const StampIcon = styled.img.attrs({ alt: "스탬프 이미지" })`
 `;
 interface CalendarContainerProps {
   showStamp: boolean[];
+  birthday: string; // YYYY/MM/DD
 }
 
-export const Calendar: React.FC<CalendarContainerProps> = ({ showStamp }) => {
+export const Calendar: React.FC<CalendarContainerProps> = ({
+  showStamp,
+  birthday,
+}) => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
   const now = new Date();
-  let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const activeDay = date.getDay();
+
+  // 생일 날짜 객체 생성
+  const birthdayDate = new Date(birthday);
+  const birthdayMonth = birthdayDate.getMonth();
+  const birthdayDay = birthdayDate.getDate();
 
   return (
     <CalendarContainer>
@@ -274,21 +286,32 @@ export const Calendar: React.FC<CalendarContainerProps> = ({ showStamp }) => {
         <CalendarMonth>{`${now.getMonth() + 1}월`}</CalendarMonth>
       </CalendarMonthDiv>
       <CalendarWeek>
-        {days.map((day, index) => (
-          <CalendarDay key={index} isActive={index === activeDay}>
-            <CalendarDate>
-              <p style={{ padding: "10px" }}>{day}</p>
-              <div style={{ position: "relative" }}>
-                {showStamp[index] && <StampIcon src={set_goal_stamp} />}
-                <p style={{ padding: "10px", position: "relative", zIndex: 1 }}>
-                  {new Date(
-                    date.valueOf() + 86400000 * (index - date.getDay()),
-                  ).getDate()}
-                </p>
-              </div>
-            </CalendarDate>
-          </CalendarDay>
-        ))}
+        {days.map((day, index) => {
+          const currentDate = new Date(
+            date.valueOf() + 86400000 * (index - activeDay),
+          );
+          const isBirthday =
+            currentDate.getMonth() === birthdayMonth &&
+            currentDate.getDate() === birthdayDay;
+
+          return (
+            <CalendarDay key={index} isActive={index === activeDay}>
+              <CalendarDate>
+                <p>{day}</p>
+                <div style={{ position: "relative" }}>
+                  {isBirthday ? (
+                    <StampIcon src={cake} />
+                  ) : (
+                    showStamp[index] && <StampIcon src={set_goal_stamp} />
+                  )}
+                  <p style={{ position: "relative", zIndex: 1 }}>
+                    {currentDate.getDate()}
+                  </p>
+                </div>
+              </CalendarDate>
+            </CalendarDay>
+          );
+        })}
       </CalendarWeek>
     </CalendarContainer>
   );
