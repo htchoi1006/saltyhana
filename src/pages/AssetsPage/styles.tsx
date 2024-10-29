@@ -12,7 +12,7 @@ export const AccountListContainer = styled.div`
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 8px;
-  width: 250px;
+  width: 89%;
   height: 170px;
   overflow-y: auto; // Enable vertical scrolling when list exceeds height
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@ export const AccountListContainer = styled.div`
 export const AccountItem = styled.div`
   padding: 10px;
   margin: 5px 0;
-  background-color: #f0f0f0;
+  background-color: #f5f7fa91;
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
@@ -124,6 +124,9 @@ export const ChartsContainer = styled.div`
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
+  background-color: #f5f7fa91;
+  border-radius: 10px;
+  box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
 `;
 
 const ChartBox = styled.div`
@@ -165,6 +168,7 @@ export const AssetDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 20px;
 `;
 
 export const AssetGuideDiv = styled.div`
