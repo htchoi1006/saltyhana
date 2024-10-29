@@ -37,7 +37,8 @@ export const InputWrapper = styled.div`
 
 export const InputContainer = styled.div`
   flex: 1;
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 3px 12px;
   display: flex;
@@ -46,6 +47,7 @@ export const InputContainer = styled.div`
   width: 380px;
   height: 47px;
   font-family: "Noto Sans KR";
+  border: 1px solid lightgray;
 
   &:focus-within {
     outline: 2px solid #008485;
@@ -78,8 +80,17 @@ export const Input = styled.input`
   padding: 0;
   font-family: "Noto Sans KR";
 
-  &::placeholder {
-    color: #adb5bd;
+  /* &::placeholder {
+		color: #adb5bd;
+	} */
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #000 !important;
   }
 `;
 
@@ -158,7 +169,7 @@ export const ImageUploadSection = styled.div`
 export const ImageUploadBox = styled.div`
   width: 228px;
   height: 228px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -166,6 +177,7 @@ export const ImageUploadBox = styled.div`
   cursor: pointer;
   overflow: hidden;
   transition: background-color 0.2s ease;
+  border: 1px solid lightgray;
 
   &:hover {
     background-color: #e9ecef;
@@ -252,6 +264,15 @@ export const RegisterInput = styled.input`
   font-size: 16px;
   outline: none;
   padding: 4px 0;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+  }
 
   &::placeholder {
     color: #adb5bd;
