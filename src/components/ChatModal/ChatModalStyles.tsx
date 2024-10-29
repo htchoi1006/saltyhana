@@ -83,12 +83,12 @@ export const ChatIcon = styled.img`
 `;
 
 // 닫기 버튼
-export const CloseImg = styled.img`
-  width: 35px;
-  height: 35px;
+export const CloseButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  color: #555;
+  font-size: 20px;
 `;
 
 // 채팅 메시지 영역

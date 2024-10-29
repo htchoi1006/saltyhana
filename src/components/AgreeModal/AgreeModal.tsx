@@ -1,28 +1,41 @@
 import React, { useState, useEffect } from "react";
 import * as styled from "./AgreeModalStyles";
+import ModalsBackground from "../Modals/ModalsBackground";
 
 interface AgreeModalProps {
   onClose: () => void;
   onAgreeAll: () => void; // 약관 모두 동의 시 호출되는 함수
+  isAgreed: boolean;
 }
 
-const AgreeModal: React.FC<AgreeModalProps> = ({ onClose, onAgreeAll }) => {
+const AgreeModal: React.FC<AgreeModalProps> = ({
+  onClose,
+  onAgreeAll,
+  isAgreed,
+}) => {
   const [isChecked1, setIsChecked1] = useState(false); // 필수 약관 1
   const [isChecked2, setIsChecked2] = useState(false); // 필수 약관 2
   const [isChecked3, setIsChecked3] = useState(false); // 선택 약관
   const [isAllChecked, setIsAllChecked] = useState(false); // 전체 동의
   const [showWarning, setShowWarning] = useState(false); // 필수 약관 미체크 시 경고 메시지
 
+  // 부모의 체크박스가 클릭된 채 모달을 열면 체크박스 선택 되어있게
+  useEffect(() => {
+    setIsChecked1(isAgreed);
+    setIsChecked2(isAgreed);
+    setIsChecked3(isAgreed);
+    setIsAllChecked(isAgreed);
+  }, [isAgreed]);
+
   // 필수 약관이 모두 체크되었는지 확인
   useEffect(() => {
-    if (isChecked1 && isChecked2) {
-      setIsAllChecked(true); // 필수 약관이 모두 체크되었으면 전체 동의도 체크
+    if (isChecked1 && isChecked2 && isChecked3) {
+      setIsAllChecked(true);
     } else {
-      setIsAllChecked(false); // 그렇지 않으면 전체 동의 체크 해제
+      setIsAllChecked(false);
     }
-  }, [isChecked1, isChecked2]);
+  }, [isChecked1, isChecked2, isChecked3]);
 
-  // 전체 동의 체크박스 클릭 시 모든 약관 선택
   const handleAllChecked = () => {
     const newValue = !isAllChecked;
     setIsAllChecked(newValue);
@@ -31,19 +44,21 @@ const AgreeModal: React.FC<AgreeModalProps> = ({ onClose, onAgreeAll }) => {
     setIsChecked3(newValue); // 선택 약관도 함께 적용
   };
 
-  // 확인 버튼 클릭 시 필수 약관 체크 여부 확인
   const handleSubmit = () => {
     if (!isChecked1 || !isChecked2) {
-      setShowWarning(true); // 필수 약관을 모두 체크하지 않았을 경우 경고 메시지 출력
+      alert("필수 약관을 모두 체크해 주세요.");
     } else {
-      setShowWarning(false); // 필수 약관이 모두 체크되었을 경우 경고 메시지 숨김
-      onAgreeAll(); // SignupPage의 체크박스를 체크 상태로 설정
+      onAgreeAll(); // 모든 약관 동의 시 호출
       onClose(); // 모달 닫기
     }
   };
 
   return (
-    <styled.ModalBackdrop>
+    <ModalsBackground onClose={onClose}>
+      <styled.CloseButton onClick={onClose} title="닫기">
+        ✖
+      </styled.CloseButton>
+
       <styled.ModalContainer>
         <styled.ModalTitle>서비스 이용 동의</styled.ModalTitle>
 
@@ -79,7 +94,7 @@ const AgreeModal: React.FC<AgreeModalProps> = ({ onClose, onAgreeAll }) => {
             (금융)거래라 함은 은행업무(여신, 수신, 내·외국환), 겸영업무(펀드,
             신탁, 파생상품, 방카슈랑스, 신용카드, 마이데이터 서비스 등) 및
             부수업무(팩토링, 보호예수, 수납 및 지급대행, 대여금고, 상품권 등
-            판매대행 등)와 이와 관련된 거래를 의미합니다..
+            판매대행 등)와 이와 관련된 거래를 의미합니다.
           </p>
         </styled.DetailContent>
 
@@ -134,7 +149,7 @@ const AgreeModal: React.FC<AgreeModalProps> = ({ onClose, onAgreeAll }) => {
 
         <styled.ModalButton onClick={handleSubmit}>확인</styled.ModalButton>
       </styled.ModalContainer>
-    </styled.ModalBackdrop>
+    </ModalsBackground>
   );
 };
 
