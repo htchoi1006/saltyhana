@@ -6,7 +6,9 @@ import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import SmartphoneIcon from "../../icons/smart-phone-01-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
-import AgreeModal from "../../components/AgreeModal/AgreeModal";
+import ModalManager, {
+  ModalManagerType,
+} from "../../components/Modals/ModalManager";
 
 import {
   Container,
@@ -20,20 +22,31 @@ import {
 } from "./styles";
 
 export default function SignupPage() {
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false); // 모달 상태 관리
-  const [isAgreed, setIsAgreed] = useState(false); // 이용약관 체크박스 상태
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
   const birthInputRef = useRef<HTMLInputElement | null>(null);
+  const modalManagerRef = useRef<ModalManagerType>(null);
+  const [isAgreed, setIsAgreed] = useState(false);
 
-  const openTermsModal = () => setIsTermsModalOpen(true);
-  const closeTermsModal = () => setIsTermsModalOpen(false);
+  const handleOpenModal = () => {
+    modalManagerRef.current?.openModal("이용약관");
+  };
 
-  // 약관에 모두 동의했을 때 호출되는 함수
-  const handleAgreeAll = () => {
-    setIsAgreed(true); // 체크박스를 체크 상태로 설정
-    closeTermsModal(); // 모달 닫기
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    if (checked) {
+      const isConfirmed = window.confirm("이용약관을 읽고 진행해주세요.");
+
+      if (isConfirmed) {
+        handleOpenModal();
+      } else {
+        e.preventDefault();
+        e.target.checked = false;
+      }
+    } else {
+      setIsAgreed(false);
+    }
   };
 
   return (
@@ -60,7 +73,6 @@ export default function SignupPage() {
               console.log(`email: ${emailInputRef.current?.value}`);
               console.log(`password: ${passwordInputRef.current?.value}`);
               console.log(`birth: ${birthInputRef.current?.value}`);
-              console.log(`check: ${isAgreed}`);
             }}
           >
             <InputsWrapper>
@@ -103,17 +115,25 @@ export default function SignupPage() {
             <AgreementCheckWrapper
               style={{ marginTop: "10px", marginBottom: "45px" }}
             >
-              {/* 약관 동의 체크박스 */}
-              <input type="checkbox" checked={isAgreed} disabled />
+              <input
+                type="checkbox"
+                checked={isAgreed}
+                onChange={handleCheckBox}
+              />
               <label>
                 <span
                   style={{ cursor: "pointer", textDecoration: "underline" }}
-                  onClick={openTermsModal} // 클릭 시 이용약관 모달 열기
+                  onClick={handleOpenModal} // 클릭 시 이용약관 모달 열기
                 >
                   이용약관
                 </span>
                 에 동의합니다.
               </label>
+              <ModalManager
+                ref={modalManagerRef}
+                setIsAgreed={setIsAgreed}
+                isAgreed={isAgreed}
+              />
             </AgreementCheckWrapper>
             <StyledButton>회원가입</StyledButton>
           </form>
@@ -122,10 +142,6 @@ export default function SignupPage() {
           </FooterParagraph>
         </Paper>
       </FormWrapper>
-      {/* 약관 동의 모달, handleAgreeAll 함수를 전달 */}
-      {isTermsModalOpen && (
-        <AgreeModal onClose={closeTermsModal} onAgreeAll={handleAgreeAll} />
-      )}
     </Container>
   );
 }
