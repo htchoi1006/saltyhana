@@ -192,7 +192,10 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
             <ProgressPercentage
-              style={{ right: `${100 - currentProgress}%`, bottom: "50px" }}
+              style={{
+                right: `${100 - currentProgress}%`,
+                bottom: "50px",
+              }}
             >
               {`${displayedProgress}%`}
             </ProgressPercentage>
@@ -259,7 +262,7 @@ const CalendarDay = styled.div<{ isActive: boolean }>`
   font-size: 18px;
   color: ${({ isActive }) => (isActive ? "#00bfa5" : "#333")};
   border: ${({ isActive }) => (isActive ? "2px solid #00bfa5" : "none")};
-  background-color: ${({ isActive }) => (isActive ? "transparent" : "white")};
+  background-color: ${({ isActive }) => (isActive ? "transparent" : "#f5f7fa")};
   cursor: pointer;
 `;
 
