@@ -10,17 +10,12 @@ import sidebar_recommend from "../../images/sidebar_recommend.png";
 import sidebar_reservation from "../../images/sidebar_reservation.png";
 import sidebar_setting from "../../images/sidebar_setting.png";
 
-import ModalManager from "../Modals/ModalManager";
+import ModalManager, { ModalManagerType } from "../Modals/ModalManager";
 
 interface INav {
   to: string;
   imgSrc: string;
   displayName: string;
-}
-
-interface ModalManagerType {
-  openModal: (modalName: string) => void;
-  closeModal: () => void;
 }
 
 export default function Sidebar() {

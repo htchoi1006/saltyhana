@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as styled from "./ChatModalStyles";
 import icon from "../../images/chatmodal_counsel.png";
-import closeIcon from "../../images/chatmodal_exit.png";
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -106,7 +105,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
         {/* 헤더 부분 */}
         <styled.Header>
           <styled.ChatIcon src={icon} />
-          <styled.CloseImg src={closeIcon} onClick={handleCloseModal} />
+          <styled.CloseButton onClick={handleCloseModal}>✖</styled.CloseButton>
         </styled.Header>
 
         {/* 채팅 부분 */}
