@@ -20,7 +20,7 @@ export const PageContainer = styled.div`
 
 const StyledGoalContainer = styled.div`
   border-radius: 10px;
-  background-color: #efefef;
+  background-color: #ebeff3;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   font-family:
     Noto Sans KR,
@@ -216,6 +216,9 @@ const CalendarContainer = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
+  /* background-color: #ebeff3;
+	box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
+	border-radius: 10px; */
 `;
 
 const CalendarMonthDiv = styled.div`
