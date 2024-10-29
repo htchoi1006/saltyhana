@@ -17,7 +17,7 @@ export const BodyWrapper = styled.div`
   flex-direction: column;
   padding: 20px 62px;
   background-color: #f5f7fa;
-  height: 90vh;
+  /* height: "calc(100% - 64px)"; */
   // background-color: #f0f0f0;
 `;
 

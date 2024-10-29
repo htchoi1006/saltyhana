@@ -190,7 +190,17 @@ const AssetsPage: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: "#f5f7fa",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        width: "95%",
+        height: "calc(100% - 64px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Header>짭짤하나 님의 자산 현황</Header>
       <HeaderDescription>
         짭짤하나 님이 가지고 계신 계좌 잔액과 기간 별 지출 현황을 확인하실 수
@@ -255,7 +265,7 @@ const AssetsPage: React.FC = () => {
           </ChartsContainer>
         </div>
       </PageContainer>
-    </>
+    </div>
   );
 };
 
