@@ -1,10 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import styled from "styled-components";
+import { createBrowserRouter } from "react-router-dom";
+
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import SignupPage from "./pages/SignupPage/SignupPage";
-import TeststartPage from "./pages/TeststartPage/TeststartPage";
+import TestStartPage from "./pages/TeststartPage/TeststartPage";
 import HomePage from "./pages/HomePage/HomePage";
 import CalendarPage from "./pages/CalendarPage/CalendarPage";
 import GoalPage from "./pages/GoalPage/GoalPage";
@@ -16,25 +16,70 @@ import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccoun
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import TestResultPage from "./pages/TestResultPage/TestResultPage";
 
-const AppContainer = styled.div`
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-`;
-
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+  },
+  {
+    path: "/connecting-account",
+    element: <ConnectingAccountPage />,
+  },
+  {
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "home",
+        element: <HomePage />,
+      },
+      {
+        path: "calendar",
+        element: <CalendarPage />,
+      },
+      {
+        path: "goal",
+        element: <GoalPage />,
+      },
+      {
+        path: "assets",
+        element: <AssetsPage />,
+      },
+      {
+        path: "recommend",
+        element: <RecommendPage />,
+      },
+    ],
+  },
+  {
+    element: <MainLayout />,
+    children: [
+      {
+        path: "/",
+        element: <LandingPage />,
+      },
+      {
+        path: "/teststart",
+        element: <TestStartPage />,
+      },
+      {
+        path: "/test/consumption",
+        element: <TestPage />,
+      },
+      {
+        path: "/result/consumption",
+        element: <TestResultPage />,
+      },
+    ],
+  },
+]);
+/*
 const App: React.FC = () => {
   return (
-    <>
-      <Router>
-        {/* <AppContainer>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            
-          </Routes>
-        </AppContainer> */}
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -57,8 +102,8 @@ const App: React.FC = () => {
           </Route>
         </Routes>
       </Router>
-    </>
   );
 };
+*/
 
-export default App;
+export default router;
