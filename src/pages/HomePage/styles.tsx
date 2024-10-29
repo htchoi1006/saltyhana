@@ -304,7 +304,12 @@ export const Calendar: React.FC<CalendarContainerProps> = ({
                   ) : (
                     showStamp[index] && <StampIcon src={set_goal_stamp} />
                   )}
-                  <p style={{ position: "relative", zIndex: 1 }}>
+                  <p
+                    style={{
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
                     {currentDate.getDate()}
                   </p>
                 </div>

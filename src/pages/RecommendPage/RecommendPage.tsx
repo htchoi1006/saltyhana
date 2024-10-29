@@ -6,10 +6,14 @@ import {
   PageTitle,
   PageDescription,
   ProductList,
-  RecommendProduct,
   TestCard,
   CustomList,
-  IconWrapper,
+  TestCardHeader,
+  TestCardLeftDiv,
+  TestCardRightDiv,
+  TestCardDescription,
+  TestCardButton,
+  TestCardHeaderIcon,
 } from "./styles";
 import travelLogImage from "../../images/recommend_travellog.png";
 import sweatHanaImage from "../../images/recommend_sweathana.png";
@@ -17,6 +21,8 @@ import youthAccountImage from "../../images/recommend_youthaccount.png";
 import { ReactComponent as WalletIcon } from "../../images/recommend_wallet.svg";
 import { ReactComponent as RecommendIcon } from "../../images/recommend_producticon.svg";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import ConsumeTestImage from "../../images/ConsumeTestImage.png";
+import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
 import { ProductType } from "../../type";
 
 const RecommendPage: React.FC = () => {
@@ -57,42 +63,31 @@ const RecommendPage: React.FC = () => {
       </ProductList>
       {/* 추천 적금 */}
       <CustomList>
-        <RecommendProduct>
-          <div>
-            <span>
-              홍길동님께
-              <br />
-              추천하는 적금
-            </span>
-          </div>
-          <div>
-            <IconWrapper>
-              <RecommendIcon />
-            </IconWrapper>
-          </div>
-        </RecommendProduct>
-        <Link
-          to="/teststart"
-          style={{
-            textDecoration: "none",
-            color: "inheirt",
-          }}
-        >
-          <TestCard>
-            <div>
-              <span>
-                소비성향
-                <br />
-                Test
-              </span>
-            </div>
-            <div>
-              <IconWrapper>
-                <WalletIcon />
-              </IconWrapper>
-            </div>
-          </TestCard>
-        </Link>
+        <TestCard>
+          <TestCardLeftDiv>
+            <TestCardHeader>
+              <span>소비성향 TEST</span>
+              <TestCardHeaderIcon src={ConsumeTestIcon} />
+            </TestCardHeader>
+            <TestCardDescription>
+              <p>내 유형은 뭘까?</p>
+              <p>테스트하고 내 성향에 맞는 투자 상품 추천 받자!</p>
+            </TestCardDescription>
+            <Link
+              to="/teststart"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                width: "100%",
+              }}
+            >
+              <TestCardButton>
+                <span>테스트 하러 가기</span>
+              </TestCardButton>
+            </Link>
+          </TestCardLeftDiv>
+          <TestCardRightDiv src={ConsumeTestImage} />
+        </TestCard>
       </CustomList>
     </BodyWrapper>
   );
