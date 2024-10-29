@@ -16,6 +16,8 @@ export const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px 62px;
+  background-color: #f5f7fa;
+  height: 90vh;
   // background-color: #f0f0f0;
 `;
 
@@ -24,6 +26,7 @@ export const PageTitle = styled.div`
   font-weight: 700;
   font-size: 36px;
   text-align: left;
+  margin-top: 20px;
 `;
 
 export const PageDescription = styled.p`
@@ -60,20 +63,21 @@ export const ProductList = styled.div`
 `;
 
 export const CustomList = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
 
   > *:nth-child(1) {
     opacity: 0;
     animation: ${fadeIn} 1s ease-out forwards;
     animation-delay: 1.2s;
   }
-  > *:nth-child(2) {
-    opacity: 0;
-    animation: ${fadeIn} 1s ease-out forwards;
-    animation-delay: 1.5s;
-  }
+  /* > *:nth-child(2) {
+		opacity: 0;
+		animation: ${fadeIn} 1s ease-out forwards;
+		animation-delay: 1.5s;
+	} */
 `;
 
 // 상품 카드와 제목을 감싸는 래퍼
@@ -99,9 +103,9 @@ export const ProductCard = styled.div`
   position: relative;
   transition: transform 0.5s ease; /* 부드러운 전환 효과 */
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  /* &:hover {
+		transform: scale(1.1);
+	} */
 
   /* 이미지에 어두운 오버레이 추가 */
   &:before {
@@ -205,44 +209,84 @@ export const ProductTitle = styled.p`
   z-index: 2; /* 텍스트는 이미지 위로 보이도록 설정 */
 `;
 
-const BasicCard = styled.div`
+// 소비성향 테스트 카드
+export const TestCard = styled.div`
+  background: #fffbd8;
+  color: white;
   width: 100%;
-  height: 250px;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: center;
   border-radius: 30px;
-  display: grid;
-  grid-template-columns: 1fr 250px;
-  transition: transform 0.5s ease; /* 부드러운 전환 효과 추가 */
+`;
+
+export const TestCardLeftDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+`;
+
+export const TestCardHeader = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 45px;
+  line-height: 70px;
+  display: flex;
+  align-items: center;
+
+  color: #404040;
+`;
+
+export const TestCardHeaderIcon = styled.img`
+  width: 80px;
+  height: auto;
+`;
+
+export const TestCardDescription = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  color: #404040;
+  margin-top: 20px;
+
+  > p {
+    margin: 0;
+  }
+`;
+
+export const TestCardButton = styled.button`
+  box-sizing: border-box;
+  width: 200px;
+  height: 65px;
+
+  background: rgba(248, 231, 140, 0.79);
+  border-radius: 50px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
 
   &:hover {
-    transform: scale(1.1);
+    background: rgba(249, 225, 90, 0.79);
   }
 
-  * span {
-    font-size: 30px;
-    font-weight: 900;
-    text-align: left;
-    line-height: 1.3;
-    margin: 0 0 30px 30px;
-  }
-  > div {
-    width: 100%;
-    height: inherit;
-    display: flex;
-    align-items: end;
+  > span {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 800;
+    font-size: 22px;
+    color: #404040;
   }
 `;
 
-// 맞춤 상품 스타일
-export const RecommendProduct = styled(BasicCard)`
-  background: #e8e8e8;
-  color: black;
-`;
-
-// 소비성향 테스트 카드
-export const TestCard = styled(BasicCard)`
-  background: #446864;
-  color: white;
+export const TestCardRightDiv = styled.img`
+  width: 583px;
+  height: auto;
+  margin-left: 300px;
 `;
 
 // 고객센터 버튼
