@@ -112,6 +112,17 @@ const ProgressPercentage = styled.div`
   white-space: nowrap;
 `;
 
+const ProgressImage = styled.img<{ leftPosition: number }>`
+  position: absolute;
+  top: 30%; // 원하는 수직 위치 조정
+  left: ${({ leftPosition }) => `calc(${leftPosition}% - 20px)`};
+  transition: left 1.5s ease-in-out;
+  width: 40px;
+  height: 40px;
+  margin-top: -5%;
+  transform: scaleX(-1); // 좌우 반전
+`;
+
 interface GoalContainerProps {
   goal: string;
   startdate: string;
@@ -176,12 +187,20 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
         <GoalDate>
           {startdate} ~ {enddate}
         </GoalDate>
+
         <ProgressContainer>
-          <ProgressPercentage style={{ right: `${100 - currentProgress}%` }}>
-            {`${displayedProgress}%`}
-          </ProgressPercentage>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
+            <ProgressPercentage
+              style={{ right: `${100 - currentProgress}%`, bottom: "50px" }}
+            >
+              {`${displayedProgress}%`}
+            </ProgressPercentage>
+            <ProgressImage
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Running.png"
+              alt="Man Running"
+              leftPosition={currentProgress}
+            />
           </ProgressBar>
         </ProgressContainer>
       </GoalContainerDiv>
