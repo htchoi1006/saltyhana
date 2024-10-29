@@ -29,7 +29,7 @@ export default function DashboardLayout() {
           <HeaderOffset></HeaderOffset>
           <Sidebar />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, backgroundColor: "#f5f7fa" }}>
           {navigation.state === "loading" ? (
             <div
               style={{
