@@ -34,7 +34,7 @@ const HomePage: React.FC = () => {
     {
       title: "추가 상품 3",
       subtitle: "설명",
-      color: "#E6F8F1",
+      color: "#EAF1FA",
       image: card6,
       description: "연 2.20% ~ 3.50%",
     },
@@ -43,16 +43,17 @@ const HomePage: React.FC = () => {
   return (
     <PageContainer>
       {/* 목표, 진행도 박스 레이아웃  */}
-      {goal == null ? (
-        <GoalContainer />
-      ) : (
+      {
+        // goal == null ? (
+        //   <GoalContainer />
+        // ) :
         <GoalProgressContainer
           goal={"여행"}
           startdate={"2024.10.01"}
           enddate={"2024.12.23"}
           progress={80}
         />
-      )}
+      }
       {/* 주간 캘린더 레이아웃 */}
       <WeekdayCalendar
         dates={[
