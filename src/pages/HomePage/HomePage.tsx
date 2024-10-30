@@ -1,12 +1,13 @@
 import React, { useRef } from "react";
 
 import * as styled from "../RecommendPage/styles";
-import { Calendar, GoalProgressContainer, PageContainer } from "./styles";
+import { GoalProgressContainer, PageContainer } from "./styles";
 import travelLogImage from "../../images/recommend_travellog.png";
 import sweatHanaImage from "../../images/recommend_sweathana.png";
 import youthAccountImage from "../../images/recommend_youthaccount.png";
 import { ProductType } from "../../type";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
 
 // HomePage 컴포넌트: 홈, 대시보드 페이지를 렌더링하는 함수형 컴포넌트
 const HomePage: React.FC = () => {
@@ -41,9 +42,19 @@ const HomePage: React.FC = () => {
         progress={80}
       />
       {/* 주간 캘린더 레이아웃 */}
-      <Calendar
-        showStamp={[true, false, false, false, false, false, false]}
-        birthday={"2024/10/31"}
+      <WeekdayCalendar
+        dates={[
+          { isAchieve: true, date: new Date("2024-10-22") },
+          { isAchieve: true, date: new Date("2024-10-23") },
+          { isAchieve: false, date: new Date("2024-10-24") },
+          { isAchieve: true, date: new Date("2024-10-25") },
+          { isAchieve: false, date: new Date("2024-10-26") },
+          { isAchieve: true, date: new Date("2024-10-27") },
+          { isAchieve: false, date: new Date("2024-10-28") },
+          { isAchieve: false, date: new Date("2024-10-29") },
+          { isAchieve: true, date: new Date("2024-10-30") },
+          { isAchieve: true, date: new Date("2024-10-31") },
+        ]}
       />
       {/* 상품 리스트가 표시되는 섹션 */}
       <styled.ProductList>
