@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
-import { CenterFlexContainer, Spinner, StyledSpan } from "./styles";
-
+import { CenterFlexContainer, StyledSpan } from "./styles";
+import * as styled from "./styles";
 export default function ConnectingAccountPage() {
   const [mounted, setMounted] = useState(false);
   const openbankingWinRef = useRef<Window | null>(null);
@@ -22,13 +22,13 @@ export default function ConnectingAccountPage() {
   return (
     <CenterFlexContainer>
       <div>
-        <Spinner>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </Spinner>
-        <StyledSpan>계좌 연결 중</StyledSpan>
+        <StyledSpan>
+          <styled.roadingImage
+            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Dolphin.png"
+            alt="Man Running"
+          />
+          계좌 연결 중..
+        </StyledSpan>
       </div>
     </CenterFlexContainer>
   );
