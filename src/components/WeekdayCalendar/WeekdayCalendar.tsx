@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { WeekDayType } from "../../type";
+import neutral from "../../images/state_neutral.png";
 import smile1 from "../../images/state_smile1.png";
 import smile2 from "../../images/state_smile2.png";
 import smile3 from "../../images/state_smile3.png";
 import smile4 from "../../images/state_smile4.png";
 import sad from "../../images/state_sad.png";
-import neutral from "../../images/state_neutral.png";
-import dayjs from "dayjs";
-// import calendar from "../../images/calendar.svg";
 import {
   CalendarContainer,
   CalendarDay,
@@ -14,7 +13,7 @@ import {
   CalendarMonthDiv,
   CalendarWeek,
 } from "./styles";
-import { WeekDayType } from "../../type";
+import dayjs from "dayjs";
 
 interface Props {
   dates: WeekDayType[];
