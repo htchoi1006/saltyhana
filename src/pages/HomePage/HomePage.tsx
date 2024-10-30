@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 
 import * as styled from "../RecommendPage/styles";
-import { GoalProgressContainer, PageContainer } from "./styles";
+import { GoalContainer, GoalProgressContainer, PageContainer } from "./styles";
 import { ProductType } from "../../type";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
@@ -11,6 +11,11 @@ import card6 from "../../images/card_6.png";
 
 // HomePage 컴포넌트: 홈, 대시보드 페이지를 렌더링하는 함수형 컴포넌트
 const HomePage: React.FC = () => {
+  const [goal, setGoal] = useState<string | null>(null);
+  const [startdate, setStartdate] = useState<string | null>(null);
+  const [enddate, setEnddate] = useState<string | null>(null);
+  const [progress, setProgress] = useState<number | null>(null);
+
   const productList: ProductType[] = [
     {
       title: "추가 상품 1",
@@ -38,12 +43,16 @@ const HomePage: React.FC = () => {
   return (
     <PageContainer>
       {/* 목표, 진행도 박스 레이아웃  */}
-      <GoalProgressContainer
-        goal={"여행"}
-        startdate={"2024.10.01"}
-        enddate={"2024.12.23"}
-        progress={80}
-      />
+      {goal == null ? (
+        <GoalContainer />
+      ) : (
+        <GoalProgressContainer
+          goal={"여행"}
+          startdate={"2024.10.01"}
+          enddate={"2024.12.23"}
+          progress={80}
+        />
+      )}
       {/* 주간 캘린더 레이아웃 */}
       <WeekdayCalendar
         dates={[

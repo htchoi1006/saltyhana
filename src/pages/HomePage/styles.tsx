@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import travel from "../../images/travel.svg";
+import goals from "../../images/goals.png";
 
 interface GoalContainerProps {
   goal: string;
@@ -17,7 +19,7 @@ export const PageContainer = styled.div`
 
 const StyledGoalContainer = styled.div`
   border-radius: 10px;
-  background-color: #ebeff3;
+  background-color: #eaf1fa; //ebeff3
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   font-family:
     Noto Sans KR,
@@ -201,6 +203,102 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
         </ProgressContainer>
       </GoalContainerDiv>
       <GoalIcon src={travel} />
+    </StyledGoalContainer>
+  );
+};
+
+export const GoalLeftDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+`;
+
+export const GoalHeader = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 45px;
+  line-height: 70px;
+  display: flex;
+  align-items: center;
+
+  color: #404040;
+`;
+
+export const GoalHeaderIcon = styled.img`
+  width: 80px;
+  height: auto;
+`;
+
+export const GoalDescription = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  color: #404040;
+  margin-top: 20px;
+
+  > p {
+    margin: 0;
+  }
+`;
+
+export const GoalButton = styled.button`
+  box-sizing: border-box;
+  width: 200px;
+  height: 65px;
+
+  background: #98c5ff;
+  border-radius: 50px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #5c9ff4;
+  }
+
+  > span {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 800;
+    font-size: 22px;
+    color: #404040;
+  }
+`;
+
+export const GoalRightDiv = styled.img`
+  width: 300px;
+  height: auto;
+  margin-left: 300px;
+`;
+
+export const GoalContainer: React.FC = () => {
+  return (
+    <StyledGoalContainer>
+      <GoalLeftDiv>
+        <GoalHeader>
+          <span>목표 설정</span>
+        </GoalHeader>
+        <GoalDescription>
+          <p>목표를 달성하려면 하루에 얼마씩 모아야 할까요?</p>
+          <p>나만의 목표를 설정하고 즐거운 저축을 시작하세요.</p>
+        </GoalDescription>
+        <Link
+          to="/goal"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            width: "100%",
+          }}
+        >
+          <GoalButton>
+            <span>목표 설정하러 가기</span>
+          </GoalButton>
+        </Link>
+      </GoalLeftDiv>
+      <GoalRightDiv src={goals} />
     </StyledGoalContainer>
   );
 };
