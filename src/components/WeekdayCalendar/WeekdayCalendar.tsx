@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import smile1 from "../../images/state_smile1.png";
+import smile2 from "../../images/state_smile2.png";
+import smile3 from "../../images/state_smile3.png";
+import smile4 from "../../images/state_smile4.png";
+import sad from "../../images/state_sad.png";
+import neutral from "../../images/state_neutral.png";
 import dayjs from "dayjs";
-
-import calendar from "../../images/calendar.svg";
+// import calendar from "../../images/calendar.svg";
 import {
   CalendarContainer,
   CalendarDay,
-  CalendarIcon,
+  StateIcon,
   CalendarMonthDiv,
   CalendarWeek,
 } from "./styles";
@@ -28,6 +33,36 @@ export default function WeekdayCalendar(props: Props) {
     }
   };
 
+  // 현재 날짜 이전 날짜 중 Achieve가 70% 이상 : smile, 50% ~ 60% : neutral, 그 이하 : sad
+  const stateImg: string = (() => {
+    const today = new Date();
+    const todayIndex = dates.findIndex(({ date }) => {
+      return (
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate()
+      );
+    });
+
+    const archieveNumber = dates.filter(
+      (d, i) => d.isAchieve && i <= todayIndex,
+    ).length;
+
+    if (archieveNumber >= Math.floor(todayIndex * 0.7)) {
+      const smileList = [smile1, smile2, smile3, smile4];
+      const randomIndex = Math.floor(Math.random() * smileList.length);
+      return smileList[randomIndex];
+    } else if (
+      archieveNumber >= Math.floor(todayIndex * 0.5) &&
+      archieveNumber < Math.floor(todayIndex * 0.7)
+    ) {
+      console.log(archieveNumber, Math.floor(todayIndex * 0.5));
+      return neutral;
+    } else {
+      return sad;
+    }
+  })();
+
   useEffect(() => {
     calculateDateCount();
     window.addEventListener("resize", calculateDateCount);
@@ -39,7 +74,7 @@ export default function WeekdayCalendar(props: Props) {
   return (
     <CalendarContainer ref={containerRef}>
       <CalendarMonthDiv>
-        <CalendarIcon src={calendar} />
+        <StateIcon src={stateImg} />
         <span>{today.current.format("M월")}</span>
       </CalendarMonthDiv>
       <CalendarWeek>
