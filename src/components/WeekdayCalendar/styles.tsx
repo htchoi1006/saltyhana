@@ -108,7 +108,7 @@ export const CalendarDay = styled.div<{
   }
 `;
 
-export const CalendarIcon = styled.img.attrs({ alt: "달력 이미지" })`
+export const StateIcon = styled.img.attrs({ alt: "상태 이미지" })`
   width: 100px;
   height: 100px;
   background-size: cover;
