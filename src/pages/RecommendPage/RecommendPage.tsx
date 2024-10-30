@@ -73,6 +73,7 @@ const RecommendPage: React.FC = () => {
       title: "하나 청년도약 계좌",
       subtitle: "하나와 함께 도약",
       image: card3,
+      color: "#FFF2E4",
       description: "연(세전, 5년)\n4.50% ~ 6.00%",
     },
     {
@@ -92,7 +93,7 @@ const RecommendPage: React.FC = () => {
     {
       title: "추가 상품 3",
       subtitle: "설명",
-      color: "#E6F8F1",
+      color: "#EAF1FA",
       image: card6,
       description: "연 2.20% ~ 3.50%",
     },
