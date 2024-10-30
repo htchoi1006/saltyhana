@@ -1,4 +1,16 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+// Fade in animation
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Container = styled.div`
   background-color: #f5f7fa;
@@ -188,5 +200,8 @@ export const FullCalendarWrapper = styled.div`
       font-size: 0.875rem;
       margin: 0 0.75rem;
     }
+    opacity: 0;
+    animation: ${fadeIn} 0.5s ease-out forwards;
+    animation-delay: 0.3s;
   }
 `;
