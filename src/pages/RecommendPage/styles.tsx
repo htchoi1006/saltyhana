@@ -45,6 +45,8 @@ export const ProductList = styled.div`
   gap: 30px;
   margin-bottom: 15px;
 
+  transition: transform 0.5s ease; /* 슬라이드 전환 */
+
   > *:nth-child(1) {
     opacity: 0;
     animation: ${fadeIn} 1s ease-out forwards;
@@ -319,4 +321,59 @@ export const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+// 커스텀 네비게이션 버튼
+export const ArrowButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 100%;
+    height: auto;
+  }
+  z-index: 1004; /* 버튼을 다른 요소 위로 올림 */
+`;
+
+// 상품 리스트를 감싸는 Wrapper
+export const ProductListWrapper = styled.div`
+  width: 100%;
+  overflow: hidden; /* 슬라이드 외부로 나가는 부분 숨김 */
+  position: relative;
+`;
+
+// ArrowButtonWrapper - 커스텀 화살표 버튼을 감싸는 래퍼
+export const ArrowButtonWrapper = styled.div<{ isPrev?: boolean }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+
+  left: ${(props) => (props.isPrev ? "-50px" : "auto")};
+  right: ${(props) => (props.isPrev ? "auto" : "-50px")};
+`;
+
+// 화살표 아이콘 스타일
+export const ArrowIcon = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: invert(1); /* 화살표 색을 흰색으로 반전 */
 `;
