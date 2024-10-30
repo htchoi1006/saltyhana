@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import cake from "../../images/cake.png";
 import travel from "../../images/travel.svg";
-import calendar from "../../images/calendar.svg";
-import set_goal_stamp from "../../images/set_goal_stamp.png";
 
 interface GoalContainerProps {
   goal: string;
@@ -43,7 +40,6 @@ const GoalContainerDiv = styled.div`
 `;
 
 const GoalContainerHeader = styled.div`
-  font-family: Noto Sans KR;
   color: rgba(63, 63, 63, 1);
   font-size: 20px;
   font-weight: 600;
@@ -54,8 +50,6 @@ const GoalTitle = styled.div`
   align-items: start;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  font-family: Noto Sans KR;
   color: rgba(63, 63, 63, 1);
   font-size: 42px;
   font-weight: 800;
@@ -63,7 +57,6 @@ const GoalTitle = styled.div`
 `;
 
 const GoalDate = styled.div`
-  font-family: Noto Sans KR;
   font-size: 18px;
   font-weight: 500;
   margin-top: 10px;
@@ -209,140 +202,5 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
       </GoalContainerDiv>
       <GoalIcon src={travel} />
     </StyledGoalContainer>
-  );
-};
-
-const CalendarContainer = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: flex;
-  /* background-color: #ebeff3;
-	box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
-	border-radius: 10px; */
-`;
-
-const CalendarMonthDiv = styled.div`
-  flex-direction: column;
-`;
-
-const CalendarMonth = styled.div`
-  font-size: 20px;
-  font-weight: 600;
-  justify-content: center;
-  text-align: center;
-  padding-left: 10px;
-`;
-
-const CalendarWeek = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  margin: 10px 0;
-`;
-
-const CalendarDate = styled.div`
-  flex-direction: column;
-  padding: 25px;
-  font-size: 20px;
-  font-weight: 500;
-  font-family:
-    Noto Sans KR,
-    sans-serif;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CalendarDay = styled.div<{ isActive: boolean }>`
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  width: 90px;
-  height: 150px;
-  border-radius: 8px;
-  font-size: 18px;
-  color: ${({ isActive }) => (isActive ? "#00bfa5" : "#333")};
-  border: ${({ isActive }) => (isActive ? "2px solid #00bfa5" : "none")};
-  background-color: ${({ isActive }) => (isActive ? "transparent" : "#f5f7fa")};
-  cursor: pointer;
-`;
-
-const CalendarIcon = styled.img.attrs({ alt: "달력 이미지" })`
-  width: 100px;
-  height: 100px;
-  background-size: cover;
-  margin-right: auto;
-  margin: 10px 0 0 15px;
-`;
-
-const StampIcon = styled.img.attrs({ alt: "스탬프 이미지" })`
-  width: 60px;
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-interface CalendarContainerProps {
-  showStamp: boolean[];
-  birthday: string; // YYYY/MM/DD
-}
-
-export const Calendar: React.FC<CalendarContainerProps> = ({
-  showStamp,
-  birthday,
-}) => {
-  const days = ["일", "월", "화", "수", "목", "금", "토"];
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const activeDay = date.getDay();
-
-  // 생일 날짜 객체 생성
-  const birthdayDate = new Date(birthday);
-  const birthdayMonth = birthdayDate.getMonth();
-  const birthdayDay = birthdayDate.getDate();
-
-  return (
-    <CalendarContainer>
-      <CalendarMonthDiv>
-        <CalendarIcon src={calendar} />
-        <CalendarMonth>{`${now.getMonth() + 1}월`}</CalendarMonth>
-      </CalendarMonthDiv>
-      <CalendarWeek>
-        {days.map((day, index) => {
-          const currentDate = new Date(
-            date.valueOf() + 86400000 * (index - activeDay),
-          );
-          const isBirthday =
-            currentDate.getMonth() === birthdayMonth &&
-            currentDate.getDate() === birthdayDay;
-
-          return (
-            <CalendarDay key={index} isActive={index === activeDay}>
-              <CalendarDate>
-                <p>{day}</p>
-                <div style={{ position: "relative" }}>
-                  {isBirthday ? (
-                    <StampIcon src={cake} />
-                  ) : (
-                    showStamp[index] && <StampIcon src={set_goal_stamp} />
-                  )}
-                  <p
-                    style={{
-                      position: "relative",
-                      zIndex: 1,
-                    }}
-                  >
-                    {currentDate.getDate()}
-                  </p>
-                </div>
-              </CalendarDate>
-            </CalendarDay>
-          );
-        })}
-      </CalendarWeek>
-    </CalendarContainer>
   );
 };
