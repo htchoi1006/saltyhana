@@ -17,7 +17,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: calc(100% - 64px);
 `;
 
 export const Header = styled.div`
@@ -26,6 +26,7 @@ export const Header = styled.div`
   font-weight: 700;
   font-size: 56px;
   line-height: 0px;
+  margin-top: 50px;
   padding-top: 20px;
   color: #000000;
   opacity: 0;

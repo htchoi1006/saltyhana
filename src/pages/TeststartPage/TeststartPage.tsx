@@ -16,13 +16,13 @@ const TeststartPage: React.FC = () => {
         <span>내 소비 성향을 찾고 맞춤형 금융 상품을 찾을 수 있어요.</span>
       </styled.HeaderDescription>
       <styled.ElementDiv>
-        <styled.Element delay={0.3}>
+        <styled.Element delay={0.6}>
           <styled.ElementImage src={img1} style={{ marginLeft: "20px" }} />
           <styled.ElementDescription style={{ marginTop: "50px" }}>
             8개 질문으로 간단하게!
           </styled.ElementDescription>
         </styled.Element>
-        <styled.Element delay={0.6}>
+        <styled.Element delay={0.7}>
           <styled.ElementImage
             src={img2}
             style={{ width: "210px", height: "auto" }}
