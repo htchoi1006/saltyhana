@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 
 import {
   BodyWrapper,
+  InnerBodyWrapper,
   PageTitle,
   PageDescription,
   TestCard,
@@ -135,42 +136,44 @@ const RecommendPage: React.FC = () => {
         <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
       </PageDescription>
 
-      {/* StyledSlider 적용 */}
-      <StyledSlider {...settings}>
-        {productList.map((product, index) => (
-          <div key={index}>
-            <ProductCard product={product} />
-          </div>
-        ))}
-      </StyledSlider>
+      <InnerBodyWrapper>
+        {/* StyledSlider 적용 */}
+        <StyledSlider {...settings}>
+          {productList.map((product, index) => (
+            <div key={index}>
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </StyledSlider>
 
-      <CustomList>
-        <TestCard>
-          <TestCardLeftDiv>
-            <TestCardHeader>
-              <span>소비성향 TEST</span>
-              <TestCardHeaderIcon src={ConsumeTestIcon} />
-            </TestCardHeader>
-            <TestCardDescription>
-              <p>내 유형은 뭘까?</p>
-              <p>테스트하고 내 성향에 맞는 투자 상품 추천 받자!</p>
-            </TestCardDescription>
-            <Link
-              to="/teststart"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-              }}
-            >
-              <TestCardButton>
-                <span>테스트 하러 가기</span>
-              </TestCardButton>
-            </Link>
-          </TestCardLeftDiv>
-          <TestCardRightDiv src={ConsumeTestImage} />
-        </TestCard>
-      </CustomList>
+        <CustomList>
+          <TestCard>
+            <TestCardLeftDiv>
+              <TestCardHeader>
+                <span>소비성향 TEST</span>
+                <TestCardHeaderIcon src={ConsumeTestIcon} />
+              </TestCardHeader>
+              <TestCardDescription>
+                <p>내 유형은 뭘까?</p>
+                <p>테스트하고 내 성향에 맞는 투자 상품 추천 받자!</p>
+              </TestCardDescription>
+              <Link
+                to="/teststart"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  width: "100%",
+                }}
+              >
+                <TestCardButton>
+                  <span>테스트 하러 가기</span>
+                </TestCardButton>
+              </Link>
+            </TestCardLeftDiv>
+            <TestCardRightDiv src={ConsumeTestImage} />
+          </TestCard>
+        </CustomList>
+      </InnerBodyWrapper>
     </BodyWrapper>
   );
 };

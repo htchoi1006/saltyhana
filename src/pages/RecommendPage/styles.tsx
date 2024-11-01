@@ -14,11 +14,19 @@ const fadeIn = keyframes`
 // 페이지 본문
 export const BodyWrapper = styled.div`
   display: flex;
+  /* height: 100%; */
   flex-direction: column;
-  padding: 20px 62px;
+  padding: 0 62px;
   background-color: #f5f7fa;
-  /* height: "calc(100% - 64px)"; */
+  height: calc(100% - 64px);
   // background-color: #f0f0f0;
+`;
+
+export const InnerBodyWrapper = styled.div`
+  display: flex;
+  height: 95%;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const PageTitle = styled.div`
@@ -68,12 +76,12 @@ export const CustomList = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
+  margin-bottom: 5vh;
 
   > *:nth-child(1) {
     opacity: 0;
     animation: ${fadeIn} 1s ease-out forwards;
-    animation-delay: 1.2s;
+    animation-delay: 0.5s;
   }
   /* > *:nth-child(2) {
 		opacity: 0;
