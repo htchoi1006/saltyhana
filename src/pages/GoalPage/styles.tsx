@@ -27,6 +27,33 @@ export const ContainerHeader = styled.div`
 
 // ------------------------------------------
 
+// export const InputWrapper = styled.div`
+// 	display: flex;
+// 	width: 80%;
+// 	gap: 20px;
+// 	align-items: flex-start;
+// 	margin-top: 30px;
+// `;
+
+// export const InputContainer = styled.div`
+// 	flex: 1;
+// 	/* background-color: #f8f9fa; */
+// 	background-color: #ffffff;
+// 	border-radius: 20px;
+// 	padding: 3px 12px;
+// 	display: flex;
+// 	align-items: center;
+// 	gap: 8px;
+// 	width: 380px;
+// 	height: 47px;
+// 	font-family: "Noto Sans KR";
+// 	border: 1px solid lightgray;
+
+// 	&:focus-within {
+// 		outline: 2px solid #008485;
+// 	}
+// `;
+
 export const InputWrapper = styled.div`
   display: flex;
   width: 80%;
@@ -36,21 +63,52 @@ export const InputWrapper = styled.div`
 `;
 
 export const InputContainer = styled.div`
-  flex: 1;
-  /* background-color: #f8f9fa; */
+  flex: 0.8; // 기존 flex: 1에서 변경하여 너비 줄임
   background-color: #ffffff;
   border-radius: 20px;
   padding: 3px 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 380px;
+  width: 300px; // 기존 380px에서 변경
   height: 47px;
   font-family: "Noto Sans KR";
   border: 1px solid lightgray;
 
   &:focus-within {
     outline: 2px solid #008485;
+  }
+`;
+
+export const CategoryContainer = styled.div`
+  flex: 0.6;
+  /* padding: 3px 12px; */
+  height: 53px;
+  font-family: "Noto Sans KR";
+`;
+
+export const CategorySelect = styled.select`
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  border: 1px solid lightgray;
+  padding: 3px 12px;
+  font-size: 16px;
+  font-family: "Noto Sans KR";
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+
+  &.placeholder {
+    color: #adb5bd;
+  }
+  &:focus {
+    outline: 2px solid #008485;
+  }
+
+  option {
+    font-size: 16px;
+    padding: 8px;
   }
 `;
 
@@ -157,6 +215,7 @@ export const RegisterDiv = styled.div`
 
 export const RegisterContent = styled.div`
   display: flex;
+  align-items: center;
   gap: 24px;
   margin-top: 20px;
   margin-bottom: 100px;
@@ -167,10 +226,10 @@ export const ImageUploadSection = styled.div`
 `;
 
 export const ImageUploadBox = styled.div`
-  width: 228px;
-  height: 228px;
+  width: 150px;
+  height: 150px;
   background-color: #ffffff;
-  border-radius: 12px;
+  border-radius: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -302,4 +361,86 @@ export const RegisterButton = styled.button`
   &:active {
     background-color: #005858;
   }
+`;
+
+export const StyledSelect = styled.select`
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  border: 1px solid lightgray;
+  padding: 0 12px;
+  font-size: 16px;
+  font-family: "Noto Sans KR";
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+  color: #000000;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  &.placeholder {
+    color: #adb5bd;
+  }
+
+  &:focus {
+    outline: 2px solid #008485;
+  }
+
+  option {
+    font-size: 16px;
+    padding: 8px;
+    color: #000000;
+  }
+
+  option[value=""] {
+    color: #adb5bd;
+  }
+
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+`;
+
+export const DirectInputContainer = styled.div`
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 47px;
+  font-family: "Noto Sans KR";
+  border: 1px solid lightgray;
+
+  &:focus-within {
+    outline: 2px solid #008485;
+  }
+
+  /* StyledSelect가 포함된 컨테이너일 경우 */
+  ${StyledSelect} {
+    border: none;
+    height: 41px;
+    padding: 0;
+    border-radius: 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
+
+export const InputGrid = styled.div`
+  display: flex;
+  gap: 20px;
+  width: 100%;
+`;
+
+export const InputColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
 `;

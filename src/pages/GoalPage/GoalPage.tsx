@@ -21,6 +21,8 @@ interface InputValues {
   amount: string;
   date: string;
   image: string | null;
+  category: string;
+  directCategory: string;
 }
 
 interface ImageUploadBoxProps {
@@ -61,11 +63,22 @@ const GoalPage: React.FC = () => {
     amount: "",
     date: "",
     image: null,
+    category: "",
+    directCategory: "",
   });
 
   const [selectedIcon, setSelectedIcon] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
+  const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
+
+  const handleCategoryChange = (category: string) => {
+    setValues((prev) => ({ ...prev, category }));
+  };
+
+  const handleDirectCategoryChange = (category: string) => {
+    setValues((prev) => ({ ...prev, directCategory: category }));
+  };
 
   const handleIconClick = (iconName: string) => {
     // 같은 아이콘을 다시 클릭하면 선택 취소
@@ -245,6 +258,22 @@ const GoalPage: React.FC = () => {
               min={formatDate(new Date().toISOString())}
             />
           </styled.InputContainer>
+          <styled.CategoryContainer>
+            <styled.CategorySelect
+              value={values.category}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className={values.category ? "" : "placeholder"}
+            >
+              <option value="" disabled>
+                종류
+              </option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </styled.CategorySelect>
+          </styled.CategoryContainer>
         </styled.InputWrapper>
         <styled.SubText>
           {savingsMessage ||
@@ -348,6 +377,70 @@ const GoalPage: React.FC = () => {
           <span>사고 싶은 물건을 직접 등록해보세요.</span>
         </styled.SelectIconText>
         {/* ----------------------------------------------------- */}
+        {/* <styled.RegisterDiv>
+					<styled.RegisterContent>
+						<styled.ImageUploadSection>
+							<ImageUploadBox
+								image={values.image}
+								onImageClick={handleImageClick}
+								onCancelClick={handleCancelImage}
+							/>
+							<input
+								type="file"
+								ref={fileInputRef}
+								onChange={handleImageUpload}
+								accept="image/*"
+								style={{ display: "none" }}
+							/>
+						</styled.ImageUploadSection>
+
+						<styled.InputSection>
+							<styled.InputContainer>
+								<styled.InputIcon
+									src={setgoalpen}
+									alt="이름 입력"
+								/>
+								<styled.RegisterInput
+									name="name"
+									placeholder="이름을 입력해주세요."
+									value={values.name}
+									onChange={handleChange}
+								/>
+							</styled.InputContainer>
+
+							<styled.InputContainer>
+								<styled.InputIcon
+									src={setgoalmoney}
+									alt="금액 입력"
+								/>
+								<styled.Input
+									name="amount"
+									placeholder="가격을 입력해주세요."
+									value={values.amount}
+									onChange={handleChange}
+									type="number"
+									min="0"
+								/>
+								<styled.UnitText>원</styled.UnitText>
+							</styled.InputContainer>
+
+							<styled.InputContainer>
+								<styled.InputIcon
+									src={setgoalcalendar}
+									alt="날짜 입력"
+								/>
+								<styled.Input
+									name="date"
+									placeholder="날짜 선택"
+									value={values.date}
+									onChange={handleChange}
+									type="date"
+									min={formatDate(new Date().toISOString())}
+								/>
+							</styled.InputContainer>
+						</styled.InputSection>
+					</styled.RegisterContent>
+				</styled.RegisterDiv> */}
         <styled.RegisterDiv>
           <styled.RegisterContent>
             <styled.ImageUploadSection>
@@ -366,46 +459,69 @@ const GoalPage: React.FC = () => {
             </styled.ImageUploadSection>
 
             <styled.InputSection>
-              <styled.InputContainer>
-                <styled.InputIcon src={setgoalpen} alt="이름 입력" />
-                <styled.RegisterInput
-                  name="name"
-                  placeholder="이름을 입력해주세요."
-                  value={values.name}
-                  onChange={handleChange}
-                />
-              </styled.InputContainer>
+              <styled.InputGrid>
+                <styled.InputColumn>
+                  <styled.DirectInputContainer>
+                    <styled.InputIcon src={setgoalpen} alt="이름 입력" />
+                    <styled.RegisterInput
+                      name="name"
+                      placeholder="이름을 입력해주세요."
+                      value={values.name}
+                      onChange={handleChange}
+                    />
+                  </styled.DirectInputContainer>
 
-              <styled.InputContainer>
-                <styled.InputIcon src={setgoalmoney} alt="금액 입력" />
-                <styled.Input
-                  name="amount"
-                  placeholder="가격을 입력해주세요."
-                  value={values.amount}
-                  onChange={handleChange}
-                  type="number"
-                  min="0"
-                />
-                <styled.UnitText>원</styled.UnitText>
-              </styled.InputContainer>
+                  <styled.DirectInputContainer>
+                    <styled.InputIcon src={setgoalmoney} alt="금액 입력" />
+                    <styled.RegisterInput
+                      name="amount"
+                      placeholder="가격을 입력해주세요."
+                      value={values.amount}
+                      onChange={handleChange}
+                      type="number"
+                      min="0"
+                    />
+                    <styled.UnitText>원</styled.UnitText>
+                  </styled.DirectInputContainer>
+                </styled.InputColumn>
 
-              <styled.InputContainer>
-                <styled.InputIcon src={setgoalcalendar} alt="날짜 입력" />
-                <styled.Input
-                  name="date"
-                  placeholder="날짜 선택"
-                  value={values.date}
-                  onChange={handleChange}
-                  type="date"
-                  min={formatDate(new Date().toISOString())}
-                />
-              </styled.InputContainer>
+                <styled.InputColumn>
+                  <styled.DirectInputContainer>
+                    <styled.InputIcon src={setgoalcalendar} alt="날짜 입력" />
+                    <styled.RegisterInput
+                      name="date"
+                      placeholder="날짜 선택"
+                      value={values.date}
+                      onChange={handleChange}
+                      type="date"
+                      min={formatDate(new Date().toISOString())}
+                    />
+                  </styled.DirectInputContainer>
+
+                  <styled.DirectInputContainer>
+                    <styled.StyledSelect
+                      onChange={(e) =>
+                        handleDirectCategoryChange(e.target.value)
+                      }
+                      value={values.directCategory}
+                      className={values.directCategory ? "" : "placeholder"}
+                    >
+                      <option value="" disabled>
+                        종류
+                      </option>
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </styled.StyledSelect>
+                  </styled.DirectInputContainer>
+                </styled.InputColumn>
+              </styled.InputGrid>
             </styled.InputSection>
           </styled.RegisterContent>
-          {/* <styled.RegisterButton>
-						<span>등록하기</span>
-					</styled.RegisterButton> */}
         </styled.RegisterDiv>
+
         <styled.RegisterButton onClick={handleRegister}>
           등록하기
         </styled.RegisterButton>
