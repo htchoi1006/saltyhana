@@ -1,4 +1,8 @@
+//RecommendPage/styles.tsx
 import styled, { keyframes } from "styled-components";
+import Slider from "react-slick";
+import rightClick from "../../images/recommend_right.png";
+import leftClick from "../../images/recommend_left.png";
 
 const fadeIn = keyframes`
   from {
@@ -84,10 +88,10 @@ export const CustomList = styled.div`
     animation-delay: 0.5s;
   }
   /* > *:nth-child(2) {
-		opacity: 0;
-		animation: ${fadeIn} 1s ease-out forwards;
-		animation-delay: 1.5s;
-	} */
+      opacity: 0;
+      animation: ${fadeIn} 1s ease-out forwards;
+      animation-delay: 1.5s;
+   } */
 `;
 
 // 상품 카드와 제목을 감싸는 래퍼
@@ -114,8 +118,8 @@ export const ProductCard = styled.div`
   transition: transform 0.5s ease; /* 부드러운 전환 효과 */
 
   /* &:hover {
-		transform: scale(1.1);
-	} */
+      transform: scale(1.1);
+   } */
 
   /* 이미지에 어두운 오버레이 추가 */
   &:before {
@@ -384,4 +388,86 @@ export const ArrowIcon = styled.img`
   height: 40px;
   object-fit: contain;
   filter: invert(1); /* 화살표 색을 흰색으로 반전 */
+`;
+
+// Slider와 커스텀 화살표 버튼 스타일 정의
+export const StyledSlider = styled(Slider)`
+  height: 300px;
+  animation: ${fadeIn} 1s ease-out;
+
+  .slick-list {
+    overflow: hidden;
+    height: 15.5vw;
+    text-align: center;
+  }
+
+  .slick-arrow {
+    display: flex;
+    z-index: 10;
+    width: 1vw;
+    height: 1vw;
+  }
+
+  .slick-slide {
+    padding-right: 50px; /* 슬라이드 간격을 오른쪽에 추가 */
+  }
+
+  .slick-prev {
+    left: -1.2vw;
+    cursor: pointer;
+    &::before {
+      content: "";
+    }
+  }
+
+  .slick-next {
+    right: -1.1vw;
+    cursor: pointer;
+    &::before {
+      content: "";
+    }
+  }
+
+  > *:nth-child(1) {
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-out forwards;
+    animation-delay: 0.3s;
+  }
+
+  > *:nth-child(2) {
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-out forwards;
+    animation-delay: 0.6s;
+  }
+
+  > *:nth-child(3) {
+    opacity: 0;
+    animation: ${fadeIn} 1s ease-out forwards;
+    animation-delay: 0.9s;
+  }
+`;
+
+// 커스텀 화살표 컴포넌트
+export const CustomPrevArrow = styled.div`
+  display: block;
+  background-image: url(${leftClick});
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: -60px;
+  top: 40%;
+  cursor: pointer;
+`;
+
+export const CustomNextArrow = styled.div`
+  display: block;
+  background-image: url(${rightClick});
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: -60px;
+  top: 40%;
+  cursor: pointer;
 `;
