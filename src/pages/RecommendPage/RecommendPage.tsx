@@ -18,12 +18,10 @@ import {
   TestCardDescription,
   TestCardButton,
   TestCardHeaderIcon,
-  ArrowButtonWrapper,
-  ArrowIcon,
+  StyledSlider,
+  CustomPrevArrow,
+  CustomNextArrow,
 } from "./styles";
-
-import rightClick from "../../images/recommend_right.png";
-import leftClick from "../../images/recommend_left.png";
 
 import card1 from "../../images/card_1.png";
 import card2 from "../../images/card_2.png";
@@ -37,23 +35,6 @@ import ConsumeTestImage from "../../images/ConsumeTestImage.png";
 import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
 import { ProductType } from "../../type";
 
-const StyledSlider = styled(Slider)`
-  height: 250px;
-
-  .slick-slide {
-    padding-right: 50px; /* 슬라이드 간격을 오른쪽에 20px 추가 */
-  }
-
-  // .slick-prev, .slick-next {
-  //   opacity: 1; /* 기본 버튼을 안 보이게 설정 */
-  //   pointer-events: none; /* 클릭할 수 없도록 설정 */
-  // }
-
-  .slick-prev,
-  .slick-next {
-    display: none; /* 기본 버튼을 숨김 */
-  }
-`;
 const RecommendPage: React.FC = () => {
   const productList: ProductType[] = [
     {
@@ -100,19 +81,6 @@ const RecommendPage: React.FC = () => {
     },
   ];
 
-  // 커스텀 화살표 컴포넌트
-  const CustomPrevArrow: React.FC<any> = (props) => (
-    <ArrowButtonWrapper {...props} isPrev={true}>
-      <ArrowIcon src={leftClick} alt="이전" />
-    </ArrowButtonWrapper>
-  );
-
-  const CustomNextArrow: React.FC<any> = (props) => (
-    <ArrowButtonWrapper {...props} isPrev={false}>
-      <ArrowIcon src={rightClick} alt="다음" />
-    </ArrowButtonWrapper>
-  );
-
   // Slider 설정
   const settings = {
     dots: false,
@@ -125,6 +93,11 @@ const RecommendPage: React.FC = () => {
     cssEase: "linear",
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 3 } },
+      { breakpoint: 480, settings: { slidesToShow: 3 } },
+    ],
   };
 
   return (
