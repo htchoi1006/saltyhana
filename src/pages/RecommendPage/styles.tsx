@@ -229,7 +229,7 @@ export const TestCard = styled.div`
   justify-content: center;
   gap: 30px;
   align-items: center;
-  border-radius: 30px;
+  border-radius: 35px;
 `;
 
 export const TestCardLeftDiv = styled.div`

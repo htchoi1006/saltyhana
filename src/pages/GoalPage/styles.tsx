@@ -184,7 +184,7 @@ export const IconBackground = styled.button<IconBackgroundProps>`
   background-color: ${(props) =>
     props.disabled ? "#f0f0f0" : props.$isSelected ? "#D0D4D7" : "#e9edf0"};
   margin-right: 20px;
-  border-radius: 30px;
+  border-radius: 35px;
   box-shadow: 3px 3px 4px 1px rgba(0, 0, 0, 0.15);
   display: flex;
   justify-content: center;

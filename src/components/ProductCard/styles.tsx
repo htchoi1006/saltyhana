@@ -22,7 +22,7 @@ export const Card = styled.div`
   aspect-ratio: 16 / 9;
   background-size: cover;
   // color: #333;
-  border-radius: 20px;
+  border-radius: 35px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   position: relative;
