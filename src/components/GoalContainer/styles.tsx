@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledGoalContainer = styled.div`
-  border-radius: 10px;
+  border-radius: 35px;
   background-color: #eaf1fa; //ebeff3
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   font-family:
