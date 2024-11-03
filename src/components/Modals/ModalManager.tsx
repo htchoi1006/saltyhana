@@ -1,6 +1,7 @@
 import { useState, forwardRef, useImperativeHandle, Ref } from "react";
 import Modals from "./Modals";
 import AgreeModal from "../AgreeModal/AgreeModal";
+import ChoiceCounsel from "../ProductModal/ChoiceCounsel";
 
 export interface ModalManagerType {
   openModal: (modalName: string) => void;
@@ -42,6 +43,9 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
       <>
         {/* 특정 모달이 열리면 해당 모달 표시 */}
         {modalType === "창구예약" && <Modals onClose={closeModal} />}
+        {modalType === "상담선택" && (
+          <ChoiceCounsel onClose={closeModal} openModal={openModal} />
+        )}
         {modalType === "이용약관" && (
           <AgreeModal
             onClose={closeModal}

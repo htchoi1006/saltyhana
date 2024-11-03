@@ -1,9 +1,8 @@
-import styled from "styled-components";
-import Slider from "react-slick";
-
-// 기존 코드 수정 없이 StyledSlider를 사용하도록 변경합니다.
-import React from "react";
 import { Link } from "react-router-dom";
+import ProductList from "./ProductList";
+
+import ConsumeTestImage from "../../images/ConsumeTestImage.png";
+import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
 
 import {
   BodyWrapper,
@@ -11,115 +10,34 @@ import {
   PageTitle,
   PageDescription,
   TestCard,
-  CustomList,
   TestCardHeader,
   TestCardLeftDiv,
   TestCardRightDiv,
   TestCardDescription,
   TestCardButton,
   TestCardHeaderIcon,
-  StyledSlider,
-  CustomPrevArrow,
-  CustomNextArrow,
+  TestCardWrapper,
+  TestCardImage,
+  TextWrapper,
 } from "./styles";
 
-import card1 from "../../images/card_1.png";
-import card2 from "../../images/card_2.png";
-import card3 from "../../images/card_3.png";
-import card4 from "../../images/card_4.png";
-import card5 from "../../images/card_5.png";
-import card6 from "../../images/card_6.png";
-
-import ProductCard from "../../components/ProductCard/ProductCard";
-import ConsumeTestImage from "../../images/ConsumeTestImage.png";
-import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
-import { ProductType } from "../../type";
-
-const RecommendPage: React.FC = () => {
-  const productList: ProductType[] = [
-    {
-      title: "369 정기예금",
-      subtitle: "3개월마다 중도해지 혜택",
-      color: "#E6F8E0",
-      image: card1,
-      description: "연 4.50% ~ 6.00%",
-    },
-    {
-      title: "트래블로그 여행 적금",
-      subtitle: "여행 준비의 시작",
-      color: "#f2f2f2",
-      image: card2,
-      description: "연 2.40% ~ 4.40%",
-    },
-    {
-      title: "하나 청년도약 계좌",
-      subtitle: "하나와 함께 도약",
-      image: card3,
-      color: "#FFF2E4",
-      description: "연(세전, 5년)\n4.50% ~ 6.00%",
-    },
-    {
-      title: "추가 상품 1",
-      subtitle: "설명",
-      color: "#F8E6E6",
-      image: card4,
-      description: "연 3.50% ~ 5.00%",
-    },
-    {
-      title: "추가 상품 2",
-      subtitle: "설명",
-      color: "#E6F8F1",
-      image: card5,
-      description: "연 2.20% ~ 3.50%",
-    },
-    {
-      title: "추가 상품 3",
-      subtitle: "설명",
-      color: "#EAF1FA",
-      image: card6,
-      description: "연 2.20% ~ 3.50%",
-    },
-  ];
-
-  // Slider 설정
-  const settings = {
-    dots: false,
-    infinite: true,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 5000,
-    pauseOnHover: true,
-    cssEase: "linear",
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />,
-    responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 3 } },
-      { breakpoint: 480, settings: { slidesToShow: 3 } },
-    ],
-  };
-
+export default function RecommendPage() {
   return (
     <BodyWrapper>
-      <PageTitle>
-        <span>맞춤형 상품 추천</span>
-      </PageTitle>
-      <PageDescription>
-        <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
-      </PageDescription>
-
       <InnerBodyWrapper>
-        {/* StyledSlider 적용 */}
-        <StyledSlider {...settings}>
-          {productList.map((product, index) => (
-            <div key={index}>
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </StyledSlider>
+        <TextWrapper>
+          <PageTitle>
+            <span>맞춤형 상품 추천</span>
+          </PageTitle>
+          <PageDescription>
+            <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
+          </PageDescription>
+        </TextWrapper>
 
-        <CustomList>
+        {/* ProductList 컴포넌트 사용 */}
+        <ProductList />
+
+        <TestCardWrapper>
           <TestCard>
             <TestCardLeftDiv>
               <TestCardHeader>
@@ -143,12 +61,12 @@ const RecommendPage: React.FC = () => {
                 </TestCardButton>
               </Link>
             </TestCardLeftDiv>
-            <TestCardRightDiv src={ConsumeTestImage} />
+            <TestCardRightDiv>
+              <TestCardImage src={ConsumeTestImage} />
+            </TestCardRightDiv>
           </TestCard>
-        </CustomList>
+        </TestCardWrapper>
       </InnerBodyWrapper>
     </BodyWrapper>
   );
-};
-
-export default RecommendPage;
+}
