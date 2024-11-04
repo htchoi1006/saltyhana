@@ -16,6 +16,7 @@ import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccoun
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import TestResultPage from "./pages/TestResultPage/TestResultPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import MyPage from "./pages/MyPage/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "recommend",
         element: <RecommendPage />,
+      },
+      {
+        path: "/mypage",
+        element: <MyPage />,
       },
     ],
   },
