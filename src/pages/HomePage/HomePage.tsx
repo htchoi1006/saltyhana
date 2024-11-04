@@ -1,39 +1,10 @@
-import * as styled from "../RecommendPage/styles";
 import { PageContainer } from "./styles";
-import { ProductType } from "../../type";
-import ProductCard from "../../components/ProductCard/ProductCard";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
 import GoalContainer from "../../components/GoalContainer/GoalContainer";
-import card4 from "../../images/card_4.png";
-import card5 from "../../images/card_5.png";
-import card6 from "../../images/card_6.png";
+import ProductList from "../RecommendPage/ProductList";
 
 // HomePage 컴포넌트: 홈, 대시보드 페이지를 렌더링하는 함수형 컴포넌트
 export default function HomePage() {
-  const productList: ProductType[] = [
-    {
-      title: "추가 상품 1",
-      subtitle: "설명",
-      color: "#F8E6E6",
-      image: card4,
-      description: "연 3.50% ~ 5.00%",
-    },
-    {
-      title: "추가 상품 2",
-      subtitle: "설명",
-      color: "#E6F8F1",
-      image: card5,
-      description: "연 2.20% ~ 3.50%",
-    },
-    {
-      title: "추가 상품 3",
-      subtitle: "설명",
-      color: "#EAF1FA",
-      image: card6,
-      description: "연 2.20% ~ 3.50%",
-    },
-  ];
-
   return (
     <PageContainer>
       {/* 목표, 진행도 박스 레이아웃  */}
@@ -64,11 +35,7 @@ export default function HomePage() {
         ]}
       />
       {/* 상품 리스트가 표시되는 섹션 */}
-      <styled.ProductList>
-        {productList.map((v, i) => (
-          <ProductCard key={i} product={v} />
-        ))}
-      </styled.ProductList>
+      <ProductList />
     </PageContainer>
   );
 }
