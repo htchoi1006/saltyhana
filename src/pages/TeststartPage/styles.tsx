@@ -1,6 +1,5 @@
-import styled, { keyframes } from "styled-components"; // 1. styled-component를 import 합니다.
+import styled, { keyframes } from "styled-components";
 
-// Fade in animation
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -17,34 +16,45 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100% - 64px);
+  height: 90%;
+  margin-top: 64px;
 `;
 
-export const Header = styled.div`
-  font-family: "Noto Sans KR";
-  font-style: normal;
+export const TextWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Header = styled.p`
   font-weight: 700;
-  font-size: 56px;
+  font-size: 3vw;
   line-height: 0px;
-  margin-top: 50px;
-  padding-top: 20px;
-  color: #000000;
+  color: #000;
   opacity: 0;
   animation: ${fadeIn} 0.5s ease-out forwards;
-  animation-delay: 0.3s; // 1. Header 나타나기
+  animation-delay: 0.3s;
 `;
 
-export const HeaderDescription = styled.div`
-  font-family: "Noto Sans KR";
-  font-style: normal;
+export const HeaderDescription = styled.p`
   font-weight: 500;
-  font-size: 25px;
+  font-size: 1.7vw;
   line-height: 0px;
-  color: #000000;
-  margin-top: 60px;
+  color: #000;
   opacity: 0;
   animation: ${fadeIn} 0.5s ease-out forwards;
-  animation-delay: 0.6s; // 2. HeaderDescription 나타나기
+  animation-delay: 0.6s;
+`;
+
+export const ElementWrapper = styled.div`
+  width: 100%;
+  height: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0;
 `;
 
 export const ElementDiv = styled.div`
@@ -52,8 +62,6 @@ export const ElementDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 70%;
-  margin-top: 130px;
-  padding-left: 15px;
 `;
 
 export const Element = styled.div<{ delay: number }>`
@@ -61,49 +69,45 @@ export const Element = styled.div<{ delay: number }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 300px;
-  padding-left: 20px;
+  width: 30%;
   opacity: 0;
   animation: ${fadeIn} 0.5s ease-out forwards;
   animation-delay: ${({ delay }) => delay}s; // Use delay prop
 `;
 
 export const ElementImage = styled.img`
-  width: 220px;
+  width: 50%;
   height: auto;
 `;
 
 export const ElementDescription = styled.div`
-  font-family: "Noto Sans KR";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 26px;
-  line-height: 0px;
-  color: #000000;
-  margin-top: 40px;
-`;
-
-export const ButtonWrapper = styled.div<{ delay?: number }>`
-  // delay prop 추가
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 16px;
-  gap: 10px;
-  width: 340px;
-  height: 65px;
+  font-weight: 500;
+  font-size: 1.4vw;
+  line-height: 0px;
+  color: #000;
+  margin-top: 40px;
+`;
+
+export const ButtonWrapper = styled.button<{ delay?: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  padding: 12px;
+  margin-top: 30px;
   background: #008485;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
-  color: #ffffff;
-  font-family: "Noto Sans KR";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 25px;
-  margin-top: 100px;
-  margin-bottom: 0;
+  border: none;
+  color: #fff;
+
+  font-weight: 600;
+  font-size: 1.7vw;
   cursor: pointer;
-  text-decoration: none;
   transition: background-color 0.5s;
 
   opacity: 0;
@@ -111,9 +115,9 @@ export const ButtonWrapper = styled.div<{ delay?: number }>`
   animation-delay: ${({ delay }) => delay}s; // 버튼의 delay 설정
 
   &:hover {
-    background-color: #00adad; /* hover 시 색상 */
+    background-color: #00adad;
     p {
-      color: #008485; /* 텍스트 색상 변경 */
+      color: #008485;
     }
   }
 `;
