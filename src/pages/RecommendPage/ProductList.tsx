@@ -18,7 +18,6 @@ import card3 from "../../images/card_3.png";
 import card4 from "../../images/card_4.png";
 import card5 from "../../images/card_5.png";
 import card6 from "../../images/card_6.png";
-import { Draggable } from "@fullcalendar/interaction";
 
 export default function ProductList() {
   const [productList] = useState<ProductType[]>([

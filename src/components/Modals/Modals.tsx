@@ -22,7 +22,6 @@ interface ModalsProps {
 }
 
 const Modals: React.FC<ModalsProps> = ({ onClose }) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [startIndex, setStartIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
@@ -45,7 +44,6 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
       alert("예약 시간을 선택해주세요.");
       return;
     }
-    setIsOpen(false);
     setIsReservationConfirmed(true);
   };
 
@@ -56,55 +54,54 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
 
   return (
     <>
-      {isOpen && (
-        <ModalsBackground onClose={onClose}>
-          <MapContainer>
-            <BankLocation
-              onSelectBank={setSelectedBank}
-              setNearbyBanks={setNearbyBanks}
-              selectedBank={selectedBank}
-              setSelectedBank={setSelectedBank}
-              searchQuery={searchQuery}
-              onSearchResults={setSearchBanks}
-              setSearchQuery={setSearchQuery} // 쿼리 업데이트 함수 전달
+      <ModalsBackground onClose={onClose}>
+        <MapContainer>
+          <BankLocation
+            onSelectBank={setSelectedBank}
+            setNearbyBanks={setNearbyBanks}
+            selectedBank={selectedBank}
+            setSelectedBank={setSelectedBank}
+            searchQuery={searchQuery}
+            onSearchResults={setSearchBanks}
+            setSearchQuery={setSearchQuery} // 쿼리 업데이트 함수 전달
+          />
+        </MapContainer>
+        <UnderMapContainer>
+          <LeftContainer>
+            <Left2Container>
+              <BankSearch onSearch={setSearchQuery} />
+              <DateContainer>
+                <DateSelector
+                  selectedYear={selectedYear}
+                  selectedMonth={selectedMonth}
+                  selectedDay={selectedDay}
+                  setSelectedYear={setSelectedYear}
+                  setSelectedMonth={setSelectedMonth}
+                  setSelectedDay={setSelectedDay}
+                />
+              </DateContainer>
+            </Left2Container>
+
+            <TimeSelector
+              selectedTime={selectedTime}
+              handleTimeSelect={handleTimeSelect}
+              startIndex={startIndex}
+              setStartIndex={setStartIndex}
             />
-          </MapContainer>
-          <UnderMapContainer>
-            <LeftContainer>
-              <Left2Container>
-                <BankSearch onSearch={setSearchQuery} />
-                <DateContainer>
-                  <DateSelector
-                    selectedYear={selectedYear}
-                    selectedMonth={selectedMonth}
-                    selectedDay={selectedDay}
-                    setSelectedYear={setSelectedYear}
-                    setSelectedMonth={setSelectedMonth}
-                    setSelectedDay={setSelectedDay}
-                  />
-                </DateContainer>
-              </Left2Container>
+          </LeftContainer>
 
-              <TimeSelector
-                selectedTime={selectedTime}
-                handleTimeSelect={handleTimeSelect}
-                startIndex={startIndex}
-                setStartIndex={setStartIndex}
-              />
-            </LeftContainer>
+          <RightContainer>
+            <BankList
+              banks={searchQuery ? searchBanks : nearbyBanks}
+              onSelectBank={setSelectedBank}
+              selectedBank={selectedBank}
+            />
+          </RightContainer>
+        </UnderMapContainer>
 
-            <RightContainer>
-              <BankList
-                banks={searchQuery ? searchBanks : nearbyBanks}
-                onSelectBank={setSelectedBank}
-                selectedBank={selectedBank}
-              />
-            </RightContainer>
-          </UnderMapContainer>
+        <ButtonsSection onClose={onClose} handleReserve={handleReserve} />
+      </ModalsBackground>
 
-          <ButtonsSection onClose={onClose} handleReserve={handleReserve} />
-        </ModalsBackground>
-      )}
       {isReservationConfirmed && (
         <ModalsOk
           onClose={() => {
