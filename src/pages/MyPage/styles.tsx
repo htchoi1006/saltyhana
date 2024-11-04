@@ -293,3 +293,50 @@ export const EditInput = styled.input`
     color: #a0aec0;
   }
 `;
+
+export const PasswordInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  gap: 8px;
+`;
+
+export const PasswordInput = styled.input`
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #a0aec0;
+  }
+`;
+
+export const RegisterButton = styled.button`
+  position: fixed;
+  bottom: 40px;
+  right: 100px;
+  padding: 16px 40px;
+  background-color: #008485;
+  color: white;
+  border: none;
+  border-radius: 128px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Noto Sans KR";
+
+  &:hover {
+    background-color: #006e6f;
+  }
+
+  &:active {
+    background-color: #005858;
+  }
+`;
