@@ -10,8 +10,8 @@ import chat from "../../images/modal_reserve_chat.png";
 import ModalsBackground from "../Modals/ModalsBackground";
 
 interface ModalsProps {
-  onClose: () => void;
   openModal: (modalName: string) => void;
+  onClose: () => void;
 }
 
 export default function ChoiceCounsel(props: ModalsProps) {
@@ -24,6 +24,7 @@ export default function ChoiceCounsel(props: ModalsProps) {
 
   const handleChatClick = () => {
     onClose();
+    openModal("채팅모달");
   };
 
   return (

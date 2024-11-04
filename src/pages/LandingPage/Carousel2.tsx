@@ -11,9 +11,9 @@ import {
   Con22p2,
   CarouselWrapper,
 } from "./styles";
-import img1 from "../../images/TeststartImg1.png";
-import img2 from "../../images/TeststartImg2.png";
-import img3 from "../../images/TeststartImg3.png";
+import img1 from "../../images/icon_teststart2.png";
+import img2 from "../../images/icon_teststart3.png";
+import img3 from "../../images/icon_teststart1.png";
 import { HeaderOffset } from "../../components/Header/styles";
 
 const Carousel2: React.FC = () => {

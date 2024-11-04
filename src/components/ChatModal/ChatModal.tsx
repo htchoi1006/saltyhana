@@ -2,11 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import * as styled from "./ChatModalStyles";
 import icon from "../../images/chatmodal_counsel.png";
 
-interface ChatModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
 const predefinedResponses: { [key: string]: string } = {
   트레블로그:
     "트레블로그 여행 적금은 연 4.50%~6.00%의 이율을 제공하며 5년 동안 유지됩니다.",
@@ -16,7 +11,13 @@ const predefinedResponses: { [key: string]: string } = {
     "하나 청년도약 계좌는 가입기간은 5년이고, 가입금액 1천원 이상 ~ 70만원 이하(천원 단위)입니다.",
 };
 
-const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
+interface ModalsProps {
+  onClose: () => void;
+}
+
+export default function ChatModal(props: ModalsProps) {
+  const { onClose } = props;
+
   const [messages, setMessages] = useState<
     { text: string; isUser: boolean; timestamp: string }[]
   >([]);
@@ -24,6 +25,14 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
 
   const chatAreaRef = useRef<HTMLDivElement>(null);
+
+  const handleCloseModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+      setIsClosing(false);
+    }, 300);
+  };
 
   // 초기 메시지 설정
   useEffect(() => {
@@ -97,16 +106,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     }
   }, [messages]);
 
-  const handleCloseModal = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-      setIsClosing(false);
-    }, 300);
-  };
-
-  if (!isOpen) return null;
-
   return (
     <styled.ModalOverlay>
       <styled.ModalContent closing={isClosing}>
@@ -141,6 +140,4 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
       </styled.ModalContent>
     </styled.ModalOverlay>
   );
-};
-
-export default ChatModal;
+}

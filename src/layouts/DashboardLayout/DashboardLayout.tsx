@@ -1,24 +1,23 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar/Sidebar";
-import CounselButton from "../../components/CounselButton/CounselButton"; // 고객센터 버튼 컴포넌트
-import ChatModal from "../../components/ChatModal/ChatModal"; // 모달 컴포넌트 임포트
+import CounselButton from "../../components/CounselButton/CounselButton";
 import Header from "../../components/Header/Header";
 import { Main } from "./styles";
 import { HeaderOffset } from "../../components/Header/styles";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import ModalManager, {
+  ModalManagerType,
+} from "../../components/Modals/ModalManager";
 
 export default function DashboardLayout() {
   const navigation = useNavigation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  const modalManagerRef = useRef<ModalManagerType>(null);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const handleButtonClick = () => {
+    modalManagerRef.current?.openModal("채팅모달");
   };
 
   return (
@@ -52,8 +51,8 @@ export default function DashboardLayout() {
 
         <div style={{}}>
           {/* 상담 모달 */}
-          <CounselButton onClick={openModal} />
-          <ChatModal isOpen={isModalOpen} onClose={closeModal} />
+          <ModalManager ref={modalManagerRef} />
+          <CounselButton onClick={handleButtonClick} />
         </div>
       </Main>
     </>
