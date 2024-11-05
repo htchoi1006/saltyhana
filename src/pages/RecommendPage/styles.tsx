@@ -38,7 +38,6 @@ export const PageTitle = styled.div`
   font-weight: 700;
   font-size: 32px;
   color: #343434;
-}
 `;
 
 export const PageDescription = styled.p`

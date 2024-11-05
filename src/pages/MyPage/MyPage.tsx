@@ -1,11 +1,76 @@
-// import styled from "styled-components";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import * as styled from "./styles";
 import profileImg from "../../images/mypage_profileImg.png";
-import { InputsWrapper } from "../SignupPage/styles";
-import AuthInput from "../../components/AuthInput";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
+
+const PasswordInputField = memo(
+  ({
+    label,
+    name,
+    value,
+    onChange,
+    placeholder,
+  }: {
+    label: string;
+    name: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder: string;
+  }) => {
+    return (
+      <label>
+        <div>
+          <styled.InputLabel>{label}</styled.InputLabel>
+        </div>
+        <styled.PasswordInputWrapper>
+          <img src={EmailIcon} alt="password icon" />
+          <styled.PasswordInput
+            type="password"
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+          />
+        </styled.PasswordInputWrapper>
+      </label>
+    );
+  },
+);
+
+const PasswordSection = memo(
+  ({
+    passwordInfo,
+    passwordError,
+    onPasswordChange,
+  }: {
+    passwordInfo: { newPassword: string; confirmPassword: string };
+    passwordError: string;
+    onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  }) => {
+    return (
+      <styled.PasswordSection>
+        <PasswordInputField
+          label="비밀번호"
+          name="newPassword"
+          value={passwordInfo.newPassword}
+          onChange={onPasswordChange}
+          placeholder="새 비밀번호 입력"
+        />
+        <PasswordInputField
+          label="비밀번호 확인"
+          name="confirmPassword"
+          value={passwordInfo.confirmPassword}
+          onChange={onPasswordChange}
+          placeholder="비밀번호 확인"
+        />
+        {passwordError && (
+          <styled.ErrorMessage>{passwordError}</styled.ErrorMessage>
+        )}
+      </styled.PasswordSection>
+    );
+  },
+);
 
 const MyPage: React.FC = () => {
   const emailInputRef = useRef<HTMLInputElement | null>(null);
@@ -28,12 +93,14 @@ const MyPage: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const handleSave = (field: keyof typeof userInfo) => (newValue: string) => {
     setUserInfo((prev) => ({
       ...prev,
       [field]: newValue,
     }));
+    setHasChanges(true);
   };
 
   const handleImageClick = () => {
@@ -57,12 +124,11 @@ const MyPage: React.FC = () => {
 
       try {
         setIsUploading(true);
-        // 이미지 미리보기 생성
         const reader = new FileReader();
         reader.onload = (e) => {
           if (e.target?.result) {
             setProfileImage(e.target.result as string);
-            // 여기에서 실제 서버로의 업로드 로직을 추가할 수 있습니다
+            setHasChanges(true);
           }
         };
         reader.readAsDataURL(file);
@@ -78,7 +144,7 @@ const MyPage: React.FC = () => {
   const handleImageDelete = () => {
     if (window.confirm("프로필 이미지를 삭제하시겠습니까?")) {
       setProfileImage(null);
-      // 여기에서 서버의 이미지도 삭제하는 API를 호출할 수 있습니다
+      setHasChanges(true);
     }
   };
 
@@ -92,6 +158,10 @@ const MyPage: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(value);
 
+    useEffect(() => {
+      setEditValue(value);
+    }, [value]);
+
     const handleSave = () => {
       if (onSave) {
         onSave(editValue);
@@ -99,43 +169,72 @@ const MyPage: React.FC = () => {
       setIsEditing(false);
     };
 
-    const handleCancel = () => {
-      setEditValue(value);
-      setIsEditing(false);
+    const handleCancel = (e: React.MouseEvent) => {
+      e.preventDefault(); // 이벤트 전파 중지
+      setEditValue(value); // 원래 값으로 복원
+      setIsEditing(false); // 편집 모드 종료
+    };
+
+    const handleEdit = (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsEditing(true);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEditValue(e.target.value);
     };
 
     return (
-      <label>
+      <styled.AuthDisplayContainer>
         <div>
           <styled.InputLabel>{labelName}</styled.InputLabel>
         </div>
-        <styled.DisplayWrapper>
-          {startIcon && <div>{startIcon}</div>}
-          {isEditing ? (
-            <>
+        <styled.InputAndButtonWrapper>
+          <styled.DisplayWrapper>
+            {startIcon && <div>{startIcon}</div>}
+            {isEditing ? (
               <styled.EditInput
                 value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
+                onChange={handleInputChange}
                 autoFocus
               />
-              <styled.Button className="cancel" onClick={handleCancel}>
+            ) : (
+              <styled.DisplayText>{value}</styled.DisplayText>
+            )}
+            {endIcon && <div>{endIcon}</div>}
+          </styled.DisplayWrapper>
+          {isEditing ? (
+            <styled.ButtonGroup>
+              <styled.Button
+                className="cancel"
+                onClick={handleCancel}
+                type="button"
+                style={{ marginRight: "0px" }}
+              >
                 취소
               </styled.Button>
-              <styled.Button onClick={handleSave}>저장</styled.Button>
-            </>
-          ) : (
-            <>
-              <styled.DisplayText>{value}</styled.DisplayText>
-              <styled.Button onClick={() => setIsEditing(true)}>
-                변경
+              <styled.Button onClick={handleSave} type="button">
+                저장
               </styled.Button>
-            </>
+            </styled.ButtonGroup>
+          ) : (
+            <styled.EditButton onClick={handleEdit} type="button">
+              수정
+            </styled.EditButton>
           )}
-          {endIcon && <div>{endIcon}</div>}
-        </styled.DisplayWrapper>
-      </label>
+        </styled.InputAndButtonWrapper>
+      </styled.AuthDisplayContainer>
     );
   };
+
+  // const [passwordInfo, setPasswordInfo] = useState({
+  // 	newPassword: "",
+  // 	confirmPassword: "",
+  // });
+  // const [passwordError, setPasswordError] = useState("");
+
+  const newPasswordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
@@ -143,15 +242,15 @@ const MyPage: React.FC = () => {
   });
   const [passwordError, setPasswordError] = useState("");
 
-  // 비밀번호 변경 핸들러
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordInfo((prev) => ({
       ...prev,
       [name]: value,
     }));
+    setHasChanges(true);
 
-    // 비밀번호 확인 검증
+    // 비밀번호 검증 로직
     if (name === "confirmPassword") {
       if (value !== passwordInfo.newPassword) {
         setPasswordError("비밀번호가 일치하지 않습니다.");
@@ -166,68 +265,6 @@ const MyPage: React.FC = () => {
         setPasswordError("");
       }
     }
-  };
-
-  // 비밀번호 저장 핸들러
-  const handlePasswordSave = () => {
-    if (passwordInfo.newPassword !== passwordInfo.confirmPassword) {
-      setPasswordError("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    if (passwordInfo.newPassword.length < 1) {
-      setPasswordError("비밀번호를 입력해주세요.");
-      return;
-    }
-    setPasswordError("");
-  };
-
-  // 새로운 비밀번호 컴포넌트
-  const PasswordInputs = () => {
-    return (
-      <styled.PasswordSection>
-        <label>
-          <div>
-            <styled.InputLabel>비밀번호</styled.InputLabel>
-          </div>
-          <styled.DisplayWrapper>
-            <img src={EmailIcon} alt="password icon" />
-            <styled.EditInput
-              type="password"
-              name="newPassword"
-              value={passwordInfo.newPassword}
-              onChange={handlePasswordChange}
-              placeholder="새 비밀번호 입력"
-            />
-          </styled.DisplayWrapper>
-        </label>
-
-        <label>
-          <div>
-            <styled.InputLabel>비밀번호 확인</styled.InputLabel>
-          </div>
-          <styled.DisplayWrapper>
-            <img src={EmailIcon} alt="password icon" />
-            <styled.EditInput
-              type="password"
-              name="confirmPassword"
-              value={passwordInfo.confirmPassword}
-              onChange={handlePasswordChange}
-              placeholder="비밀번호 확인"
-            />
-          </styled.DisplayWrapper>
-        </label>
-
-        {passwordError && (
-          <styled.ErrorMessage>{passwordError}</styled.ErrorMessage>
-        )}
-
-        <styled.ButtonWrapper>
-          <styled.Button onClick={handlePasswordSave}>
-            비밀번호 변경
-          </styled.Button>
-        </styled.ButtonWrapper>
-      </styled.PasswordSection>
-    );
   };
 
   return (
@@ -288,9 +325,14 @@ const MyPage: React.FC = () => {
             startIcon={<img src={EmailIcon} alt="email icon" />}
             onSave={handleSave("birth")}
           />
-          <PasswordInputs />
+          <PasswordSection
+            passwordInfo={passwordInfo}
+            passwordError={passwordError}
+            onPasswordChange={handlePasswordChange}
+          />
         </styled.InputWrapper>
       </styled.InputContainer>
+      <styled.RegisterButton>변경하기</styled.RegisterButton>
     </styled.Container>
   );
 };
