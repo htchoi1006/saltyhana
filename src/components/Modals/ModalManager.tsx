@@ -1,6 +1,8 @@
-import { useState, forwardRef, useImperativeHandle, Ref } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import Modals from "./Modals";
 import AgreeModal from "../AgreeModal/AgreeModal";
+import ChoiceCounsel from "../ProductModal/ChoiceCounsel";
+import ChatModal from "../ChatModal/ChatModal";
 
 export interface ModalManagerType {
   openModal: (modalName: string) => void;
@@ -18,12 +20,12 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
 
     // 모달 열기 함수
     const openModal = (type: string) => {
-      setModalType(type); // 해당 모달 타입 저장
+      setModalType(type);
     };
 
     // 모달 닫기 함수
     const closeModal = () => {
-      setModalType(null); // 모달 닫기
+      setModalType(null);
     };
 
     const handleAgreeAll = () => {
@@ -42,6 +44,10 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
       <>
         {/* 특정 모달이 열리면 해당 모달 표시 */}
         {modalType === "창구예약" && <Modals onClose={closeModal} />}
+        {modalType === "상담선택" && (
+          <ChoiceCounsel onClose={closeModal} openModal={openModal} />
+        )}
+        {modalType === "채팅모달" && <ChatModal onClose={closeModal} />}
         {modalType === "이용약관" && (
           <AgreeModal
             onClose={closeModal}

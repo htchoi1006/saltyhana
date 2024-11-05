@@ -9,6 +9,7 @@ import sidebar_assets from "../../images/sidebar_assets.png";
 import sidebar_recommend from "../../images/sidebar_recommend.png";
 import sidebar_reservation from "../../images/sidebar_reservation.png";
 import sidebar_setting from "../../images/sidebar_setting.png";
+import sidebar_user from "../../images/sidebar_user.png";
 
 import ModalManager, { ModalManagerType } from "../Modals/ModalManager";
 
@@ -32,6 +33,7 @@ export default function Sidebar() {
       imgSrc: sidebar_recommend,
       displayName: "상품 추천",
     },
+    { to: "/mypage", imgSrc: sidebar_user, displayName: "내 정보" },
   ];
 
   const handleOpenModal = () => {

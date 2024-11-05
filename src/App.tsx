@@ -15,6 +15,8 @@ import DashboardLayout from "./layouts/DashboardLayout/DashboardLayout";
 import ConnectingAccountPage from "./pages/ConnectingAccoutPage/ConnectingAccountPage";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import TestResultPage from "./pages/TestResultPage/TestResultPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import MyPage from "./pages/MyPage/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
   },
   {
     element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "home",
@@ -51,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "recommend",
         element: <RecommendPage />,
+      },
+      {
+        path: "/mypage",
+        element: <MyPage />,
       },
     ],
   },
@@ -76,34 +83,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-/*
-const App: React.FC = () => {
-  return (
-
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/connecting-account"
-            element={<ConnectingAccountPage />}
-          />
-          <Route element={<DashboardLayout />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/goal" element={<GoalPage />} />
-            <Route path="/assets" element={<AssetsPage />} />
-            <Route path="/recommend" element={<RecommendPage />} />
-          </Route>
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/teststart" element={<TeststartPage />} />
-            <Route path="/test/consumption" element={<TestPage />} />
-            <Route path="/result/consumption" element={<TestResultPage />} />
-          </Route>
-        </Routes>
-      </Router>
-  );
-};
-*/
 
 export default router;

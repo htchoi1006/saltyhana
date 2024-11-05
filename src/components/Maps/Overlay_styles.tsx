@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import SwitchButton from "../../images/modal_location_switch.png";
+import Switchhover from "../../images/modal_location_hover.png";
 
 export const OverlayContainer = styled.div`
   position: absolute;
@@ -52,21 +54,19 @@ export const CloseButton = styled.button`
 //지도 검색 초기화
 export const MapButton = styled.button`
   position: absolute;
-  top: 8px;
+  top: 220px;
   right: 60px;
   background-color: transparent;
-  color: #333;
-  border: none; // 테두리 없음
-  cursor: pointer; // 커서 포인터로 변경
-  font-size: 14px;
+  border: none;
+  cursor: pointer;
+
+  background-image: url(${SwitchButton});
+  background-size: cover;
+  width: 40px;
+  height: 40px;
   z-index: 100;
 
   &:hover {
-    text-decoration: underline; // 호버 시 밑줄 추가
-    font-weight: bold;
-  }
-
-  &:focus {
-    outline: none; // 포커스 시 테두리 없음
+    background-image: url(${Switchhover});
   }
 `;

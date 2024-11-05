@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import cake from "../../images/cake.png";
 import travel from "../../images/travel.svg";
-import calendar from "../../images/calendar.svg";
-import set_goal_stamp from "../../images/set_goal_stamp.png";
+import goals from "../../images/goals.png";
 
 interface GoalContainerProps {
   goal: string;
@@ -20,7 +19,7 @@ export const PageContainer = styled.div`
 
 const StyledGoalContainer = styled.div`
   border-radius: 10px;
-  background-color: #efefef;
+  background-color: #eaf1fa; //ebeff3
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   font-family:
     Noto Sans KR,
@@ -43,7 +42,6 @@ const GoalContainerDiv = styled.div`
 `;
 
 const GoalContainerHeader = styled.div`
-  font-family: Noto Sans KR;
   color: rgba(63, 63, 63, 1);
   font-size: 20px;
   font-weight: 600;
@@ -54,8 +52,6 @@ const GoalTitle = styled.div`
   align-items: start;
   display: flex;
   flex-direction: column;
-  align-items: start;
-  font-family: Noto Sans KR;
   color: rgba(63, 63, 63, 1);
   font-size: 42px;
   font-weight: 800;
@@ -63,7 +59,6 @@ const GoalTitle = styled.div`
 `;
 
 const GoalDate = styled.div`
-  font-family: Noto Sans KR;
   font-size: 18px;
   font-weight: 500;
   margin-top: 10px;
@@ -110,6 +105,17 @@ const ProgressPercentage = styled.div`
   margin-bottom: 5px;
   transition: right 1.5s ease-in-out;
   white-space: nowrap;
+`;
+
+const ProgressImage = styled.img<{ leftPosition: number }>`
+  position: absolute;
+  top: 30%; // 원하는 수직 위치 조정
+  left: ${({ leftPosition }) => `calc(${leftPosition}% - 20px)`};
+  transition: left 1.5s ease-in-out;
+  width: 40px;
+  height: 40px;
+  margin-top: -5%;
+  transform: scaleX(-1); // 좌우 반전
 `;
 
 interface GoalContainerProps {
@@ -176,12 +182,23 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
         <GoalDate>
           {startdate} ~ {enddate}
         </GoalDate>
+
         <ProgressContainer>
-          <ProgressPercentage style={{ right: `${100 - currentProgress}%` }}>
-            {`${displayedProgress}%`}
-          </ProgressPercentage>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
+            <ProgressPercentage
+              style={{
+                right: `${100 - currentProgress}%`,
+                bottom: "50px",
+              }}
+            >
+              {`${displayedProgress}%`}
+            </ProgressPercentage>
+            <ProgressImage
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Running.png"
+              alt="Man Running"
+              leftPosition={currentProgress}
+            />
           </ProgressBar>
         </ProgressContainer>
       </GoalContainerDiv>
@@ -190,134 +207,98 @@ export const GoalProgressContainer: React.FC<GoalContainerProps> = ({
   );
 };
 
-const CalendarContainer = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
+export const GoalLeftDiv = styled.div`
   display: flex;
-`;
-
-const CalendarMonthDiv = styled.div`
   flex-direction: column;
-`;
-
-const CalendarMonth = styled.div`
-  font-size: 20px;
-  font-weight: 600;
   justify-content: center;
-  text-align: center;
-  padding-left: 10px;
+  align-items: start;
 `;
 
-const CalendarWeek = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  margin: 10px 0;
-`;
-
-const CalendarDate = styled.div`
-  flex-direction: column;
-  padding: 25px;
-  font-size: 20px;
-  font-weight: 500;
-  font-family:
-    Noto Sans KR,
-    sans-serif;
-  position: relative;
+export const GoalHeader = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 45px;
+  line-height: 70px;
   display: flex;
   align-items: center;
-  justify-content: center;
+
+  color: #404040;
 `;
 
-const CalendarDay = styled.div<{ isActive: boolean }>`
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  width: 90px;
-  height: 150px;
-  border-radius: 8px;
-  font-size: 18px;
-  color: ${({ isActive }) => (isActive ? "#00bfa5" : "#333")};
-  border: ${({ isActive }) => (isActive ? "2px solid #00bfa5" : "none")};
-  background-color: ${({ isActive }) => (isActive ? "transparent" : "white")};
-  cursor: pointer;
-`;
-
-const CalendarIcon = styled.img.attrs({ alt: "달력 이미지" })`
-  width: 100px;
-  height: 100px;
-  background-size: cover;
-  margin-right: auto;
-  margin: 10px 0 0 15px;
-`;
-
-const StampIcon = styled.img.attrs({ alt: "스탬프 이미지" })`
-  width: 60px;
+export const GoalHeaderIcon = styled.img`
+  width: 80px;
   height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `;
-interface CalendarContainerProps {
-  showStamp: boolean[];
-  birthday: string; // YYYY/MM/DD
-}
 
-export const Calendar: React.FC<CalendarContainerProps> = ({
-  showStamp,
-  birthday,
-}) => {
-  const days = ["일", "월", "화", "수", "목", "금", "토"];
-  const now = new Date();
-  const date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const activeDay = date.getDay();
+export const GoalDescription = styled.div`
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  color: #404040;
+  margin-top: 20px;
 
-  // 생일 날짜 객체 생성
-  const birthdayDate = new Date(birthday);
-  const birthdayMonth = birthdayDate.getMonth();
-  const birthdayDay = birthdayDate.getDate();
+  > p {
+    margin: 0;
+  }
+`;
 
+export const GoalButton = styled.button`
+  box-sizing: border-box;
+  width: 200px;
+  height: 65px;
+
+  background: #98c5ff;
+  border-radius: 50px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #5c9ff4;
+  }
+
+  > span {
+    font-family: "Noto Sans KR";
+    font-style: normal;
+    font-weight: 800;
+    font-size: 22px;
+    color: #404040;
+  }
+`;
+
+export const GoalRightDiv = styled.img`
+  width: 300px;
+  height: auto;
+  margin-left: 300px;
+`;
+
+export const GoalContainer: React.FC = () => {
   return (
-    <CalendarContainer>
-      <CalendarMonthDiv>
-        <CalendarIcon src={calendar} />
-        <CalendarMonth>{`${now.getMonth() + 1}월`}</CalendarMonth>
-      </CalendarMonthDiv>
-      <CalendarWeek>
-        {days.map((day, index) => {
-          const currentDate = new Date(
-            date.valueOf() + 86400000 * (index - activeDay),
-          );
-          const isBirthday =
-            currentDate.getMonth() === birthdayMonth &&
-            currentDate.getDate() === birthdayDay;
-
-          return (
-            <CalendarDay key={index} isActive={index === activeDay}>
-              <CalendarDate>
-                <p>{day}</p>
-                <div style={{ position: "relative" }}>
-                  {isBirthday ? (
-                    <StampIcon src={cake} />
-                  ) : (
-                    showStamp[index] && <StampIcon src={set_goal_stamp} />
-                  )}
-                  <p
-                    style={{
-                      position: "relative",
-                      zIndex: 1,
-                    }}
-                  >
-                    {currentDate.getDate()}
-                  </p>
-                </div>
-              </CalendarDate>
-            </CalendarDay>
-          );
-        })}
-      </CalendarWeek>
-    </CalendarContainer>
+    <StyledGoalContainer>
+      <GoalLeftDiv>
+        <GoalHeader>
+          <span>목표 설정</span>
+        </GoalHeader>
+        <GoalDescription>
+          <p>목표를 달성하려면 하루에 얼마씩 모아야 할까요?</p>
+          <p>나만의 목표를 설정하고 즐거운 저축을 시작하세요.</p>
+        </GoalDescription>
+        <Link
+          to="/goal"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            width: "100%",
+          }}
+        >
+          <GoalButton>
+            <span>목표 설정하러 가기</span>
+          </GoalButton>
+        </Link>
+      </GoalLeftDiv>
+      <GoalRightDiv src={goals} />
+    </StyledGoalContainer>
   );
 };

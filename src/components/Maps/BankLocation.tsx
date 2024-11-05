@@ -78,7 +78,7 @@ const BankLocation: React.FC<BankLocationProps> = ({
         searchNearbyBanks(currentPosition.lat, currentPosition.lng);
       }
     }
-  }, [searchQuery, currentPosition]);
+  }, [searchQuery]);
 
   const searchNearbyBanks = (lat: number, lng: number) => {
     const places = new window.kakao.maps.services.Places();
@@ -159,6 +159,7 @@ const BankLocation: React.FC<BankLocationProps> = ({
         if (results.length > 0) {
           setSearchBanks(results); // 검색된 리스트 업데이트
           onSearchResults(results); // 부모로 결과 전달
+          focusOnBank(results[0]);
         } else {
           // 부모로 빈 리스트 전달
           setSearchBanks([]); // 검색 결과 초기화
@@ -232,6 +233,7 @@ const BankLocation: React.FC<BankLocationProps> = ({
     setSearchBanks([]); // 검색된 리스트 초기화
     onSearchResults([]);
     setSelectedBank(null);
+    setSelectedMarker(null);
     setOverlayVisible(false);
     setIsNearbySearchActive(true); // 주변 검색 활성화
     setSearchQuery("");
@@ -287,7 +289,8 @@ const BankLocation: React.FC<BankLocationProps> = ({
           />
         )}
       </KakaoMap>
-      <MapButton onClick={handleNearbySearch}> 내 주변 검색 모드</MapButton>
+
+      <MapButton onClick={handleNearbySearch} />
     </>
   );
 };

@@ -1,96 +1,72 @@
-import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+import ProductList from "./ProductList";
+
+import ConsumeTestImage from "../../images/ConsumeTestImage.png";
+import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
 
 import {
   BodyWrapper,
+  InnerBodyWrapper,
   PageTitle,
   PageDescription,
-  ProductList,
   TestCard,
-  CustomList,
   TestCardHeader,
   TestCardLeftDiv,
   TestCardRightDiv,
   TestCardDescription,
   TestCardButton,
   TestCardHeaderIcon,
+  TestCardWrapper,
+  TestCardImage,
+  TextWrapper,
 } from "./styles";
-import travelLogImage from "../../images/recommend_travellog.png";
-import sweatHanaImage from "../../images/recommend_sweathana.png";
-import youthAccountImage from "../../images/recommend_youthaccount.png";
-import { ReactComponent as WalletIcon } from "../../images/recommend_wallet.svg";
-import { ReactComponent as RecommendIcon } from "../../images/recommend_producticon.svg";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import ConsumeTestImage from "../../images/ConsumeTestImage.png";
-import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
-import { ProductType } from "../../type";
 
-const RecommendPage: React.FC = () => {
-  const productList = useRef<ProductType[]>([
-    {
-      title: "트래블 로그 여행 적금",
-      subtitle: "여행 준비의 시작",
-      image: travelLogImage,
-      description: "연(세전, 5년)\n4.50% ~ 6.00%",
-    },
-    {
-      title: "달달하나",
-      subtitle: "",
-      image: sweatHanaImage,
-      description: "혜택(2백만원까지)\n기본 0.10%~최고 3.00%(연, 세전)",
-    },
-    {
-      title: "하나 청년도약 계좌",
-      subtitle: "하나와 함께 도약",
-      image: youthAccountImage,
-      description: "연(세전, 5년)\n4.50% ~ 6.00%",
-    },
-  ]);
-
+export default function RecommendPage() {
   return (
     <BodyWrapper>
-      <PageTitle>
-        <span>맞춤형 상품 추천</span>
-      </PageTitle>
-      <PageDescription>
-        <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
-      </PageDescription>
-      {/* 상품 리스트가 표시되는 섹션 */}
-      <ProductList>
-        {productList.current.map((v, i) => (
-          <ProductCard key={i} product={v} />
-        ))}
-      </ProductList>
-      {/* 추천 적금 */}
-      <CustomList>
-        <TestCard>
-          <TestCardLeftDiv>
-            <TestCardHeader>
-              <span>소비성향 TEST</span>
-              <TestCardHeaderIcon src={ConsumeTestIcon} />
-            </TestCardHeader>
-            <TestCardDescription>
-              <p>내 유형은 뭘까?</p>
-              <p>테스트하고 내 성향에 맞는 투자 상품 추천 받자!</p>
-            </TestCardDescription>
-            <Link
-              to="/teststart"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-              }}
-            >
-              <TestCardButton>
-                <span>테스트 하러 가기</span>
-              </TestCardButton>
-            </Link>
-          </TestCardLeftDiv>
-          <TestCardRightDiv src={ConsumeTestImage} />
-        </TestCard>
-      </CustomList>
+      <InnerBodyWrapper>
+        <TextWrapper>
+          <PageTitle>
+            <span>맞춤형 상품 추천</span>
+          </PageTitle>
+          <PageDescription>
+            <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
+          </PageDescription>
+        </TextWrapper>
+
+        {/* ProductList 컴포넌트 사용 */}
+        <ProductList />
+
+        <TestCardWrapper>
+          <TestCard>
+            <TestCardLeftDiv>
+              <TestCardHeader>
+                <span>소비성향 TEST</span>
+                <TestCardHeaderIcon src={ConsumeTestIcon} />
+              </TestCardHeader>
+              <TestCardDescription>
+                <p>내 유형은 뭘까?</p>
+                <p>테스트하고 내 성향에 맞는 투자 상품 추천 받자!</p>
+              </TestCardDescription>
+              <Link
+                to="/teststart"
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  width: "100%",
+                }}
+              >
+                <TestCardButton>
+                  <span>테스트 하러 가기</span>
+                </TestCardButton>
+              </Link>
+            </TestCardLeftDiv>
+            <TestCardRightDiv>
+              <TestCardImage src={ConsumeTestImage} />
+            </TestCardRightDiv>
+          </TestCard>
+        </TestCardWrapper>
+      </InnerBodyWrapper>
     </BodyWrapper>
   );
-};
-
-export default RecommendPage;
+}
