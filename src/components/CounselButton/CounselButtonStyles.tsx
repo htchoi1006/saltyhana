@@ -5,7 +5,7 @@ export const FloatingButton = styled.div`
   position: fixed;
 
   // 플로팅 위치 수정 필요
-  bottom: 30px; /* 페이지 하단에서의 위치 */
+  bottom: 40px; /* 페이지 하단에서의 위치 */
   right: 30px; /* 페이지 오른쪽에서의 위치 */
 
   width: 60px;
