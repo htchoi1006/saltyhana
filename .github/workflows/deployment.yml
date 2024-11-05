@@ -6,6 +6,10 @@ on:
 env:
   BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
   AWS_REGION: "ap-northeast-2"
+  REACT_APP_CAL_API_KEY: ${{secrets.REACT_APP_CAL_API_KEY}}
+  REACT_APP_KAKAOMAP_KEY: ${{secrets.REACT_APP_KAKAOMAP_KEY}}
+  REACT_APP_ACCOUNT_CLIENT_ID: ${{secrets.REACT_APP_ACCOUNT_CLIENT_ID}}
+  REACT_APP_ACCOUNT_STATE: ${{secrets.REACT_APP_ACCOUNT_STATE}}
 
 permissions:
   id-token: write
