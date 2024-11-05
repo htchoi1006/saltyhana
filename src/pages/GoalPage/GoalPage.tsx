@@ -15,6 +15,9 @@ import iconpet from "../../images/goal_icon_pet.png";
 import iconshopping from "../../images/goal_icon_shopping.webp";
 import iconticket from "../../images/goal_icon_ticket.webp";
 import icontravel from "../../images/goal_icon_travel.png";
+import ModalManager, {
+  ModalManagerType,
+} from "../../components/Modals/ModalManager";
 
 interface InputValues {
   name: string;
@@ -71,6 +74,7 @@ const GoalPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
   const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
+  const modalManagerRef = useRef<ModalManagerType>(null);
 
   const handleCategoryChange = (category: string) => {
     setValues((prev) => ({ ...prev, category }));
@@ -148,7 +152,33 @@ const GoalPage: React.FC = () => {
     if (values.image) {
       console.log("등록된 이미지:", values.image);
     } else if (selectedIcon) {
+      values.image = selectedIcon;
       console.log("선택한 아이콘:", selectedIcon);
+    }
+
+    if (values.category) {
+      values.directCategory = values.category;
+    } else if (values.directCategory) {
+      values.category = values.directCategory;
+    }
+
+    const anyValueMissing = Object.values(values).some(
+      (value) => value === null || value === "",
+    );
+
+    console.log(values, anyValueMissing);
+
+    if (!anyValueMissing) {
+      modalManagerRef.current?.openModal("목표등록");
+      setValues({
+        name: "",
+        amount: "",
+        date: "",
+        image: null,
+        category: "",
+        directCategory: "",
+      });
+      setSelectedIcon("");
     }
   };
 
@@ -460,6 +490,7 @@ const GoalPage: React.FC = () => {
         <styled.RegisterButton onClick={handleRegister}>
           등록하기
         </styled.RegisterButton>
+        <ModalManager ref={modalManagerRef} />
       </styled.Container>
     </>
   );

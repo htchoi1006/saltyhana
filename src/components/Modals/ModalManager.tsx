@@ -3,6 +3,7 @@ import Modals from "./Modals";
 import AgreeModal from "../AgreeModal/AgreeModal";
 import ChoiceCounsel from "../ProductModal/ChoiceCounsel";
 import ChatModal from "../ChatModal/ChatModal";
+import GoalRegister from "./GoalRegister";
 
 export interface ModalManagerType {
   openModal: (modalName: string) => void;
@@ -48,6 +49,7 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
           <ChoiceCounsel onClose={closeModal} openModal={openModal} />
         )}
         {modalType === "채팅모달" && <ChatModal onClose={closeModal} />}
+        {modalType === "목표등록" && <GoalRegister onClose={closeModal} />}
         {modalType === "이용약관" && (
           <AgreeModal
             onClose={closeModal}
