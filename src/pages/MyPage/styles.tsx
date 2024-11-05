@@ -212,15 +212,15 @@ export const InputLabel = styled.span`
   font-weight: 500;
 `;
 
-export const DisplayWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background-color: #f8fafc;
-  gap: 8px;
-`;
+// export const DisplayWrapper = styled.div`
+// 	display: flex;
+// 	align-items: center;
+// 	padding: 12px 16px;
+// 	border: 1px solid #e2e8f0;
+// 	border-radius: 8px;
+// 	background-color: #f8fafc;
+// 	gap: 8px;
+// `;
 
 export const DisplayText = styled.span`
   flex: 1;
@@ -246,6 +246,8 @@ export const Button = styled.button`
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s;
+  width: 70px;
+  height: 52px;
 
   &:hover {
     background-color: #006f6f;
@@ -281,18 +283,18 @@ export const ButtonWrapper = styled.div`
 `;
 
 // 기존 EditInput 스타일 수정
-export const EditInput = styled.input`
-  flex: 1;
-  margin-left: 8px;
-  padding: 4px 8px;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  font-size: 14px;
+// export const EditInput = styled.input`
+// 	flex: 1;
+// 	margin-left: 8px;
+// 	padding: 4px 8px;
+// 	border: 1px solid #e2e8f0;
+// 	border-radius: 4px;
+// 	font-size: 14px;
 
-  &::placeholder {
-    color: #a0aec0;
-  }
-`;
+// 	&::placeholder {
+// 		color: #a0aec0;
+// 	}
+// `;
 
 export const PasswordInputWrapper = styled.div`
   display: flex;
@@ -338,5 +340,57 @@ export const RegisterButton = styled.button`
 
   &:active {
     background-color: #005858;
+  }
+`;
+
+export const AuthDisplayContainer = styled.label`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const InputAndButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const DisplayWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  gap: 8px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
+export const EditButton = styled(Button)`
+  width: 70px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: "Noto Sans KR";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+`;
+
+export const EditInput = styled.input`
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+
+  &::placeholder {
+    color: #a0aec0;
   }
 `;

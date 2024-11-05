@@ -1,4 +1,4 @@
-import React, { useRef, useState, memo } from "react";
+import React, { useRef, useState, memo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import * as styled from "./styles";
 import profileImg from "../../images/mypage_profileImg.png";
@@ -158,6 +158,10 @@ const MyPage: React.FC = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(value);
 
+    useEffect(() => {
+      setEditValue(value);
+    }, [value]);
+
     const handleSave = () => {
       if (onSave) {
         onSave(editValue);
@@ -165,41 +169,61 @@ const MyPage: React.FC = () => {
       setIsEditing(false);
     };
 
-    const handleCancel = () => {
-      setEditValue(value);
-      setIsEditing(false);
+    const handleCancel = (e: React.MouseEvent) => {
+      e.preventDefault(); // 이벤트 전파 중지
+      setEditValue(value); // 원래 값으로 복원
+      setIsEditing(false); // 편집 모드 종료
+    };
+
+    const handleEdit = (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsEditing(true);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEditValue(e.target.value);
     };
 
     return (
-      <label>
+      <styled.AuthDisplayContainer>
         <div>
           <styled.InputLabel>{labelName}</styled.InputLabel>
         </div>
-        <styled.DisplayWrapper>
-          {startIcon && <div>{startIcon}</div>}
-          {isEditing ? (
-            <>
+        <styled.InputAndButtonWrapper>
+          <styled.DisplayWrapper>
+            {startIcon && <div>{startIcon}</div>}
+            {isEditing ? (
               <styled.EditInput
                 value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
+                onChange={handleInputChange}
                 autoFocus
               />
-              <styled.Button className="cancel" onClick={handleCancel}>
+            ) : (
+              <styled.DisplayText>{value}</styled.DisplayText>
+            )}
+            {endIcon && <div>{endIcon}</div>}
+          </styled.DisplayWrapper>
+          {isEditing ? (
+            <styled.ButtonGroup>
+              <styled.Button
+                className="cancel"
+                onClick={handleCancel}
+                type="button"
+                style={{ marginRight: "0px" }}
+              >
                 취소
               </styled.Button>
-              <styled.Button onClick={handleSave}>저장</styled.Button>
-            </>
-          ) : (
-            <>
-              <styled.DisplayText>{value}</styled.DisplayText>
-              <styled.Button onClick={() => setIsEditing(true)}>
-                수정
+              <styled.Button onClick={handleSave} type="button">
+                저장
               </styled.Button>
-            </>
+            </styled.ButtonGroup>
+          ) : (
+            <styled.EditButton onClick={handleEdit} type="button">
+              수정
+            </styled.EditButton>
           )}
-          {endIcon && <div>{endIcon}</div>}
-        </styled.DisplayWrapper>
-      </label>
+        </styled.InputAndButtonWrapper>
+      </styled.AuthDisplayContainer>
     );
   };
 
