@@ -2,28 +2,83 @@ import styled from "styled-components";
 
 // 목표 리스트 상위 컨테이너
 export const GoalListContainer = styled.div`
-  flex: 0.9;
+  flex: 0.8;
   background: #ffffff;
-  border-radius: 0.5rem;
+  border-radius: 35px;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 20px;
   padding: 30px;
+  position: relative;
+`;
+
+export const GoalRegisterButton = styled.div`
+  bottom: 20px;
+  padding: 20px 0;
+  width: 100%;
+  text-align: center;
+  background-color: #008485;
+  color: white;
+  border: none;
+  border-radius: 35px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Noto Sans KR";
+
+  &:hover {
+    background-color: #006e6f;
+  }
+
+  &:active {
+    background-color: #005858;
+  }
+`;
+
+// 목표 수정 버튼 스타일
+export const EditButton = styled.img.attrs({ alt: "편집 아이콘" })`
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: #008485;
+  font-size: 20px;
+`;
+
+// 목표 삭제 버튼 스타일
+export const DeleteButton = styled.img.attrs({ alt: "삭제 아이콘" })`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: -5px;
+  width: 30px;
+  height: auto;
+  cursor: pointer;
+  visibility: hidden;
 `;
 
 // 목표 개별 스타일
 export const GoalItem = styled.div`
   background-color: ${(props) => props.color || "#e5e7eb"};
   color: white;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  padding: 20px;
+  border-radius: 35px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  position: relative;
 
   &:hover {
     scale: 1.05;
+
+    ${DeleteButton} {
+      visibility: visible;
+    }
   }
 `;
 
@@ -31,6 +86,9 @@ export const GoalItem = styled.div`
 export const GoalTitle = styled.div`
   font-size: 30px;
   font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
 `;
 
 // 목표 아이콘, 이름, 날짜 div
