@@ -63,7 +63,7 @@ export const DeleteButton = styled.img.attrs({ alt: "삭제 아이콘" })`
 `;
 
 // 목표 개별 스타일
-export const GoalItem = styled.div`
+export const GoalItem = styled.div<{ color: string; isActive: boolean }>`
   background-color: ${(props) => props.color || "#e5e7eb"};
   color: white;
   padding: 20px;
@@ -72,13 +72,28 @@ export const GoalItem = styled.div`
   flex-direction: column;
   gap: 0.25rem;
   position: relative;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    opacity 0.3s ease;
 
-  &:hover {
-    scale: 1.05;
-
-    ${DeleteButton} {
-      visibility: visible;
+  // 애니메이션 효과 추가
+  ${(props) =>
+    props.isActive
+      ? `
+    transform: scale(1.05); // 클릭 시 확대
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); // 클릭 시 그림자 강조
+    opacity: 1; // 클릭 시 투명도 유지
+  `
+      : `
+    &:hover {
+      transform: scale(1.03);
+      opacity: 0.95; // 호버 시 투명도 약간 줄임
     }
+  `}
+
+  &:hover ${DeleteButton} {
+    visibility: visible;
   }
 `;
 
