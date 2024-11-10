@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+    from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -9,6 +20,9 @@ export const Container = styled.div`
 `;
 
 export const ProfileImgDiv = styled.div`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 0.3s;
   width: 200px;
   height: 200px;
   border: 1px solid black;
@@ -177,6 +191,9 @@ export const ProfileSection = styled.div`
 // `;
 
 export const NameDiv = styled.div`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,7 +256,7 @@ export const DisplayText = styled.span`
 
 export const Button = styled.button`
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 20px;
   border: none;
   background-color: #008485;
   color: white;
@@ -264,6 +281,9 @@ export const Button = styled.button`
 `;
 
 export const PasswordSection = styled.div`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 0.8s;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -301,7 +321,7 @@ export const PasswordInputWrapper = styled.div`
   align-items: center;
   padding: 12px 16px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 20px;
   background-color: #f8fafc;
   gap: 8px;
 `;
@@ -344,6 +364,9 @@ export const RegisterButton = styled.button`
 `;
 
 export const AuthDisplayContainer = styled.label`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 0.6s;
   display: flex;
   flex-direction: column;
 `;
@@ -360,7 +383,7 @@ export const DisplayWrapper = styled.div`
   align-items: center;
   padding: 12px 16px;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 20px;
   background-color: #f8fafc;
   gap: 8px;
 `;
@@ -381,6 +404,8 @@ export const EditButton = styled(Button)`
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
+
+  border-radius: 20px;
 `;
 
 export const EditInput = styled.input`
