@@ -352,3 +352,9 @@ export const Con3Img = styled.img`
   width: 100px;
   height: 100px;
 `;
+
+export const FooterImg = styled.img`
+  width: 100%;
+  height: auto;
+  margin-top: 200px;
+`;

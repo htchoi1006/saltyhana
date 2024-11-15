@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import footerimg from "../../images/footer.png";
 
 import {
   Container,
@@ -14,6 +15,7 @@ import {
   Con1Link,
   Con3StyleDiv,
   Con3Img,
+  FooterImg,
 } from "./styles";
 import { CenterFlexContainer } from "../ConnectingAccoutPage/styles";
 import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
@@ -284,6 +286,7 @@ const LandingPage: React.FC = () => {
             </Slider>
           </div>
         </Con3StyleDiv>
+        <FooterImg src={footerimg} />
       </SectionWrapper>
     </Container>
   );
