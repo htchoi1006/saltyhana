@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+from {
+    opacity: 0;
+    transform: translateY(20px);
+    }
+to {
+    opacity: 1;
+    transform: translateY(0);
+    }
+`;
 
 export const Wrapper = styled.div`
   display: flex;
@@ -13,7 +24,8 @@ export const Card = styled.div`
   margin-top: 10px;
   background-size: cover;
   border-radius: 35px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); */
+  box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   position: relative;
   transition: transform 0.5s ease;
