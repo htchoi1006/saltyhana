@@ -38,7 +38,6 @@ export const PageTitle = styled.div`
   font-weight: 700;
   font-size: 32px;
   color: #343434;
-}
 `;
 
 export const PageDescription = styled.p`
@@ -53,6 +52,7 @@ export const TestCardWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  animation: ${fadeIn} 2s ease-out;
 `;
 
 // 소비성향 테스트 카드
@@ -66,7 +66,7 @@ export const TestCard = styled.div`
   justify-content: center;
   margin-bottom: 20px;
   border-radius: 35px;
-  animation: ${fadeIn} 1s ease-out;
+  box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25);
 `;
 
 export const TestCardLeftDiv = styled.div`

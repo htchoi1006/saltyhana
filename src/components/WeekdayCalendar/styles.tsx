@@ -25,7 +25,7 @@ export const rotateCalendar = keyframes`
 
 export const CalendarContainer = styled.div`
   display: flex;
-  margin: 15px 0;
+  margin: 0 0 15px 0;
   align-items: center;
   > div:nth-child(1) {
     flex: none;
