@@ -52,7 +52,9 @@ export const TestCardWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  animation: ${fadeIn} 2s ease-out;
+  opacity: 0;
+  animation: ${fadeIn} 1.2s ease-out forwards;
+  animation-delay: 0.8s;
 `;
 
 // 소비성향 테스트 카드

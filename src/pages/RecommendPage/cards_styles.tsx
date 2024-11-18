@@ -21,7 +21,7 @@ export const ProductListWrapper = styled.div`
 
 // Slider와 커스텀 화살표 버튼 스타일 정의
 export const StyledSlider = styled(Slider)`
-  animation: ${fadeIn} 2s ease-out;
+  /* animation: ${fadeIn} 0.5s ease-out; */
 
   .slick-list {
     overflow: hidden;
@@ -54,19 +54,19 @@ export const StyledSlider = styled(Slider)`
 
   > *:nth-child(1) {
     opacity: 0;
-    animation: ${fadeIn} 1s ease-out forwards;
+    animation: ${fadeIn} 0.5s ease-out forwards;
     animation-delay: 0.3s;
   }
 
   > *:nth-child(2) {
     opacity: 0;
-    animation: ${fadeIn} 1s ease-out forwards;
+    animation: ${fadeIn} 0.5s ease-out forwards;
     animation-delay: 0.6s;
   }
 
   > *:nth-child(3) {
     opacity: 0;
-    animation: ${fadeIn} 1s ease-out forwards;
+    animation: ${fadeIn} 0.5s ease-out forwards;
     animation-delay: 0.9s;
   }
 `;
