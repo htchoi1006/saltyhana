@@ -16,10 +16,13 @@ import {
   Con3StyleDiv,
   Con3Img,
   FooterImg,
+  TitleImg,
+  RichText,
 } from "./styles";
 import { CenterFlexContainer } from "../ConnectingAccoutPage/styles";
 import LandingPageSlider from "../../components/LandingPage/LandingPageSlider";
-import hand from "../../images/꿈돌이손.png";
+import landImg from "../../images/landing_main_icon.png";
+import pig from "../../images/landing_piggy.png";
 import thumb from "../../images/thumb.png";
 import trophy from "../../images/trophy.png";
 
@@ -67,16 +70,22 @@ const AnimatedMainText = styled(StyledMainText)`
   animation-delay: 0.3s; // 가장 먼저 나타남
 `;
 
+const AnimatedRichText = styled(RichText)`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 0.6s;
+`;
+
 const AnimatedSubText = styled(SubText)`
   opacity: 0;
   animation: ${fadeIn} 1s ease-out forwards;
-  animation-delay: 0.6s; // 메인 텍스트 다음
+  animation-delay: 0.9s; // 메인 텍스트 다음
 `;
 
 const AnimatedLink = styled(Con1Link)`
   opacity: 0;
   animation: ${fadeIn} 1s ease-out forwards;
-  animation-delay: 0.9s; // 서브 텍스트 다음
+  animation-delay: 1.2s; // 서브 텍스트 다음
 `;
 
 // 이미지를 위한 래퍼 컴포넌트
@@ -114,7 +123,7 @@ const AnimatedText = styled.div<AnimatedTextProps>`
 
 const ScrollAnimatedText: React.FC = () => {
   const [opacity, setOpacity] = useState<number>(0.3);
-  const [translateY, setTranslateY] = useState<number>(200); // 시작 위치를 200px로 증가
+  const [translateY, setTranslateY] = useState<number>(200);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const textRef = useRef<HTMLDivElement | null>(null);
 
@@ -201,11 +210,13 @@ const LandingPage: React.FC = () => {
           <div style={{ flex: 1 }}>
             <CenterFlexBox>
               <Stack>
-                <AnimatedMainText>자산을 하나로</AnimatedMainText>
-                <AnimatedSubText>
-                  오늘도 부자될 생각만 하셨나요?
-                  <br /> 당신의 자산을 하나로 관리하세요.
-                </AnimatedSubText>
+                <AnimatedMainText>
+                  하나
+                  <TitleImg src={pig} alt="리치" />
+                  리치
+                </AnimatedMainText>
+                <AnimatedRichText>Reach for Rich</AnimatedRichText>
+                <AnimatedSubText>하나와 함께 부자가 되는 습관</AnimatedSubText>
                 <AnimatedLink to="/login">
                   <span>시작하기</span>
                 </AnimatedLink>
@@ -215,7 +226,7 @@ const LandingPage: React.FC = () => {
           <div style={{ flex: 1 }}>
             <CenterFlexBox>
               <FloatingImageWrapper>
-                <img src={hand} alt="hand" />
+                <img src={landImg} alt="dream" />
               </FloatingImageWrapper>
             </CenterFlexBox>
           </div>
