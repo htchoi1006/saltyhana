@@ -13,6 +13,7 @@ export const StyledGoalContainer = styled.div`
   min-height: 150px;
   font-size: 15px;
   font-weight: 700;
+  height: 100%;
 
   margin: 0; /* 추가 */
   box-sizing: border-box;
