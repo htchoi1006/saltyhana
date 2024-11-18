@@ -81,14 +81,13 @@ export const CalendarDay = styled.div<{
   border-radius: 30px;
   font-size: 18px;
   animation: ${fadeIn} ${({ index }) => (index + 1) * 0.2}s ease-out forwards;
-  background-color: ${({ is_today }) =>
-    is_today ? "rgb(93 ,75, 156)" : "inherit"};
+  border: ${({ is_today }) =>
+    is_today ? "3px solid rgb(93 ,75, 156)" : "inherit"};
 
   > span:nth-child(1) {
     font-weight: 600;
     color: ${({ is_today, is_achieve, day }) => {
       if (!is_achieve) return "rgba(100,100,100,0.3)";
-      if (is_today) return "white";
       if (day === "SAT") {
         return "rgb(50, 50, 190)";
       } else if (day === "SUN") {
@@ -102,7 +101,6 @@ export const CalendarDay = styled.div<{
     font-size: 20px;
     color: ${({ is_today, is_achieve }) => {
       if (!is_achieve) return "rgba(100,100,100,0.3)";
-      if (is_today) return "white";
       return "black";
     }};
   }
