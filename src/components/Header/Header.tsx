@@ -8,20 +8,24 @@ import {
   HeaderLink,
   StyledHeaderLink,
   WelcomeSpan,
+  ProfileImage,
 } from "./styles";
 import hana_logo from "../../images/hanabank_logo.png";
+import defaultProfile from "../../images/default_profile.png"; // 디폴트 프로필 이미지 경로
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 interface IUserInfo {
   id: string;
   password: string;
   isLoggedIn: boolean;
+  profileImage?: string; // 사용자 이미지 정보 추가
 }
 
 const initInfo: IUserInfo = {
   id: "",
   password: "",
   isLoggedIn: false,
+  profileImage: "", // 기본값으로 빈 문자열
 };
 
 export default function Header() {
@@ -48,7 +52,15 @@ export default function Header() {
               <StyledHeaderLink to="/signup">회원가입</StyledHeaderLink>
             </>
           ) : (
-            <WelcomeSpan>{user.id}님 환영합니다</WelcomeSpan>
+            <>
+              {/* 변경된 부분 */}
+              <HeaderLink to="/mypage" style={{color:"black", display: "flex", alignItems: "center", gap: "10px" }}>
+                  <ProfileImage
+                    src={user.profileImage || defaultProfile} // 등록된 이미지가 없으면 디폴트 이미지 사용
+                    alt="프로필 이미지" />
+                  <WelcomeSpan>{user.id}님 환영합니다</WelcomeSpan>
+              </HeaderLink>
+            </>
           )}
         </div>
       </HeaderBox>
