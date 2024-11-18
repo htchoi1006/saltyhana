@@ -10,7 +10,7 @@ import {
   WelcomeSpan,
   ProfileImage,
 } from "./styles";
-import hana_logo from "../../images/hanabank_logo.png";
+import pig from "../../images/landing_piggy.png";
 import defaultProfile from "../../images/default_profile.png"; // 디폴트 프로필 이미지 경로
 import useLocalStorage from "../../hooks/useLocalStorage";
 
@@ -39,10 +39,8 @@ export default function Header() {
       <HeaderBox>
         <div style={{ display: "flex", flex: 1 }}>
           <HeaderLink to="/">
-            <HanaLogo src={hana_logo} />
-            <HanaLogoDiv>
-              <span>자산을 하나로</span>
-            </HanaLogoDiv>
+            <HanaLogo src={pig} />
+            <HanaLogoDiv>하나 리치</HanaLogoDiv>
           </HeaderLink>
         </div>
         <div style={{ flex: "none", display: "flex", gap: "5px" }}>
@@ -54,11 +52,20 @@ export default function Header() {
           ) : (
             <>
               {/* 변경된 부분 */}
-              <HeaderLink to="/mypage" style={{color:"black", display: "flex", alignItems: "center", gap: "10px" }}>
-                  <ProfileImage
-                    src={user.profileImage || defaultProfile} // 등록된 이미지가 없으면 디폴트 이미지 사용
-                    alt="프로필 이미지" />
-                  <WelcomeSpan>{user.id}님 환영합니다</WelcomeSpan>
+              <HeaderLink
+                to="/mypage"
+                style={{
+                  color: "black",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <ProfileImage
+                  src={user.profileImage || defaultProfile} // 등록된 이미지가 없으면 디폴트 이미지 사용
+                  alt="프로필 이미지"
+                />
+                <WelcomeSpan>{user.id}님 환영합니다</WelcomeSpan>
               </HeaderLink>
             </>
           )}
