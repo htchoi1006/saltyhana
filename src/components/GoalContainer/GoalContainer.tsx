@@ -12,10 +12,8 @@ import {
   ProgressContainer,
   ProgressPercentage,
   ProgressImage,
-  GoalLeftDiv,
   GoalDescription,
   GoalButton,
-  GoalRightDiv,
   GoalHeader,
   RunnerContainer,
 } from "./styles";
@@ -83,25 +81,6 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
         <GoalDate>
           {startdate} ~ {enddate}
         </GoalDate>
-
-        {/* <ProgressContainer>
-					<ProgressBar>
-						<Progress style={{ width: `${currentProgress}%` }} />
-						<ProgressPercentage
-							style={{
-								right: `${100 - currentProgress}%`,
-								bottom: "50px",
-							}}
-						>
-							{`${displayedProgress}%`}
-						</ProgressPercentage>
-						<ProgressImage
-							src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Running.png"
-							alt="Man Running"
-							leftPosition={currentProgress}
-						/>
-					</ProgressBar>
-				</ProgressContainer> */}
         <ProgressContainer>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
@@ -123,7 +102,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
 const GoalSetContainer = () => {
   return (
     <StyledGoalContainer>
-      <GoalLeftDiv>
+      <GoalContainerDiv>
         <GoalHeader>
           <span>목표 설정</span>
         </GoalHeader>
@@ -136,15 +115,15 @@ const GoalSetContainer = () => {
           style={{
             textDecoration: "none",
             color: "inherit",
-            width: "100%",
+            // width: "100%",
           }}
         >
           <GoalButton>
             <span>목표 설정하러 가기</span>
           </GoalButton>
         </Link>
-      </GoalLeftDiv>
-      <GoalRightDiv src={goals} />
+      </GoalContainerDiv>
+      <GoalIcon src={goals} />
     </StyledGoalContainer>
   );
 };
