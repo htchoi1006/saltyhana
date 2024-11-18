@@ -14,13 +14,10 @@ import {
   CalendarWeek,
 } from "./styles";
 import dayjs from "dayjs";
+import _ from "underscore";
 
-interface Props {
-  dates: WeekDayType[];
-}
-
-export default function WeekdayCalendar(props: Props) {
-  const { dates } = props;
+export default function WeekdayCalendar() {
+  const [dates, setDates] = useState<WeekDayType[]>([]);
   const today = useRef(dayjs());
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dateCount, setDateCount] = useState(0);
@@ -61,6 +58,23 @@ export default function WeekdayCalendar(props: Props) {
       return sad;
     }
   })();
+
+  useEffect(() => {
+    if (!today.current) {
+      return;
+    }
+    setDates(
+      _.range(dateCount)
+        .map((v): WeekDayType => {
+          const nextDate = today.current.subtract(v, "d");
+          return {
+            date: nextDate.toDate(),
+            isAchieve: Math.random() > 0.5,
+          };
+        })
+        .reverse(),
+    );
+  }, [dateCount]);
 
   useEffect(() => {
     calculateDateCount();

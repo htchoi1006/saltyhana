@@ -113,25 +113,7 @@ export default function HomePage() {
         </NavigationDots>
       </CarouselContainer>
 
-      <WeekdayCalendar
-        dates={[
-          { isAchieve: true, date: new Date("2024-10-17") },
-          { isAchieve: true, date: new Date("2024-10-18") },
-          { isAchieve: true, date: new Date("2024-10-19") },
-          { isAchieve: true, date: new Date("2024-10-20") },
-          { isAchieve: true, date: new Date("2024-10-21") },
-          { isAchieve: true, date: new Date("2024-10-22") },
-          { isAchieve: true, date: new Date("2024-10-23") },
-          { isAchieve: false, date: new Date("2024-10-24") },
-          { isAchieve: true, date: new Date("2024-10-25") },
-          { isAchieve: false, date: new Date("2024-10-26") },
-          { isAchieve: true, date: new Date("2024-10-27") },
-          { isAchieve: false, date: new Date("2024-10-28") },
-          { isAchieve: false, date: new Date("2024-10-29") },
-          { isAchieve: true, date: new Date("2024-10-30") },
-          { isAchieve: true, date: new Date("2024-10-31") },
-        ]}
-      />
+      <WeekdayCalendar />
       <ProductList />
     </PageContainer>
   );
