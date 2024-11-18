@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // useNavigate import
 
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
@@ -22,6 +22,7 @@ import {
 } from "./styles";
 
 export default function SignupPage() {
+  const navigate = useNavigate(); // useNavigate hook
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
@@ -49,6 +50,30 @@ export default function SignupPage() {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const id = idInputRef.current?.value?.trim();
+    const email = emailInputRef.current?.value?.trim();
+    const password = passwordInputRef.current?.value?.trim();
+    const birth = birthInputRef.current?.value?.trim();
+
+    // 입력값 검증
+    if (!id || !email || !password || !birth) {
+      alert("모든 필드를 입력해주세요.");
+      return;
+    }
+
+    if (!isAgreed) {
+      alert("이용약관에 동의해주세요.");
+      return;
+    }
+
+    // 입력값이 모두 유효하면 로그인 페이지로 라우팅
+    alert("회원가입이 완료되었습니다.");
+    navigate("/login");
+  };
+
   return (
     <Container>
       <ImgWrapper>
@@ -66,15 +91,7 @@ export default function SignupPage() {
         <Paper style={{ height: "700px", marginRight: "30px" }}>
           <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
           <h1>자산을 하나로</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              console.log(`id: ${idInputRef.current?.value}`);
-              console.log(`email: ${emailInputRef.current?.value}`);
-              console.log(`password: ${passwordInputRef.current?.value}`);
-              console.log(`birth: ${birthInputRef.current?.value}`);
-            }}
-          >
+          <form onSubmit={handleSubmit}>
             <InputsWrapper>
               <AuthInput
                 labelName="이메일"
@@ -135,7 +152,7 @@ export default function SignupPage() {
                 isAgreed={isAgreed}
               />
             </AgreementCheckWrapper>
-            <StyledButton>회원가입</StyledButton>
+            <StyledButton type="submit">회원가입</StyledButton>
           </form>
           <FooterParagraph style={{ fontSize: "14px" }}>
             이미 계정이 있으신가요? <Link to="/login">로그인</Link>
