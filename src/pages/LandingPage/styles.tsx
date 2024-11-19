@@ -102,7 +102,7 @@ export const StyledMainText = styled.span`
   font-size: 72px;
   line-height: 87px;
   letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 
   color: #000000;
 `;
@@ -114,16 +114,16 @@ export const TitleImg = styled.img`
 `;
 
 export const RichText = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   font-size: 32px;
   line-height: 30px;
   color: #000;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 `;
 
 export const SubText = styled.div`
   font-weight: 350;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 29px;
   color: #000;
   margin-bottom: 10px;
