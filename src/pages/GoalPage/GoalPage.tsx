@@ -1,23 +1,17 @@
-import React, { useState, useMemo, useRef, ChangeEvent } from "react";
-import * as styled from "./styles";
-import setgoalpen from "../../images/set_goal_pen.png";
-import setgoalmoney from "../../images/set_goal_money.png";
-import setgoalcalendar from "../../images/set_goal_calendar.png";
-import iconbeach from "../../images/goal_icon_beach.webp";
-import iconbeer from "../../images/goal_icon_beer.png";
-import iconcar from "../../images/goal_icon_car.png";
-import iconcake from "../../images/goal_icon_cake.png";
-import iconcoffee from "../../images/goal_icon_coffee.png";
-import iconlobstar from "../../images/goal_icon_lobstar.png";
-import iconanniversary from "../../images/goal_icon_anniversary.png";
-import iconmoney from "../../images/goal_icon_money.webp";
-import iconpet from "../../images/goal_icon_pet.png";
-import iconshopping from "../../images/goal_icon_shopping.webp";
-import iconticket from "../../images/goal_icon_ticket.webp";
-import icontravel from "../../images/goal_icon_travel.png";
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  ChangeEvent,
+  useEffect,
+} from "react";
+import { useLocation } from "react-router-dom";
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
+import { commonIcons, goalIcons } from "./styles";
+import AnimatedSavingContainer from "../../components/AnimatedSavingContainer/AnimatedSavingContainer";
+import * as styled from "./styles";
 
 interface InputValues {
   name: string;
@@ -61,22 +55,29 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   );
 };
 
-const GoalPage: React.FC = () => {
+export default function GoalPage() {
   const [values, setValues] = useState<InputValues>({
     name: "",
     amount: "",
-    startDate: "", // 수정된 부분
-    endDate: "", // 추가된 부분
+    startDate: "", // 목표 시작 날짜
+    endDate: "", // 목표 완료 날짜
     image: null,
     category: "",
     directCategory: "",
   });
+
+  // useLocation 사용, 다른 페이지 전달 값 받기
+  const location = useLocation();
 
   const [selectedIcon, setSelectedIcon] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
   const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
   const modalManagerRef = useRef<ModalManagerType>(null);
+  // 캘린더 페이지에서 전달된 state에서 날짜 값 가져오기
+  const [selectedDate, setSelectedDate] = useState<string>(
+    location.state?.selectedDate || "",
+  );
 
   const handleCategoryChange = (category: string) => {
     setValues((prev) => ({ ...prev, category }));
@@ -164,6 +165,10 @@ const GoalPage: React.FC = () => {
       values.category = values.directCategory;
     }
 
+    if (!values.startDate) {
+      values.startDate = selectedDate;
+    }
+
     const anyValueMissing = Object.values(values).some(
       (value) => value === null || value === "",
     );
@@ -175,13 +180,14 @@ const GoalPage: React.FC = () => {
       setValues({
         name: "",
         amount: "",
-        startDate: "", // 수정된 부분
-        endDate: "",
+        startDate: "", // 목표 시작 날짜
+        endDate: "", // 목표 완료 날짜
         image: null,
         category: "",
         directCategory: "",
       });
       setSelectedIcon("");
+      setSelectedDate("");
     }
   };
 
@@ -218,7 +224,9 @@ const GoalPage: React.FC = () => {
 
     const startDate = values.startDate
       ? new Date(values.startDate)
-      : new Date();
+      : selectedDate
+        ? new Date(selectedDate)
+        : new Date();
     const targetDate = new Date(values.endDate);
 
     if (targetDate <= startDate)
@@ -229,20 +237,10 @@ const GoalPage: React.FC = () => {
 
     const dailyAmount = Math.ceil(targetAmount / diffDays);
 
-    const formatAmount = (amount: number) => {
-      if (amount >= 10000) {
-        const man = Math.floor(amount / 10000);
-        const remainder = amount % 10000;
-        if (remainder === 0) {
-          return `${man}만`;
-        }
-        return `${man}만 ${remainder.toLocaleString()}`;
-      }
-      return amount.toLocaleString();
-    };
-
-    return `하루에 ${formatAmount(dailyAmount)}원씩 ${diffDays}일 동안 저축을 도와드릴게요!`;
-  }, [values.amount, values.startDate, values.endDate]);
+    return (
+      <AnimatedSavingContainer dailyAmount={dailyAmount} days={diffDays} />
+    );
+  }, [values.amount, values.startDate, values.endDate, selectedDate]);
 
   return (
     <>
@@ -250,7 +248,10 @@ const GoalPage: React.FC = () => {
         <styled.ContainerHeader>금액으로 설정하기</styled.ContainerHeader>
         <styled.InputWrapper>
           <styled.InputContainer>
-            <styled.SetGoalPen src={setgoalpen} alt="목표 이름 입력" />
+            <styled.SetGoalPen
+              src={commonIcons.setGoalPen}
+              alt="목표 이름 입력"
+            />
             <styled.Input
               name="name"
               placeholder="이름을 입력해주세요."
@@ -260,7 +261,10 @@ const GoalPage: React.FC = () => {
           </styled.InputContainer>
 
           <styled.InputContainer>
-            <styled.SetGoalMoney src={setgoalmoney} alt="목표 금액 입력" />
+            <styled.SetGoalMoney
+              src={commonIcons.setGoalMoney}
+              alt="목표 금액 입력"
+            />
             <styled.Input
               name="amount"
               placeholder="목표 금액을 입력해주세요."
@@ -293,13 +297,13 @@ const GoalPage: React.FC = () => {
         <styled.InputWrapper style={{ marginTop: "16px" }}>
           <styled.InputContainer style={{ width: "217px" }}>
             <styled.SetGoalCalendar
-              src={setgoalcalendar}
+              src={commonIcons.setGoalCalendar}
               alt="목표 시작 날짜 입력"
             />
             <styled.Input
               name="startDate"
               placeholder="목표 시작 날짜"
-              value={values.startDate}
+              value={values.startDate || selectedDate}
               onChange={handleChange}
               type="date"
               min={formatDate(new Date().toISOString())}
@@ -308,7 +312,7 @@ const GoalPage: React.FC = () => {
 
           <styled.InputContainer>
             <styled.SetGoalCalendar
-              src={setgoalcalendar}
+              src={commonIcons.setGoalCalendar}
               alt="목표 종료 날짜 입력"
             />
             <styled.Input
@@ -334,42 +338,42 @@ const GoalPage: React.FC = () => {
             $isSelected={selectedIcon === "travel"}
             disabled={!!values.image}
           >
-            <styled.Icons src={icontravel} />
+            <styled.Icons src={goalIcons.iconTravel} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("anniversary")}
             $isSelected={selectedIcon === "anniversary"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconanniversary} />
+            <styled.Icons src={goalIcons.iconAnniversary} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("shopping")}
             $isSelected={selectedIcon === "shopping"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconshopping} />
+            <styled.Icons src={goalIcons.iconShopping} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("money")}
             $isSelected={selectedIcon === "money"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconmoney} />
+            <styled.Icons src={goalIcons.iconMoney} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("beer")}
             $isSelected={selectedIcon === "beer"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconbeer} />
+            <styled.Icons src={goalIcons.iconBeer} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("coffee")}
             $isSelected={selectedIcon === "coffee"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconcoffee} />
+            <styled.Icons src={goalIcons.iconCoffee} />
           </styled.IconBackground>
         </styled.IconList>
         <styled.IconList>
@@ -378,131 +382,95 @@ const GoalPage: React.FC = () => {
             $isSelected={selectedIcon === "car"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconcar} />
+            <styled.Icons src={goalIcons.iconCar} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("ticket")}
             $isSelected={selectedIcon === "ticket"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconticket} />
+            <styled.Icons src={goalIcons.iconTicket} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("cake")}
             $isSelected={selectedIcon === "cake"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconcake} />
+            <styled.Icons src={goalIcons.iconCake} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("lobstar")}
             $isSelected={selectedIcon === "lobstar"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconlobstar} />
+            <styled.Icons src={goalIcons.iconLobster} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("beach")}
             $isSelected={selectedIcon === "beach"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconbeach} />
+            <styled.Icons src={goalIcons.iconBeach} />
           </styled.IconBackground>
           <styled.IconBackground
             onClick={() => handleIconClick("pet")}
             $isSelected={selectedIcon === "pet"}
             disabled={!!values.image}
           >
-            <styled.Icons src={iconpet} />
+            <styled.Icons src={goalIcons.iconPet} />
           </styled.IconBackground>
         </styled.IconList>
-        <styled.ContainerHeader style={{ marginTop: "41px" }}>
-          <span>직접 등록하기</span>
-        </styled.ContainerHeader>
-        <styled.SelectIconText>
-          <span>사고 싶은 물건을 직접 등록해보세요.</span>
-        </styled.SelectIconText>
-        <styled.RegisterDiv>
-          <styled.RegisterContent>
-            <styled.ImageUploadSection>
-              <ImageUploadBox
-                image={values.image}
-                onImageClick={handleImageClick}
-                onCancelClick={handleCancelImage}
-              />
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                style={{ display: "none" }}
-              />
-            </styled.ImageUploadSection>
-
-            <styled.InputSection>
-              <styled.InputGrid>
-                <styled.InputColumn>
-                  <styled.DirectInputContainer>
-                    <styled.InputIcon src={setgoalpen} alt="이름 입력" />
-                    <styled.RegisterInput
-                      name="name"
-                      placeholder="이름을 입력해주세요."
-                      value={values.name}
-                      onChange={handleChange}
-                    />
-                  </styled.DirectInputContainer>
-
-                  <styled.DirectInputContainer>
-                    <styled.InputIcon src={setgoalmoney} alt="금액 입력" />
-                    <styled.RegisterInput
-                      name="amount"
-                      placeholder="가격을 입력해주세요."
-                      value={values.amount}
-                      onChange={handleChange}
-                      type="number"
-                      min="0"
-                    />
-                    <styled.UnitText>원</styled.UnitText>
-                  </styled.DirectInputContainer>
-                </styled.InputColumn>
-
-                <styled.InputColumn>
-                  <styled.DirectInputContainer style={{ width: "217px" }}>
-                    <styled.InputIcon
-                      src={setgoalcalendar}
-                      alt="시작 날짜 입력"
-                    />
-                    <styled.RegisterInput
-                      name="startDate"
-                      placeholder="목표 시작 날짜"
-                      value={values.startDate}
-                      onChange={handleChange}
-                      type="date"
-                      min={formatDate(new Date().toISOString())}
-                    />
-                  </styled.DirectInputContainer>
-
-                  <styled.DirectInputContainer>
-                    <styled.InputIcon
-                      src={setgoalcalendar}
-                      alt="종료 날짜 입력"
-                    />
-                    <styled.RegisterInput
-                      name="endDate"
-                      placeholder="목표 종료 날짜"
-                      value={values.endDate}
-                      onChange={handleChange}
-                      type="date"
-                      min={
-                        values.startDate || formatDate(new Date().toISOString())
-                      }
-                    />
-                  </styled.DirectInputContainer>
-                </styled.InputColumn>
-              </styled.InputGrid>
-            </styled.InputSection>
-          </styled.RegisterContent>
-        </styled.RegisterDiv>
+        <styled.IconList>
+          <styled.IconBackground
+            onClick={() => handleIconClick("party")}
+            $isSelected={selectedIcon === "party"}
+            disabled={!!values.image}
+          >
+            <styled.Icons src={goalIcons.iconParty} />
+          </styled.IconBackground>
+          <styled.IconBackground
+            onClick={() => handleIconClick("cruise")}
+            $isSelected={selectedIcon === "cruise"}
+            disabled={!!values.image}
+          >
+            <styled.Icons src={goalIcons.iconCruise} />
+          </styled.IconBackground>
+          <styled.IconBackground
+            onClick={() => handleIconClick("amusementpark")}
+            $isSelected={selectedIcon === "amusementpark"}
+            disabled={!!values.image}
+          >
+            <styled.Icons src={goalIcons.iconAmusementPark} />
+          </styled.IconBackground>
+          <styled.IconBackground
+            onClick={() => handleIconClick("christmas")}
+            $isSelected={selectedIcon === "christmas"}
+            disabled={!!values.image}
+          >
+            <styled.Icons src={goalIcons.iconChristmas} />
+          </styled.IconBackground>
+          <styled.IconBackground
+            onClick={() => handleIconClick("phone")}
+            $isSelected={selectedIcon === "phone"}
+            disabled={!!values.image}
+          >
+            <styled.Icons src={goalIcons.iconPhone} />
+          </styled.IconBackground>
+          <styled.ImageUploadSection>
+            <ImageUploadBox
+              image={values.image}
+              onImageClick={handleImageClick}
+              onCancelClick={handleCancelImage}
+            />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              style={{ display: "none" }}
+            />
+          </styled.ImageUploadSection>
+        </styled.IconList>
 
         <styled.RegisterButton onClick={handleRegister}>
           등록하기
@@ -511,6 +479,4 @@ const GoalPage: React.FC = () => {
       </styled.Container>
     </>
   );
-};
-
-export default GoalPage;
+}

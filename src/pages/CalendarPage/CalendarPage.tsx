@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CalendarContainer, Container } from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
 import travel from "../../images/goal_icon_travel.png";
 import beer from "../../images/goal_icon_beer.png";
+import phone from "../../images/goal_icon_phone.webp";
 import MonthCalendar from "../../components/MonthCalendar/MonthCalendar";
 import GoalList from "../../components/GoalList/GoalList";
-import { CalendarContainer, Container } from "./styles";
 export interface Goal {
   id: number;
   title: string;
@@ -16,25 +18,35 @@ export interface Goal {
 }
 
 export default function Calendar() {
+  const navigate = useNavigate();
   const apiKey: string | undefined = process.env.REACT_APP_CAL_API_KEY;
   const goals: Goal[] = [
     {
       id: 1,
       title: "프로젝트 완성",
-      startDate: "2024-11-01",
-      endDate: "2024-11-15",
+      startDate: "2024-11-15",
+      endDate: "2024-11-30",
       color: "#eab308",
-      progress: 20,
+      progress: 40,
       icon: beer,
     },
     {
       id: 2,
-      title: "여행",
-      startDate: "2024-11-05",
-      endDate: "2024-11-10",
+      title: "파리 여행",
+      startDate: "2024-11-29",
+      endDate: "2024-12-04",
       color: "#3b82f6",
-      progress: 10,
+      progress: 0,
       icon: travel,
+    },
+    {
+      id: 3,
+      title: "맥북 구매",
+      startDate: "2024-11-08",
+      endDate: "2024-12-05",
+      color: "#718ebf",
+      progress: 30,
+      icon: phone,
     },
   ];
 
@@ -88,10 +100,9 @@ export default function Calendar() {
 
     goals.forEach((goal) => {
       if (formattedDate === goal.startDate || formattedDate === goal.endDate) {
-        const icon = goal.id === 1 ? beer : goal.id === 2 ? travel : "";
         const img = document.createElement("img");
 
-        img.src = icon;
+        img.src = goal.icon;
         img.alt = "Goal Icon";
         img.style.width = "90px";
         img.style.position = "relative";
@@ -117,6 +128,10 @@ export default function Calendar() {
     return <div>{dayNumber}</div>;
   };
 
+  const handleDateSelect = (date: string) => {
+    navigate("/goal", { state: { selectedDate: date } }); // 날짜를 목표 정하기 페이지 state로 전달
+  };
+
   return (
     <Container>
       <CalendarContainer>
@@ -125,6 +140,7 @@ export default function Calendar() {
           apiKey={apiKey}
           handleDayCellDidMount={handleDayCellDidMount}
           handleDayCellContent={handleDayCellContent}
+          onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달
         />
       </CalendarContainer>
       <GoalList goals={goals} onGoalClick={handleGoalClick} />
