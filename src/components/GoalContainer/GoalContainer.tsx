@@ -18,6 +18,7 @@ import {
   GoalRightDiv,
   GoalHeader,
   RunnerContainer,
+  StyledSetGoalContainer,
 } from "./styles";
 import travel from "../../images/travel.svg";
 import goals from "../../images/goals.png";
@@ -83,25 +84,6 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
         <GoalDate>
           {startdate} ~ {enddate}
         </GoalDate>
-
-        {/* <ProgressContainer>
-					<ProgressBar>
-						<Progress style={{ width: `${currentProgress}%` }} />
-						<ProgressPercentage
-							style={{
-								right: `${100 - currentProgress}%`,
-								bottom: "50px",
-							}}
-						>
-							{`${displayedProgress}%`}
-						</ProgressPercentage>
-						<ProgressImage
-							src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Running.png"
-							alt="Man Running"
-							leftPosition={currentProgress}
-						/>
-					</ProgressBar>
-				</ProgressContainer> */}
         <ProgressContainer>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
@@ -122,7 +104,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
 
 const GoalSetContainer = () => {
   return (
-    <StyledGoalContainer>
+    <StyledSetGoalContainer>
       <GoalLeftDiv>
         <GoalHeader>
           <span>목표 설정</span>
@@ -145,7 +127,7 @@ const GoalSetContainer = () => {
         </Link>
       </GoalLeftDiv>
       <GoalRightDiv src={goals} />
-    </StyledGoalContainer>
+    </StyledSetGoalContainer>
   );
 };
 
