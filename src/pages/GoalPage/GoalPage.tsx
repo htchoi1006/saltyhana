@@ -22,7 +22,8 @@ import ModalManager, {
 interface InputValues {
   name: string;
   amount: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   image: string | null;
   category: string;
   directCategory: string;
@@ -64,7 +65,8 @@ const GoalPage: React.FC = () => {
   const [values, setValues] = useState<InputValues>({
     name: "",
     amount: "",
-    date: "",
+    startDate: "", // 수정된 부분
+    endDate: "", // 추가된 부분
     image: null,
     category: "",
     directCategory: "",
@@ -146,7 +148,7 @@ const GoalPage: React.FC = () => {
       "목표 금액:",
       values.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원",
     );
-    console.log("목표 날짜:", values.date);
+    console.log("목표 날짜:", values.endDate);
 
     // 이미지가 있으면 이미지 정보를, 없으면 선택된 아이콘 정보를 출력
     if (values.image) {
@@ -173,7 +175,8 @@ const GoalPage: React.FC = () => {
       setValues({
         name: "",
         amount: "",
-        date: "",
+        startDate: "", // 수정된 부분
+        endDate: "",
         image: null,
         category: "",
         directCategory: "",
@@ -206,30 +209,26 @@ const GoalPage: React.FC = () => {
   };
 
   const savingsMessage = useMemo(() => {
-    // 아무 값도 입력되지 않은 경우의 기본 메시지
-    if (!values.amount && !values.date) {
+    if (!values.amount || !values.endDate) {
       return "위 칸을 채워주시면 하루에 얼마씩 돈을 모아야 할지 알려드려요!";
     }
-
-    if (!values.amount || !values.date) return "";
 
     const targetAmount = parseInt(values.amount);
     if (isNaN(targetAmount) || targetAmount <= 0) return "";
 
-    const today = new Date();
-    const targetDate = new Date(values.date);
+    const startDate = values.startDate
+      ? new Date(values.startDate)
+      : new Date();
+    const targetDate = new Date(values.endDate);
 
-    // 날짜가 과거인 경우 체크
-    if (targetDate <= today) return "목표 날짜는 오늘 이후로 설정해주세요.";
+    if (targetDate <= startDate)
+      return "종료 날짜는 시작 날짜 이후로 설정해주세요.";
 
-    // 남은 일수 계산 (당일 포함)
-    const diffTime = targetDate.getTime() - today.getTime();
+    const diffTime = targetDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    // 하루 저축 금액 계산
     const dailyAmount = Math.ceil(targetAmount / diffDays);
 
-    // 금액 포맷팅 (만원 단위로 변환)
     const formatAmount = (amount: number) => {
       if (amount >= 10000) {
         const man = Math.floor(amount / 10000);
@@ -243,7 +242,7 @@ const GoalPage: React.FC = () => {
     };
 
     return `하루에 ${formatAmount(dailyAmount)}원씩 ${diffDays}일 동안 저축을 도와드릴게요!`;
-  }, [values.amount, values.date]);
+  }, [values.amount, values.startDate, values.endDate]);
 
   return (
     <>
@@ -274,20 +273,6 @@ const GoalPage: React.FC = () => {
             <styled.UnitText>원</styled.UnitText>
           </styled.InputContainer>
 
-          <styled.InputContainer>
-            <styled.SetGoalCalendar
-              src={setgoalcalendar}
-              alt="목표 날짜 입력"
-            />
-            <styled.Input
-              name="date"
-              placeholder="날짜 선택"
-              value={values.date}
-              onChange={handleChange}
-              type="date"
-              min={formatDate(new Date().toISOString())}
-            />
-          </styled.InputContainer>
           <styled.CategoryContainer>
             <styled.CategorySelect
               value={values.category}
@@ -304,6 +289,37 @@ const GoalPage: React.FC = () => {
               ))}
             </styled.CategorySelect>
           </styled.CategoryContainer>
+        </styled.InputWrapper>
+        <styled.InputWrapper style={{ marginTop: "16px" }}>
+          <styled.InputContainer style={{ width: "217px" }}>
+            <styled.SetGoalCalendar
+              src={setgoalcalendar}
+              alt="목표 시작 날짜 입력"
+            />
+            <styled.Input
+              name="startDate"
+              placeholder="목표 시작 날짜"
+              value={values.startDate}
+              onChange={handleChange}
+              type="date"
+              min={formatDate(new Date().toISOString())}
+            />
+          </styled.InputContainer>
+
+          <styled.InputContainer>
+            <styled.SetGoalCalendar
+              src={setgoalcalendar}
+              alt="목표 종료 날짜 입력"
+            />
+            <styled.Input
+              name="endDate"
+              placeholder="목표 종료 날짜"
+              value={values.endDate}
+              onChange={handleChange}
+              type="date"
+              min={values.startDate || formatDate(new Date().toISOString())}
+            />
+          </styled.InputContainer>
         </styled.InputWrapper>
         <styled.SubText>
           {savingsMessage ||
@@ -451,12 +467,15 @@ const GoalPage: React.FC = () => {
                 </styled.InputColumn>
 
                 <styled.InputColumn>
-                  <styled.DirectInputContainer>
-                    <styled.InputIcon src={setgoalcalendar} alt="날짜 입력" />
+                  <styled.DirectInputContainer style={{ width: "217px" }}>
+                    <styled.InputIcon
+                      src={setgoalcalendar}
+                      alt="시작 날짜 입력"
+                    />
                     <styled.RegisterInput
-                      name="date"
-                      placeholder="날짜 선택"
-                      value={values.date}
+                      name="startDate"
+                      placeholder="목표 시작 날짜"
+                      value={values.startDate}
                       onChange={handleChange}
                       type="date"
                       min={formatDate(new Date().toISOString())}
@@ -464,22 +483,20 @@ const GoalPage: React.FC = () => {
                   </styled.DirectInputContainer>
 
                   <styled.DirectInputContainer>
-                    <styled.StyledSelect
-                      onChange={(e) =>
-                        handleDirectCategoryChange(e.target.value)
+                    <styled.InputIcon
+                      src={setgoalcalendar}
+                      alt="종료 날짜 입력"
+                    />
+                    <styled.RegisterInput
+                      name="endDate"
+                      placeholder="목표 종료 날짜"
+                      value={values.endDate}
+                      onChange={handleChange}
+                      type="date"
+                      min={
+                        values.startDate || formatDate(new Date().toISOString())
                       }
-                      value={values.directCategory}
-                      className={values.directCategory ? "" : "placeholder"}
-                    >
-                      <option value="" disabled>
-                        종류
-                      </option>
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </styled.StyledSelect>
+                    />
                   </styled.DirectInputContainer>
                 </styled.InputColumn>
               </styled.InputGrid>
