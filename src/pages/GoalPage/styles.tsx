@@ -25,38 +25,9 @@ export const ContainerHeader = styled.div`
   color: #343434;
 `;
 
-// ------------------------------------------
-
-// export const InputWrapper = styled.div`
-// 	display: flex;
-// 	width: 80%;
-// 	gap: 20px;
-// 	align-items: flex-start;
-// 	margin-top: 30px;
-// `;
-
-// export const InputContainer = styled.div`
-// 	flex: 1;
-// 	/* background-color: #f8f9fa; */
-// 	background-color: #ffffff;
-// 	border-radius: 20px;
-// 	padding: 3px 12px;
-// 	display: flex;
-// 	align-items: center;
-// 	gap: 8px;
-// 	width: 380px;
-// 	height: 47px;
-// 	font-family: "Noto Sans KR";
-// 	border: 1px solid lightgray;
-
-// 	&:focus-within {
-// 		outline: 2px solid #008485;
-// 	}
-// `;
-
 export const InputWrapper = styled.div`
   display: flex;
-  width: 80%;
+  /* width: 80%; */
   gap: 20px;
   align-items: flex-start;
   margin-top: 30px;
