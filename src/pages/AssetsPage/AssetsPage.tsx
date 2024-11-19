@@ -76,9 +76,9 @@ export default function AssetsPage() {
   return (
     <PageContainer>
       {/* 개인 자산 페이지 헤더 */}
-      <Header>짭짤하나 님의 자산 현황</Header>
+      <Header>최혁태 님의 자산 현황</Header>
       <HeaderDescription>
-        짭짤하나 님이 가지고 계신 계좌 잔액과 기간 별 지출 현황을 확인하실 수
+        최혁태 님이 가지고 계신 계좌 잔액과 기간 별 지출 현황을 확인하실 수
         있어요.
       </HeaderDescription>
       <div style={{ flex: 1 }}>
