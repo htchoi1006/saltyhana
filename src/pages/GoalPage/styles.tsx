@@ -1,9 +1,56 @@
 import styled from "styled-components";
+import setGoalPen from "../../images/set_goal_pen.png";
+import setGoalMoney from "../../images/set_goal_money.png";
+import setGoalCalendar from "../../images/set_goal_calendar.png";
+import iconAmusementPark from "../../images/goal_icon_amusementpark.png";
+import iconAnniversary from "../../images/goal_icon_anniversary.png";
+import iconBeach from "../../images/goal_icon_beach.webp";
+import iconBeer from "../../images/goal_icon_beer.png";
+import iconCar from "../../images/goal_icon_car.png";
+import iconCake from "../../images/goal_icon_cake.png";
+import iconCoffee from "../../images/goal_icon_coffee.png";
+import iconCruise from "../../images/goal_icon_cruise.png";
+import iconChristmas from "../../images/goal_icon_christmas.png";
+import iconLobster from "../../images/goal_icon_lobstar.png";
+import iconMoney from "../../images/goal_icon_money.webp";
+import iconParty from "../../images/goal_icon_party.png";
+import iconPet from "../../images/goal_icon_pet.png";
+import iconPhone from "../../images/goal_icon_phone.webp";
+import iconShopping from "../../images/goal_icon_shopping.webp";
+import iconTicket from "../../images/goal_icon_ticket.webp";
+import iconTravel from "../../images/goal_icon_travel.png";
 
 interface IconBackgroundProps {
   $isSelected?: boolean;
   disabled?: boolean;
 }
+
+// Export grouped icons (optional for easier reuse)
+export const commonIcons = {
+  setGoalPen,
+  setGoalMoney,
+  setGoalCalendar,
+};
+
+export const goalIcons = {
+  iconAmusementPark,
+  iconAnniversary,
+  iconBeach,
+  iconBeer,
+  iconCar,
+  iconCake,
+  iconCoffee,
+  iconCruise,
+  iconChristmas,
+  iconLobster,
+  iconMoney,
+  iconParty,
+  iconPet,
+  iconPhone,
+  iconShopping,
+  iconTicket,
+  iconTravel,
+};
 
 export const Container = styled.div`
   font-family: "Noto Sans KR";
@@ -109,10 +156,6 @@ export const Input = styled.input`
   padding: 0;
   font-family: "Noto Sans KR";
 
-  /* &::placeholder {
-		color: #adb5bd;
-	} */
-
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
@@ -120,6 +163,55 @@ export const Input = styled.input`
     -webkit-box-shadow: 0 0 0 30px white inset !important;
     box-shadow: 0 0 0 30px white inset !important;
     -webkit-text-fill-color: #000 !important;
+  }
+
+  &[type="date"] {
+    position: relative;
+
+    &::-webkit-datetime-edit-text,
+    &::-webkit-datetime-edit-month-field,
+    &::-webkit-datetime-edit-day-field,
+    &::-webkit-datetime-edit-year-field {
+      display: none;
+    }
+
+    &::-webkit-calendar-picker-indicator {
+      background: transparent;
+      bottom: 0;
+      color: transparent;
+      cursor: pointer;
+      height: auto;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: auto;
+    }
+
+    &[value=""] {
+      &::-webkit-datetime-edit-text,
+      &::-webkit-datetime-edit-month-field,
+      &::-webkit-datetime-edit-day-field,
+      &::-webkit-datetime-edit-year-field {
+        display: none;
+      }
+
+      &::before {
+        content: attr(placeholder);
+        color: #adb5bd;
+        position: absolute;
+        left: 0;
+      }
+    }
+
+    &:not([value=""]) {
+      &::-webkit-datetime-edit-text,
+      &::-webkit-datetime-edit-month-field,
+      &::-webkit-datetime-edit-day-field,
+      &::-webkit-datetime-edit-year-field {
+        display: inline;
+      }
+    }
   }
 `;
 
@@ -275,40 +367,6 @@ export const UploadedImage = styled.img`
   object-fit: cover;
 `;
 
-export const InputSection = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-`;
-
-export const InputIcon = styled.img`
-  width: 30px;
-  height: auto;
-`;
-
-export const RegisterInput = styled.input`
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  outline: none;
-  padding: 4px 0;
-
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
-    box-shadow: 0 0 0 30px white inset !important;
-    -webkit-text-fill-color: #000 !important;
-  }
-
-  &::placeholder {
-    color: #adb5bd;
-  }
-`;
-
 export const RegisterButton = styled.button`
   position: fixed;
   bottom: 40px;
@@ -332,86 +390,4 @@ export const RegisterButton = styled.button`
   &:active {
     background-color: #005858;
   }
-`;
-
-export const StyledSelect = styled.select`
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  border: 1px solid lightgray;
-  padding: 0 12px;
-  font-size: 16px;
-  font-family: "Noto Sans KR";
-  background-color: #ffffff;
-  cursor: pointer;
-  outline: none;
-  color: #000000;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-
-  &.placeholder {
-    color: #adb5bd;
-  }
-
-  &:focus {
-    outline: 2px solid #008485;
-  }
-
-  option {
-    font-size: 16px;
-    padding: 8px;
-    color: #000000;
-  }
-
-  option[value=""] {
-    color: #adb5bd;
-  }
-
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
-`;
-
-export const DirectInputContainer = styled.div`
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 3px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 47px;
-  font-family: "Noto Sans KR";
-  border: 1px solid lightgray;
-
-  &:focus-within {
-    outline: 2px solid #008485;
-  }
-
-  /* StyledSelect가 포함된 컨테이너일 경우 */
-  ${StyledSelect} {
-    border: none;
-    height: 41px;
-    padding: 0;
-    border-radius: 0;
-
-    &:focus {
-      outline: none;
-    }
-  }
-`;
-
-export const InputGrid = styled.div`
-  display: flex;
-  gap: 20px;
-  width: 100%;
-`;
-
-export const InputColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  flex: 1;
 `;
