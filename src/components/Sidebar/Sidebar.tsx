@@ -70,10 +70,10 @@ export default function Sidebar() {
             )}
           </styled.NavItemLink>
         ))}
-        <styled.MenuItem onClick={handleOpenModal}>
+        {/* <styled.MenuItem onClick={handleOpenModal}>
           <styled.ReservationIcon src={sidebar_reservation} />
           <span>창구 예약</span>
-        </styled.MenuItem>
+        </styled.MenuItem> */}
         <ModalManager ref={modalManagerRef} />
       </styled.MenuSection>
       <styled.SettingsSection>
