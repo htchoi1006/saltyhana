@@ -31,7 +31,7 @@ export const PageContainer = styled.div`
   padding: 42px 42px 40px;
   display: flex;
   flex-direction: column;
-  margin: 0 50px;
+  margin: 20px 50px 0 40px;
 `;
 
 // 계좌 정보 스타일

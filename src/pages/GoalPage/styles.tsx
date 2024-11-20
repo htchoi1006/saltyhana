@@ -55,7 +55,7 @@ export const goalIcons = {
 export const Container = styled.div`
   font-family: "Noto Sans KR";
   margin-top: 50px;
-  margin-left: 50px;
+  margin-left: 70px;
   display: flex;
   flex-direction: column;
   align-items: start;
