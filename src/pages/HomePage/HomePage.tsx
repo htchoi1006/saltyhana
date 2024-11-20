@@ -9,9 +9,12 @@ import {
   NavigationDots,
   Dot,
 } from "./styles";
+import dayjs from "dayjs";
+import _ from "underscore";
 
 export default function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const dateCount = 12;
 
   const goals = [
     {
@@ -50,6 +53,25 @@ export default function HomePage() {
     },
   ];
 
+  const generateRandomDates = () => {
+    console.log(dateCount);
+    const today = dayjs();
+    return _.range(dateCount)
+      .map((v) => {
+        const date = today.subtract(v, "d").toDate();
+        return {
+          date,
+          isAchieve: Math.random() > 0.5, // 랜덤 생성
+        };
+      })
+      .reverse();
+  };
+
+  const goalsWithDates = goals.map((goal) => ({
+    ...goal,
+    dates: generateRandomDates(),
+  }));
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
     const scrollPosition = container.scrollLeft;
@@ -62,7 +84,7 @@ export default function HomePage() {
     <PageContainer>
       <CarouselContainer>
         <CarouselWrapper className="carousel-container" onScroll={handleScroll}>
-          {goals.map((goalData, index) => (
+          {goalsWithDates.map((goalData, index) => (
             <div key={index} className="carousel-item">
               <GoalContainer {...goalData} />
             </div>
@@ -86,8 +108,7 @@ export default function HomePage() {
           ))}
         </NavigationDots>
       </CarouselContainer>
-
-      <WeekdayCalendar />
+      <WeekdayCalendar dates={goalsWithDates[currentIndex].dates} />
       <ProductList />
     </PageContainer>
   );

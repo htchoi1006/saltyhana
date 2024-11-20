@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { WeekDayType } from "../../type";
 import neutral from "../../images/state_neutral.png";
 import smile1 from "../../images/state_smile1.png";
@@ -14,23 +14,16 @@ import {
   CalendarWeek,
 } from "./styles";
 import dayjs from "dayjs";
-import _ from "underscore";
+interface WeekdayCalendarProps {
+  dates: WeekDayType[]; // 외부에서 전달받은 dates 데이터
+}
 
-export default function WeekdayCalendar() {
-  const [dates, setDates] = useState<WeekDayType[]>([]);
+export default function WeekdayCalendar({ dates }: WeekdayCalendarProps) {
   const today = useRef(dayjs());
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [dateCount, setDateCount] = useState(0);
-
-  const calculateDateCount = () => {
-    if (containerRef.current) {
-      const totalWidth = containerRef.current.offsetWidth - 160;
-      setDateCount(Math.floor(totalWidth / 90));
-    }
-  };
 
   // 현재 날짜 이전 날짜 중 Achieve가 70% 이상 : smile, 50% ~ 60% : neutral, 그 이하 : sad
-  const stateImg: string = (() => {
+  const stateImg = useMemo(() => {
     const today = new Date();
     const todayIndex = dates.findIndex(({ date }) => {
       return (
@@ -40,49 +33,24 @@ export default function WeekdayCalendar() {
       );
     });
 
-    const archieveNumber = dates.filter(
+    const achieveNumber = dates.filter(
       (d, i) => d.isAchieve && i <= todayIndex,
     ).length;
 
-    if (archieveNumber >= Math.floor(todayIndex * 0.7)) {
+    if (achieveNumber >= Math.floor(todayIndex * 0.7)) {
       const smileList = [smile1, smile2, smile3, smile4];
       const randomIndex = Math.floor(Math.random() * smileList.length);
       return smileList[randomIndex];
     } else if (
-      archieveNumber >= Math.floor(todayIndex * 0.5) &&
-      archieveNumber < Math.floor(todayIndex * 0.7)
+      achieveNumber >= Math.floor(todayIndex * 0.5) &&
+      achieveNumber < Math.floor(todayIndex * 0.7)
     ) {
-      console.log(archieveNumber, Math.floor(todayIndex * 0.5));
+      console.log(achieveNumber, Math.floor(todayIndex * 0.5));
       return neutral;
     } else {
       return sad;
     }
-  })();
-
-  useEffect(() => {
-    if (!today.current) {
-      return;
-    }
-    setDates(
-      _.range(dateCount)
-        .map((v): WeekDayType => {
-          const nextDate = today.current.subtract(v, "d");
-          return {
-            date: nextDate.toDate(),
-            isAchieve: Math.random() > 0.5,
-          };
-        })
-        .reverse(),
-    );
-  }, [dateCount]);
-
-  useEffect(() => {
-    calculateDateCount();
-    window.addEventListener("resize", calculateDateCount);
-    return () => {
-      window.removeEventListener("resize", calculateDateCount);
-    };
-  }, []);
+  }, [dates]);
 
   return (
     <CalendarContainer ref={containerRef}>
@@ -91,7 +59,7 @@ export default function WeekdayCalendar() {
         <span>{today.current.format("M월")}</span>
       </CalendarMonthDiv>
       <CalendarWeek>
-        {dates.slice(0, dateCount).map((v, i) => {
+        {dates.map((v, i) => {
           const date = dayjs(v.date);
           const dayStr = date.format("ddd").toLocaleUpperCase();
 
