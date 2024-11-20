@@ -75,9 +75,19 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
                   selectedYear={selectedYear}
                   selectedMonth={selectedMonth}
                   selectedDay={selectedDay}
-                  setSelectedYear={setSelectedYear}
-                  setSelectedMonth={setSelectedMonth}
-                  setSelectedDay={setSelectedDay}
+                  // 날짜 변경 시 시간 초기화
+                  setSelectedYear={(year) => {
+                    setSelectedYear(year);
+                    setSelectedTime(null);
+                  }}
+                  setSelectedMonth={(month) => {
+                    setSelectedMonth(month);
+                    setSelectedTime(null);
+                  }}
+                  setSelectedDay={(day) => {
+                    setSelectedDay(day);
+                    setSelectedTime(null);
+                  }}
                 />
               </DateContainer>
             </Left2Container>
@@ -87,6 +97,9 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
               handleTimeSelect={handleTimeSelect}
               startIndex={startIndex}
               setStartIndex={setStartIndex}
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+              selectedDay={selectedDay}
             />
           </LeftContainer>
 
