@@ -50,8 +50,8 @@ export default function LoginPage() {
     <Container>
       <FormWrapper>
         <Paper style={{ height: "560px" }}>
-          <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
-          <h1>자산을 하나로</h1>
+          <h2 style={{ marginTop: "40px" }}>하나와 함께 부자가 되는 습관</h2>
+          <h1>하나 리치</h1>
           <form onSubmit={handleLogin}>
             <InputsWrapper>
               <AuthInput

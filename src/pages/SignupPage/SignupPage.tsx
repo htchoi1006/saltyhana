@@ -89,8 +89,8 @@ export default function SignupPage() {
       </ImgWrapper>
       <FormWrapper>
         <Paper style={{ height: "700px", marginRight: "30px" }}>
-          <h2 style={{ marginTop: "40px" }}>쉽게 들이는 저축 습관</h2>
-          <h1>자산을 하나로</h1>
+          <h2 style={{ marginTop: "40px" }}>하나와 함께 부자가 되는 습관</h2>
+          <h1>하나 리치</h1>
           <form onSubmit={handleSubmit}>
             <InputsWrapper>
               <AuthInput
@@ -139,7 +139,10 @@ export default function SignupPage() {
               />
               <label>
                 <span
-                  style={{ cursor: "pointer", textDecoration: "underline" }}
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
                   onClick={handleOpenModal} // 클릭 시 이용약관 모달 열기
                 >
                   이용약관

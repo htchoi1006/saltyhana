@@ -1,23 +1,37 @@
-import React, { useRef, useState, memo, useEffect } from "react";
+import React, { useRef, useState, memo, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import * as styled from "./styles";
 import profileImg from "../../images/mypage_profileImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 
+// Props 타입 정의
+interface AuthDisplayProps {
+  labelName: string;
+  value: string;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  onSave?: (newValue: string) => void;
+}
+
+interface PasswordInputFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+}
+
+interface PasswordSectionProps {
+  passwordInfo: {
+    newPassword: string;
+    confirmPassword: string;
+  };
+  passwordError: string;
+  onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 const PasswordInputField = memo(
-  ({
-    label,
-    name,
-    value,
-    onChange,
-    placeholder,
-  }: {
-    label: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder: string;
-  }) => {
+  ({ label, name, value, onChange, placeholder }: PasswordInputFieldProps) => {
     return (
       <label>
         <div>
@@ -39,15 +53,7 @@ const PasswordInputField = memo(
 );
 
 const PasswordSection = memo(
-  ({
-    passwordInfo,
-    passwordError,
-    onPasswordChange,
-  }: {
-    passwordInfo: { newPassword: string; confirmPassword: string };
-    passwordError: string;
-    onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }) => {
+  ({ passwordInfo, passwordError, onPasswordChange }: PasswordSectionProps) => {
     return (
       <styled.PasswordSection>
         <PasswordInputField
@@ -72,107 +78,29 @@ const PasswordSection = memo(
   },
 );
 
-const MyPage: React.FC = () => {
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [userInfo, setUserInfo] = useState({
-    email: "user@example.com",
-    id: "test1234",
-    birth: "1999.10.06",
-    password: "",
-  });
-
-  interface Props {
-    labelName: string;
-    value: string;
-    startIcon?: React.ReactNode;
-    endIcon?: React.ReactNode;
-    onSave?: (newValue: string) => void;
-  }
-
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [hasChanges, setHasChanges] = useState(false);
-
-  const handleSave = (field: keyof typeof userInfo) => (newValue: string) => {
-    setUserInfo((prev) => ({
-      ...prev,
-      [field]: newValue,
-    }));
-    setHasChanges(true);
-  };
-
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert("파일 크기는 5MB 이하여야 합니다.");
-        return;
-      }
-
-      if (!file.type.startsWith("image/")) {
-        alert("이미지 파일만 업로드 가능합니다.");
-        return;
-      }
-
-      try {
-        setIsUploading(true);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            setProfileImage(e.target.result as string);
-            setHasChanges(true);
-          }
-        };
-        reader.readAsDataURL(file);
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("이미지 업로드 중 오류가 발생했습니다.");
-      } finally {
-        setIsUploading(false);
-      }
-    }
-  };
-
-  const handleImageDelete = () => {
-    if (window.confirm("프로필 이미지를 삭제하시겠습니까?")) {
-      setProfileImage(null);
-      setHasChanges(true);
-    }
-  };
-
-  const AuthDisplay: React.FC<Props> = ({
-    labelName,
-    value,
-    startIcon,
-    endIcon,
-    onSave,
-  }) => {
+const AuthDisplay = memo(
+  ({ labelName, value, startIcon, endIcon, onSave }: AuthDisplayProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(value);
 
+    // value prop이 변경될 때 editValue 업데이트
     useEffect(() => {
       setEditValue(value);
     }, [value]);
 
-    const handleSave = () => {
-      if (onSave) {
+    const handleSave = (e: React.MouseEvent) => {
+      e.preventDefault();
+      // 값이 변경되었을 때만 저장 실행
+      if (onSave && editValue !== value) {
         onSave(editValue);
       }
       setIsEditing(false);
     };
 
     const handleCancel = (e: React.MouseEvent) => {
-      e.preventDefault(); // 이벤트 전파 중지
+      e.preventDefault();
       setEditValue(value); // 원래 값으로 복원
-      setIsEditing(false); // 편집 모드 종료
+      setIsEditing(false);
     };
 
     const handleEdit = (e: React.MouseEvent) => {
@@ -225,16 +153,33 @@ const MyPage: React.FC = () => {
         </styled.InputAndButtonWrapper>
       </styled.AuthDisplayContainer>
     );
-  };
+  },
+  (prevProps, nextProps) => {
+    // 메모이제이션 조건 수정
+    return (
+      prevProps.value === nextProps.value &&
+      prevProps.onSave === nextProps.onSave &&
+      prevProps.labelName === nextProps.labelName
+    );
+  },
+);
 
-  // const [passwordInfo, setPasswordInfo] = useState({
-  // 	newPassword: "",
-  // 	confirmPassword: "",
-  // });
-  // const [passwordError, setPasswordError] = useState("");
-
+const MyPage: React.FC = () => {
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
   const newPasswordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [userInfo, setUserInfo] = useState({
+    email: "admin@admin.com",
+    id: "saltyhana",
+    birth: "1999.10.06",
+    password: "",
+  });
+
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
@@ -242,28 +187,98 @@ const MyPage: React.FC = () => {
   });
   const [passwordError, setPasswordError] = useState("");
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setPasswordInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setHasChanges(true);
+  const handleSave = useCallback(
+    (field: keyof typeof userInfo) => (newValue: string) => {
+      setUserInfo((prev) => ({
+        ...prev,
+        [field]: newValue,
+      }));
+      setHasChanges(true);
+    },
+    [],
+  );
 
-    // 비밀번호 검증 로직
-    if (name === "confirmPassword") {
-      if (value !== passwordInfo.newPassword) {
-        setPasswordError("비밀번호가 일치하지 않습니다.");
-      } else {
-        setPasswordError("");
+  const handlePasswordChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setPasswordInfo((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+      setHasChanges(true);
+
+      if (name === "confirmPassword") {
+        if (value !== passwordInfo.newPassword) {
+          setPasswordError("비밀번호가 일치하지 않습니다.");
+        } else {
+          setPasswordError("");
+        }
       }
+      if (name === "newPassword" && passwordInfo.confirmPassword) {
+        if (value !== passwordInfo.confirmPassword) {
+          setPasswordError("비밀번호가 일치하지 않습니다.");
+        } else {
+          setPasswordError("");
+        }
+      }
+    },
+    [passwordInfo.newPassword, passwordInfo.confirmPassword],
+  );
+
+  const resetFileInput = useCallback(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
-    if (name === "newPassword" && passwordInfo.confirmPassword) {
-      if (value !== passwordInfo.confirmPassword) {
-        setPasswordError("비밀번호가 일치하지 않습니다.");
-      } else {
-        setPasswordError("");
+  }, []);
+
+  const handleImageClick = () => {
+    resetFileInput(); // 파일 입력 초기화
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+          alert("파일 크기는 5MB 이하여야 합니다.");
+          resetFileInput();
+          return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+          alert("이미지 파일만 업로드 가능합니다.");
+          resetFileInput();
+          return;
+        }
+
+        try {
+          setIsUploading(true);
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target?.result) {
+              setProfileImage(e.target.result as string);
+              setHasChanges(true);
+            }
+          };
+          reader.readAsDataURL(file);
+        } catch (error) {
+          console.error("Upload error:", error);
+          alert("이미지 업로드 중 오류가 발생했습니다.");
+          resetFileInput();
+        } finally {
+          setIsUploading(false);
+        }
       }
+    },
+    [resetFileInput],
+  );
+
+  const handleImageDelete = () => {
+    if (window.confirm("프로필 이미지를 삭제하시겠습니까?")) {
+      setProfileImage(null);
+      resetFileInput();
+      setHasChanges(true);
     }
   };
 

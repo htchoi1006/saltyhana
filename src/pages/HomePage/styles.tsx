@@ -4,6 +4,7 @@ export const PageContainer = styled.div`
   padding: 42px 42px 40px;
   display: flex;
   flex-direction: column;
+  margin: 0 50px;
 `;
 
 export const CarouselContainer = styled.div`

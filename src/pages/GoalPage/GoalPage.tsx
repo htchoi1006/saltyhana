@@ -245,7 +245,7 @@ export default function GoalPage() {
   return (
     <>
       <styled.Container>
-        <styled.ContainerHeader>금액으로 설정하기</styled.ContainerHeader>
+        <styled.ContainerHeader>목표 설정하기</styled.ContainerHeader>
         <styled.InputWrapper>
           <styled.InputContainer>
             <styled.SetGoalPen
