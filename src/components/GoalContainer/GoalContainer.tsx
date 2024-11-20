@@ -8,6 +8,7 @@ import {
   GoalDate,
   GoalIcon,
   ProgressBar,
+  MoneyProgress,
   Progress,
   ProgressContainer,
   ProgressPercentage,
@@ -28,10 +29,13 @@ interface GoalContainerProps {
   startdate: string | null;
   enddate: string | null;
   progress: number | 0;
+  totalmoney: number | 0;
+  currentmoney: number | 0;
 }
 
 const GoalProgressContainer = (props: GoalContainerProps) => {
-  const { goal, startdate, enddate, progress } = props;
+  const { goal, startdate, enddate, progress, totalmoney, currentmoney } =
+    props;
 
   const [currentProgress, setCurrentProgress] = useState(0);
   const [displayedProgress, setDisplayedProgress] = useState(0);
@@ -95,6 +99,12 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
               <ProgressPercentage>{`${displayedProgress}%`}</ProgressPercentage>
             </RunnerContainer>
           </ProgressBar>
+          <MoneyProgress>
+            <span>
+              {currentmoney.toLocaleString()}원&nbsp;/&nbsp;
+              {totalmoney.toLocaleString()}원
+            </span>
+          </MoneyProgress>
         </ProgressContainer>
       </GoalContainerDiv>
       <GoalIcon src={travel} />
@@ -132,7 +142,8 @@ const GoalSetContainer = () => {
 };
 
 export default function GoalContainer(props: GoalContainerProps) {
-  const { goal, startdate, enddate, progress } = props;
+  const { goal, startdate, enddate, progress, totalmoney, currentmoney } =
+    props;
 
   return goal == null ? (
     <GoalSetContainer />
@@ -142,6 +153,8 @@ export default function GoalContainer(props: GoalContainerProps) {
       startdate={startdate}
       enddate={enddate}
       progress={progress}
+      totalmoney={totalmoney}
+      currentmoney={currentmoney}
     />
   );
 }
