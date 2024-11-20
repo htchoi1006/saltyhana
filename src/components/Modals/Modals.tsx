@@ -79,14 +79,17 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
                   setSelectedYear={(year) => {
                     setSelectedYear(year);
                     setSelectedTime(null);
+                    setStartIndex(0);
                   }}
                   setSelectedMonth={(month) => {
                     setSelectedMonth(month);
                     setSelectedTime(null);
+                    setStartIndex(0);
                   }}
                   setSelectedDay={(day) => {
                     setSelectedDay(day);
                     setSelectedTime(null);
+                    setStartIndex(0);
                   }}
                 />
               </DateContainer>
