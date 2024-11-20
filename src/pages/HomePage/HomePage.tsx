@@ -15,17 +15,25 @@ export default function HomePage() {
 
   const goals = [
     {
+      goal: "파리 여행",
+      startdate: "2024.11.01",
+      enddate: "2024.11.28",
+      progress: 70,
+    },
+    {
       goal: null,
       startdate: "",
       enddate: "",
       progress: 0,
     },
+
     {
-      goal: "결혼 자금",
-      startdate: "2024.11.01",
-      enddate: "2025.11.30",
-      progress: 26,
+      goal: "맥북 구매",
+      startdate: "2024.11.08",
+      enddate: "2024.12.05",
+      progress: 35,
     },
+
     {
       goal: "내 집 마련",
       startdate: "2024.09.01",
