@@ -13,6 +13,9 @@ interface TimeSelectorProps {
   handleTimeSelect: (time: string) => void;
   startIndex: number;
   setStartIndex: (index: number) => void;
+  selectedYear: number;
+  selectedMonth: number;
+  selectedDay: number;
 }
 
 const TimeSelector: React.FC<TimeSelectorProps> = ({
@@ -20,6 +23,9 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   handleTimeSelect,
   startIndex,
   setStartIndex,
+  selectedYear,
+  selectedMonth,
+  selectedDay,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startMouseX, setStartMouseX] = useState(0);
@@ -49,6 +55,13 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
 
   const timeSlots = generateTimeSlots();
   const timeSlotsLength = timeSlots.length;
+
+  // 현재 날짜와 비교하여 과거 시간 비활성화
+  const now = new Date();
+  const isToday =
+    selectedYear === now.getFullYear() &&
+    selectedMonth === now.getMonth() + 1 &&
+    selectedDay === now.getDate();
 
   // 시간 슬롯을 가져올 때 최대 4개까지 또는 남은 슬롯 수 만큼 가져오기
   const timeSlotsToDisplay = timeSlots.slice(startIndex, startIndex + 4);
@@ -116,17 +129,27 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
         <img src={icon_left} alt="Left Scroll" style={{ width: "13px" }} />
       </ScrollButton>
       <TimeButtonContainer onMouseDown={handleMouseDown}>
-        {timeSlotsToDisplay.map((time) => (
-          <TimeButton
-            key={time.key}
-            isSelected={selectedTime === time.key}
-            onClick={() => {
-              handleTimeSelect(time.key);
-            }}
-          >
-            {time.label}
-          </TimeButton>
-        ))}
+        {timeSlotsToDisplay.map((time) => {
+          const timeParts = time.key.split(":");
+          const slotTime = new Date();
+          slotTime.setHours(parseInt(timeParts[0]));
+          slotTime.setMinutes(parseInt(timeParts[1]));
+          slotTime.setSeconds(0);
+          const isDisabled = isToday && slotTime.getTime() < now.getTime(); // 과거 시간 비활성화
+
+          return (
+            <TimeButton
+              key={time.key}
+              isSelected={selectedTime === time.key}
+              disabled={isDisabled}
+              onClick={() => {
+                if (!isDisabled) handleTimeSelect(time.key);
+              }}
+            >
+              {time.label}
+            </TimeButton>
+          );
+        })}
       </TimeButtonContainer>
       <ScrollButton
         onClick={handleRightClick}
