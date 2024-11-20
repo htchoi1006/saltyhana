@@ -19,19 +19,25 @@ export default function HomePage() {
       startdate: "2024.11.01",
       enddate: "2024.11.28",
       progress: 70,
+      totalmoney: 1500000,
+      currentmoney: 1050000,
     },
     {
       goal: null,
       startdate: "",
       enddate: "",
       progress: 0,
+      totalmoney: 0,
+      currentmoney: 0,
     },
 
     {
       goal: "맥북 구매",
       startdate: "2024.11.08",
       enddate: "2024.12.05",
-      progress: 35,
+      progress: 40,
+      totalmoney: 3000000,
+      currentmoney: 1200000,
     },
 
     {
@@ -39,6 +45,8 @@ export default function HomePage() {
       startdate: "2024.09.01",
       enddate: "2026.08.31",
       progress: 10,
+      totalmoney: 200000000,
+      currentmoney: 20000000,
     },
   ];
 

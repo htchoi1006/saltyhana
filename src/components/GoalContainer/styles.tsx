@@ -65,17 +65,24 @@ export const GoalIcon = styled.img.attrs({ alt: "목표 이미지" })`
   width: 200px;
   height: 200px;
   background-size: cover;
-  margin-left: auto;
+  margin-left: 0;
 `;
 
 export const ProgressBar = styled.div`
-  width: 100%;
+  width: 75%;
   background-color: #ececec;
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   height: 24px;
   margin-top: 15px;
+`;
+
+export const MoneyProgress = styled.div`
+  margin-left: 20px;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 800;
 `;
 
 export const Progress = styled.div`
@@ -91,6 +98,8 @@ export const ProgressContainer = styled.div`
   position: relative;
   width: 100%;
   margin-top: 30px;
+  display: flex;
+  align-items: center;
 `;
 
 export const RunnerContainer = styled.div<{ leftPosition: number }>`
