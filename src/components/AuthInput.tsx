@@ -14,6 +14,8 @@ interface Props {
   endIcon?: ReactNode;
   name: string;
   autoComplete?: HTMLInputAutoCompleteAttribute;
+  showCheckButton?: boolean;
+  onCheck?: () => void;
 }
 
 const InputLabel = styled.span`
@@ -40,6 +42,21 @@ const UnstyledInput = styled.input`
   font-size: inherit;
 `;
 
+const CheckButton = styled.button`
+  padding: 4px 8px;
+  background-color: #008485;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #006e6f;
+  }
+`;
+
 const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
   const {
     labelName,
@@ -49,6 +66,8 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
     type,
     name,
     autoComplete,
+    showCheckButton,
+    onCheck,
   } = props;
   return (
     <label>
@@ -66,6 +85,11 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
             autoComplete={autoComplete}
           />
         </div>
+        {showCheckButton && (
+          <CheckButton type="button" onClick={onCheck}>
+            중복 확인
+          </CheckButton>
+        )}
         {endIcon && <div>{endIcon}</div>}
       </InputWrapper>
     </label>
