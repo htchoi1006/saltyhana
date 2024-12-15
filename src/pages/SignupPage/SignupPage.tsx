@@ -20,9 +20,11 @@ import {
   FooterParagraph,
   AgreementCheckWrapper,
 } from "./styles";
+import { off } from "process";
 
 export default function SignupPage() {
   const navigate = useNavigate(); // useNavigate hook
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
@@ -53,6 +55,7 @@ export default function SignupPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const name = idInputRef.current?.value?.trim();
     const id = idInputRef.current?.value?.trim();
     const email = emailInputRef.current?.value?.trim();
     const password = passwordInputRef.current?.value?.trim();
@@ -74,6 +77,26 @@ export default function SignupPage() {
     navigate("/login");
   };
 
+  const handleEmailCheck = () => {
+    const email = emailInputRef.current?.value?.trim();
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+    // 여기에 이메일 중복 확인 로직 구현
+    alert("이메일 중복 확인이 필요합니다.");
+  };
+
+  const handleIdCheck = () => {
+    const id = idInputRef.current?.value?.trim();
+    if (!id) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+    // 여기에 아이디 중복 확인 로직 구현
+    alert("아이디 중복 확인이 필요합니다.");
+  };
+
   return (
     <Container>
       <ImgWrapper>
@@ -88,11 +111,19 @@ export default function SignupPage() {
         />
       </ImgWrapper>
       <FormWrapper>
-        <Paper style={{ height: "700px", marginRight: "30px" }}>
+        <Paper style={{ height: "auto", marginRight: "30px" }}>
           <h2 style={{ marginTop: "40px" }}>하나와 함께 부자가 되는 습관</h2>
           <h1>하나 리치</h1>
           <form onSubmit={handleSubmit}>
             <InputsWrapper>
+              <AuthInput
+                labelName="이름"
+                placeholder="이름을 입력해주세요."
+                name="name"
+                autoComplete="off"
+                startIcon={<img src={EmailIcon} alt="email icon" />}
+                ref={nameInputRef}
+              />
               <AuthInput
                 labelName="이메일"
                 placeholder="이메일을 입력해주세요."
@@ -100,14 +131,18 @@ export default function SignupPage() {
                 autoComplete="email"
                 startIcon={<img src={EmailIcon} alt="email icon" />}
                 ref={emailInputRef}
+                showCheckButton
+                onCheck={handleEmailCheck}
               />
               <AuthInput
                 labelName="아이디"
                 placeholder="아이디를 입력해주세요."
                 name="id"
-                autoComplete="username"
+                autoComplete="userid"
                 startIcon={<img src={EmailIcon} alt="email icon" />}
                 ref={idInputRef}
+                showCheckButton
+                onCheck={handleIdCheck}
               />
               <AuthInput
                 labelName="비밀번호"
@@ -122,7 +157,7 @@ export default function SignupPage() {
               />
               <AuthInput
                 labelName="생년월일"
-                placeholder="생년월일을 입력해주세요."
+                placeholder="생년월일을 입력해주세요. (YYYYMMDD)"
                 name="birth"
                 autoComplete="off"
                 startIcon={<img src={SmartphoneIcon} alt="smartphone icon" />}
