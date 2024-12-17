@@ -6,6 +6,7 @@ import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import SmartphoneIcon from "../../icons/smart-phone-01-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
+import CalendarIcon from "../../images/signup_calendar.png";
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
@@ -28,9 +29,12 @@ export default function SignupPage() {
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement | null>(null);
   const birthInputRef = useRef<HTMLInputElement | null>(null);
   const modalManagerRef = useRef<ModalManagerType>(null);
   const [isAgreed, setIsAgreed] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [passwordError, setPasswordError] = useState<string>("");
 
   const handleOpenModal = () => {
     modalManagerRef.current?.openModal("이용약관");
@@ -52,6 +56,34 @@ export default function SignupPage() {
     }
   };
 
+  const today = new Date();
+  const maxDate = today.toISOString().split("T")[0]; // 오늘
+  const minDate = new Date(
+    today.getFullYear() - 100,
+    today.getMonth(),
+    today.getDate(),
+  )
+    .toISOString()
+    .split("T")[0]; // 100년 전
+
+  const handlePasswordChange = () => {
+    const password = passwordInputRef.current?.value;
+    const confirmPassword = passwordConfirmRef.current?.value;
+
+    if (confirmPassword) {
+      if (password !== confirmPassword) {
+        setPasswordMatch(false);
+        setPasswordError("비밀번호가 일치하지 않습니다.");
+      } else {
+        setPasswordMatch(true);
+        setPasswordError("");
+      }
+    } else {
+      setPasswordMatch(true);
+      setPasswordError("");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -59,10 +91,11 @@ export default function SignupPage() {
     const id = idInputRef.current?.value?.trim();
     const email = emailInputRef.current?.value?.trim();
     const password = passwordInputRef.current?.value?.trim();
+    const confirmPassword = passwordConfirmRef.current?.value?.trim();
     const birth = birthInputRef.current?.value?.trim();
 
     // 입력값 검증
-    if (!id || !email || !password || !birth) {
+    if (!id || !email || !password || !confirmPassword || !birth) {
       alert("모든 필드를 입력해주세요.");
       return;
     }
@@ -74,6 +107,7 @@ export default function SignupPage() {
 
     // 입력값이 모두 유효하면 로그인 페이지로 라우팅
     alert("회원가입이 완료되었습니다.");
+    console.log(email, name, id, birth, password);
     navigate("/login");
   };
 
@@ -112,7 +146,7 @@ export default function SignupPage() {
       </ImgWrapper>
       <FormWrapper>
         <Paper style={{ height: "auto", marginRight: "30px" }}>
-          <h2 style={{ marginTop: "40px" }}>하나와 함께 부자가 되는 습관</h2>
+          <h2 style={{ marginTop: "0px" }}>하나와 함께 부자가 되는 습관</h2>
           <h1>하나 리치</h1>
           <form onSubmit={handleSubmit}>
             <InputsWrapper>
@@ -120,7 +154,7 @@ export default function SignupPage() {
                 labelName="이름"
                 placeholder="이름을 입력해주세요."
                 name="name"
-                autoComplete="off"
+                autoComplete="username"
                 startIcon={<img src={EmailIcon} alt="email icon" />}
                 ref={nameInputRef}
               />
@@ -144,28 +178,60 @@ export default function SignupPage() {
                 showCheckButton
                 onCheck={handleIdCheck}
               />
-              <AuthInput
-                labelName="비밀번호"
-                placeholder="비밀번호를 입력해주세요."
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                startIcon={
-                  <img src={LockPasswordIcon} alt="lock-password icon" />
-                }
-                ref={passwordInputRef}
-              />
+              <div>
+                <AuthInput
+                  labelName="비밀번호"
+                  placeholder="비밀번호를 입력해주세요."
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  startIcon={
+                    <img src={LockPasswordIcon} alt="lock-password icon" />
+                  }
+                  ref={passwordInputRef}
+                  onChange={handlePasswordChange}
+                />
+                <div style={{ marginTop: "16px" }}>
+                  <AuthInput
+                    labelName="비밀번호 확인"
+                    placeholder="비밀번호를 다시 입력해주세요."
+                    name="password-confirm"
+                    type="password"
+                    autoComplete="new-password"
+                    startIcon={
+                      <img src={LockPasswordIcon} alt="lock-password icon" />
+                    }
+                    ref={passwordConfirmRef}
+                    onChange={handlePasswordChange}
+                  />
+                  {passwordError && (
+                    <div
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginTop: "4px",
+                        marginLeft: "16px",
+                      }}
+                    >
+                      {passwordError}
+                    </div>
+                  )}
+                </div>
+              </div>
               <AuthInput
                 labelName="생년월일"
-                placeholder="생년월일을 입력해주세요. (YYYYMMDD)"
+                placeholder="생년월일을 선택해주세요"
                 name="birth"
-                autoComplete="off"
+                type="date"
+                autoComplete="bday"
                 startIcon={<img src={SmartphoneIcon} alt="smartphone icon" />}
                 ref={birthInputRef}
+                min={minDate}
+                max={maxDate}
               />
             </InputsWrapper>
             <AgreementCheckWrapper
-              style={{ marginTop: "10px", marginBottom: "45px" }}
+              style={{ marginTop: "10px", marginBottom: "5px" }}
             >
               <input
                 type="checkbox"
@@ -178,7 +244,7 @@ export default function SignupPage() {
                     cursor: "pointer",
                     textDecoration: "underline",
                   }}
-                  onClick={handleOpenModal} // 클릭 시 이용약관 모달 열기
+                  onClick={handleOpenModal}
                 >
                   이용약관
                 </span>
