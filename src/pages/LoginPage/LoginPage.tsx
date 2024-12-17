@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -16,34 +16,98 @@ import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
 
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface UserInfo {
+  identifier: string;
+  isLoggedIn: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const passwordInputRef = useRef<HTMLInputElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLoginApi = async (loginData: {
+    identifier: string;
+    password: string;
+  }) => {
+    try {
+      const params = new URLSearchParams({
+        identifier: loginData.identifier,
+        password: loginData.password,
+      });
+
+      const response = await fetch(
+        `http://localhost:9090/auth/login?${params.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("아이디 또는 비밀번호가 일치하지 않습니다.");
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("로그인 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const id = idInputRef.current?.value;
+    const identifier = idInputRef.current?.value?.trim();
     const password = passwordInputRef.current?.value;
 
     // 입력값 검증
-    if (!id || !password) {
+    if (!identifier || !password) {
       alert("아이디와 비밀번호를 모두 입력해주세요.");
       return;
     }
 
-    // 계정 정보를 로컬 스토리지에 저장
-    const userInfo = {
-      id,
-      password,
-      isLoggedIn: true,
-    };
+    setIsLoading(true);
+    try {
+      const response = await handleLoginApi({
+        identifier,
+        password,
+      });
 
-    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      // 로그인 성공 시 사용자 정보 저장
+      const userInfo = {
+        identifier,
+        isLoggedIn: true,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      };
 
-    // home으로 라우팅
-    navigate("/home");
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
+
+      navigate("/home");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("로그인 중 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -87,9 +151,15 @@ export default function LoginPage() {
             </div>
             <StyledButton
               type="submit"
-              style={{ marginTop: "45px", marginBottom: "10px" }}
+              style={{
+                marginTop: "45px",
+                marginBottom: "10px",
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.7 : 1,
+              }}
+              disabled={isLoading}
             >
-              <span>로그인</span>
+              <span>{isLoading ? "로그인 중..." : "로그인"}</span>
             </StyledButton>
             <Link
               to="/signup"

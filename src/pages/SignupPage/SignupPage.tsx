@@ -32,9 +32,11 @@ export default function SignupPage() {
   const passwordConfirmRef = useRef<HTMLInputElement | null>(null);
   const birthInputRef = useRef<HTMLInputElement | null>(null);
   const modalManagerRef = useRef<ModalManagerType>(null);
+
   const [isAgreed, setIsAgreed] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [passwordError, setPasswordError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpenModal = () => {
     modalManagerRef.current?.openModal("이용약관");
@@ -84,19 +86,73 @@ export default function SignupPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (signupData: {
+    identifier: string;
+    email: string;
+    password: string;
+    name: string;
+    confirmPassword: string;
+    birth: string;
+  }) => {
+    try {
+      const params = new URLSearchParams({
+        identifier: signupData.identifier,
+        email: signupData.email,
+        password: signupData.password,
+        name: signupData.name,
+        confirmPassword: signupData.confirmPassword,
+        birth: signupData.birth,
+      });
+
+      const response = await fetch(
+        `http://localhost:9090/auth/signup?${params.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "회원가입에 실패했습니다.");
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("회원가입 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const name = idInputRef.current?.value?.trim();
-    const id = idInputRef.current?.value?.trim();
+    const name = nameInputRef.current?.value?.trim();
+    const identifier = idInputRef.current?.value?.trim();
     const email = emailInputRef.current?.value?.trim();
     const password = passwordInputRef.current?.value?.trim();
     const confirmPassword = passwordConfirmRef.current?.value?.trim();
-    const birth = birthInputRef.current?.value?.trim();
+    const birth = birthInputRef.current?.value;
 
     // 입력값 검증
-    if (!id || !email || !password || !confirmPassword || !birth) {
+    if (
+      !name ||
+      !identifier ||
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !birth
+    ) {
       alert("모든 필드를 입력해주세요.");
+      return;
+    }
+
+    if (!passwordMatch) {
+      alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
@@ -105,10 +161,29 @@ export default function SignupPage() {
       return;
     }
 
-    // 입력값이 모두 유효하면 로그인 페이지로 라우팅
-    alert("회원가입이 완료되었습니다.");
-    console.log(email, name, id, birth, password);
-    navigate("/login");
+    // API 호출
+    setIsLoading(true);
+    try {
+      await handleSignup({
+        identifier,
+        email,
+        password,
+        name,
+        confirmPassword,
+        birth,
+      });
+
+      alert("회원가입이 완료되었습니다.");
+      navigate("/login");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("회원가입 중 오류가 발생했습니다.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleEmailCheck = () => {
@@ -256,7 +331,16 @@ export default function SignupPage() {
                 isAgreed={isAgreed}
               />
             </AgreementCheckWrapper>
-            <StyledButton type="submit">회원가입</StyledButton>
+            <StyledButton
+              type="submit"
+              disabled={isLoading}
+              style={{
+                cursor: isLoading ? "not-allowed" : "pointer",
+                opacity: isLoading ? 0.7 : 1,
+              }}
+            >
+              {isLoading ? "처리중..." : "회원가입"}
+            </StyledButton>
           </form>
           <FooterParagraph style={{ fontSize: "14px" }}>
             이미 계정이 있으신가요? <Link to="/login">로그인</Link>
