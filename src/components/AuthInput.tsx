@@ -3,6 +3,7 @@ import {
   ReactNode,
   HTMLInputTypeAttribute,
   HTMLInputAutoCompleteAttribute,
+  ChangeEventHandler,
 } from "react";
 import styled from "styled-components";
 
@@ -16,6 +17,9 @@ interface Props {
   autoComplete?: HTMLInputAutoCompleteAttribute;
   showCheckButton?: boolean;
   onCheck?: () => void;
+  min?: string;
+  max?: string;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 const InputLabel = styled.span`
@@ -40,6 +44,17 @@ const UnstyledInput = styled.input`
   background-color: inherit;
   width: 100%;
   font-size: inherit;
+
+  &[type="date"]::-webkit-datetime-edit-text,
+  &[type="date"]::-webkit-datetime-edit-month-field,
+  &[type="date"]::-webkit-datetime-edit-day-field,
+  &[type="date"]::-webkit-datetime-edit-year-field {
+    color: ${(props) => (props.value ? "inherit" : "#757575")};
+  }
+
+  &[type="date"]:invalid::-webkit-datetime-edit {
+    color: #757575;
+  }
 `;
 
 const CheckButton = styled.button`
@@ -68,6 +83,9 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
     autoComplete,
     showCheckButton,
     onCheck,
+    min,
+    max,
+    onChange,
   } = props;
   return (
     <label>
@@ -83,6 +101,9 @@ const AuthInput = forwardRef<HTMLInputElement, Props>((props, ref) => {
             ref={ref}
             placeholder={placeholder}
             autoComplete={autoComplete}
+            min={min}
+            max={max}
+            onChange={onChange}
           />
         </div>
         {showCheckButton && (
