@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import {
   FixedHeader,
@@ -18,7 +19,15 @@ interface IUserInfo {
   id: string;
   password: string;
   isLoggedIn: boolean;
-  profileImage?: string; // 사용자 이미지 정보 추가
+  profileImage: string; // 사용자 이미지 정보 추가
+}
+
+interface UserData {
+  email: string;
+  identifier: string;
+  name: string;
+  birth: string;
+  profileImg: string | null;
 }
 
 const initInfo: IUserInfo = {
@@ -31,6 +40,42 @@ const initInfo: IUserInfo = {
 export default function Header() {
   const location = useLocation();
   const [user, setUser] = useLocalStorage<IUserInfo>("userInfo", initInfo);
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+          return;
+        }
+
+        const response = await fetch("http://localhost:9090/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data: UserData = await response.json();
+        setUserName(data.name);
+
+        setUser((prev) => ({
+          ...prev,
+          profileImage: data.profileImg || "",
+        }));
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [setUser]);
 
   const pathName = location.pathname;
 
@@ -51,7 +96,6 @@ export default function Header() {
             </>
           ) : (
             <>
-              {/* 변경된 부분 */}
               <HeaderLink
                 to="/mypage"
                 style={{
@@ -62,10 +106,10 @@ export default function Header() {
                 }}
               >
                 <ProfileImage
-                  src={user.profileImage || defaultProfile} // 등록된 이미지가 없으면 디폴트 이미지 사용
+                  src={user.profileImage || defaultProfile}
                   alt="프로필 이미지"
                 />
-                <WelcomeSpan>{user.id}님 환영합니다</WelcomeSpan>
+                <WelcomeSpan>{userName}님 환영합니다</WelcomeSpan>
               </HeaderLink>
             </>
           )}
