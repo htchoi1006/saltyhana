@@ -45,7 +45,7 @@ export default function LoginPage() {
       });
 
       const response = await fetch(
-        `http://localhost:9090/auth/login?${params.toString()}`,
+        `http://localhost:9090/api/auth/login?${params.toString()}`,
         {
           method: "POST",
           headers: {
