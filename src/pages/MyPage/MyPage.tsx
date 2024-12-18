@@ -13,6 +13,14 @@ interface AuthDisplayProps {
   onSave?: (newValue: string) => void;
 }
 
+interface UserData {
+  email: string;
+  identifier: string;
+  name: string;
+  birth: string;
+  profileImg: string | null;
+}
+
 interface PasswordInputFieldProps {
   label: string;
   name: string;
@@ -171,12 +179,15 @@ const MyPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [userInfo, setUserInfo] = useState({
-    email: "admin@admin.com",
-    id: "saltyhana",
-    birth: "1999.10.06",
+    email: "",
+    id: "",
+    birth: "",
+    name: "",
     password: "",
   });
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -186,6 +197,54 @@ const MyPage: React.FC = () => {
     confirmPassword: "",
   });
   const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("http://localhost:9090/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const data: UserData = await response.json();
+        // Format birth date to match the desired format (YYYY.MM.DD)
+        const formattedBirth = data.birth
+          ? data.birth.split("-").join(".")
+          : "";
+
+        setUserInfo({
+          email: data.email,
+          id: data.identifier,
+          birth: formattedBirth,
+          name: data.name,
+          password: "",
+        });
+
+        if (data.profileImg) {
+          setProfileImage(data.profileImg);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Error fetching user data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleSave = useCallback(
     (field: keyof typeof userInfo) => (newValue: string) => {
@@ -318,7 +377,7 @@ const MyPage: React.FC = () => {
       </styled.ProfileSection>
 
       <styled.NameDiv>
-        <span>최혁태</span>
+        <span>{userInfo.name}</span>
       </styled.NameDiv>
       <styled.InputContainer>
         <styled.InputWrapper>
