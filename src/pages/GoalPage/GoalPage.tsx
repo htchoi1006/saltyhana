@@ -23,11 +23,50 @@ interface InputValues {
   directCategory: string;
 }
 
+interface GoalRequest {
+  goalName: string;
+  goalMoney: number;
+  startDate: string;
+  endDate: string;
+  goalType: number;
+  iconId: number;
+  goalImg: string | null;
+}
+
 interface ImageUploadBoxProps {
   image: string | null;
   onImageClick: () => void;
   onCancelClick: () => void;
 }
+
+const categoryToNumber: Record<string, number> = {
+  예금: 1,
+  적금: 2,
+  펀드: 3,
+  "단순 저축": 4,
+  여행: 5,
+  소비: 6,
+};
+
+const iconToNumber: Record<string, number> = {
+  travel: 11,
+  anniversary: 12,
+  shopping: 13,
+  money: 14,
+  beer: 15,
+  coffee: 16,
+  car: 17,
+  ticket: 18,
+  cake: 19,
+  lobstar: 20,
+  beach: 21,
+  pet: 22,
+  party: 23,
+  cruise: 24,
+  amusementpark: 25,
+  christmas: 26,
+  phone: 27,
+};
 
 const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   image,
@@ -78,6 +117,29 @@ export default function GoalPage() {
   const [selectedDate, setSelectedDate] = useState<string>(
     location.state?.selectedDate || "",
   );
+
+  const registerGoal = async (goalData: GoalRequest) => {
+    try {
+      const response = await fetch("http://localhost:9090/api/goals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Assuming token is stored in localStorage
+          accept: "*/*",
+        },
+        body: JSON.stringify(goalData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to register goal");
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error registering goal:", error);
+      throw error;
+    }
+  };
 
   const handleCategoryChange = (category: string) => {
     setValues((prev) => ({ ...prev, category }));
@@ -142,7 +204,7 @@ export default function GoalPage() {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     console.log("=== 목표 등록 정보 ===");
     console.log("목표 이름:", values.name);
     console.log(
@@ -151,7 +213,6 @@ export default function GoalPage() {
     );
     console.log("목표 날짜:", values.endDate);
 
-    // 이미지가 있으면 이미지 정보를, 없으면 선택된 아이콘 정보를 출력
     if (values.image) {
       console.log("등록된 이미지:", values.image);
     } else if (selectedIcon) {
@@ -176,18 +237,37 @@ export default function GoalPage() {
     console.log(values, anyValueMissing);
 
     if (!anyValueMissing) {
-      modalManagerRef.current?.openModal("목표등록");
-      setValues({
-        name: "",
-        amount: "",
-        startDate: "", // 목표 시작 날짜
-        endDate: "", // 목표 완료 날짜
-        image: null,
-        category: "",
-        directCategory: "",
-      });
-      setSelectedIcon("");
-      setSelectedDate("");
+      try {
+        const goalRequest: GoalRequest = {
+          goalName: values.name,
+          goalMoney: parseInt(values.amount),
+          startDate: values.startDate || selectedDate,
+          endDate: values.endDate,
+          goalType: categoryToNumber[values.category],
+          iconId: selectedIcon ? iconToNumber[selectedIcon] : 0,
+          goalImg:
+            values.image && values.image !== selectedIcon ? values.image : null,
+        };
+
+        await registerGoal(goalRequest);
+        modalManagerRef.current?.openModal("목표등록");
+
+        // Reset form
+        setValues({
+          name: "",
+          amount: "",
+          startDate: "",
+          endDate: "",
+          image: null,
+          category: "",
+          directCategory: "",
+        });
+        setSelectedIcon("");
+        setSelectedDate("");
+      } catch (error) {
+        console.error("Failed to register goal:", error);
+        // Handle error (e.g., show error modal)
+      }
     }
   };
 
