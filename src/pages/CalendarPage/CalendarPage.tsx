@@ -25,7 +25,7 @@ export default function Calendar() {
       id: 1,
       title: "프로젝트 완성",
       startDate: "2024-11-15",
-      endDate: "2024-11-30",
+      endDate: "2024-11-29",
       color: "#eab308",
       progress: 40,
       icon: beer,
@@ -95,32 +95,33 @@ export default function Calendar() {
             );
           }
         }
-      }
-    }
 
-    goals.forEach((goal) => {
-      if (formattedDate === goal.startDate || formattedDate === goal.endDate) {
-        const img = document.createElement("img");
+        if (
+          formattedDate === selectedGoal.startDate ||
+          formattedDate === selectedGoal.endDate
+        ) {
+          const img = document.createElement("img");
 
-        img.src = goal.icon;
-        img.alt = "Goal Icon";
-        img.style.width = "90px";
-        img.style.position = "relative";
-        img.style.bottom = "5px";
-        img.style.left = "50%";
-        img.style.transform = "translateX(-50%)";
+          img.src = selectedGoal.icon;
+          img.alt = "Goal Icon";
+          img.style.width = "90px";
+          img.style.position = "relative";
+          img.style.bottom = "5px";
+          img.style.left = "50%";
+          img.style.transform = "translateX(-50%)";
 
-        const dayFrame = Array.from(
-          arg.el.getElementsByClassName(
-            "fc-daygrid-day-frame fc-scrollgrid-sync-inner",
-          ),
-        );
+          const dayFrame = Array.from(
+            arg.el.getElementsByClassName(
+              "fc-daygrid-day-frame fc-scrollgrid-sync-inner",
+            ),
+          );
 
-        if (dayFrame.length > 0) {
-          dayFrame.forEach((frame) => frame.append(img.cloneNode(true)));
+          if (dayFrame.length > 0) {
+            dayFrame.forEach((frame) => frame.append(img.cloneNode(true)));
+          }
         }
       }
-    });
+    }
   };
 
   const handleDayCellContent = (args: DayCellContentArg): JSX.Element => {
