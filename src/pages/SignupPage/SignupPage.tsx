@@ -105,7 +105,7 @@ export default function SignupPage() {
       });
 
       const response = await fetch(
-        `http://localhost:9090/auth/signup?${params.toString()}`,
+        `http://localhost:9090/api/auth/signup?${params.toString()}`,
         {
           method: "POST",
           headers: {

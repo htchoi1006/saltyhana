@@ -11,6 +11,7 @@ interface AuthDisplayProps {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   onSave?: (newValue: string) => void;
+  type?: "text" | "date";
 }
 
 interface UserData {
@@ -19,6 +20,15 @@ interface UserData {
   name: string;
   birth: string;
   profileImg: string | null;
+}
+
+interface UpdateUserData {
+  email?: string;
+  identifier?: string;
+  password?: string;
+  confirmPassword?: string;
+  name?: string;
+  birth?: string;
 }
 
 interface PasswordInputFieldProps {
@@ -87,7 +97,14 @@ const PasswordSection = memo(
 );
 
 const AuthDisplay = memo(
-  ({ labelName, value, startIcon, endIcon, onSave }: AuthDisplayProps) => {
+  ({
+    labelName,
+    value,
+    startIcon,
+    endIcon,
+    onSave,
+    type = "text",
+  }: AuthDisplayProps) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(value);
 
@@ -98,7 +115,6 @@ const AuthDisplay = memo(
 
     const handleSave = (e: React.MouseEvent) => {
       e.preventDefault();
-      // 값이 변경되었을 때만 저장 실행
       if (onSave && editValue !== value) {
         onSave(editValue);
       }
@@ -107,7 +123,7 @@ const AuthDisplay = memo(
 
     const handleCancel = (e: React.MouseEvent) => {
       e.preventDefault();
-      setEditValue(value); // 원래 값으로 복원
+      setEditValue(value);
       setIsEditing(false);
     };
 
@@ -117,7 +133,20 @@ const AuthDisplay = memo(
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setEditValue(e.target.value);
+      const newValue = e.target.value;
+      if (type === "date") {
+        const formattedDate = newValue.split("-").join(".");
+        setEditValue(formattedDate);
+      } else {
+        setEditValue(newValue);
+      }
+    };
+
+    const getDateInputValue = () => {
+      if (type === "date" && editValue) {
+        return editValue.split(".").join("-");
+      }
+      return editValue;
     };
 
     return (
@@ -130,8 +159,9 @@ const AuthDisplay = memo(
             {startIcon && <div>{startIcon}</div>}
             {isEditing ? (
               <styled.EditInput
-                value={editValue}
+                value={getDateInputValue()}
                 onChange={handleInputChange}
+                type={type}
                 autoFocus
               />
             ) : (
@@ -163,7 +193,6 @@ const AuthDisplay = memo(
     );
   },
   (prevProps, nextProps) => {
-    // 메모이제이션 조건 수정
     return (
       prevProps.value === nextProps.value &&
       prevProps.onSave === nextProps.onSave &&
@@ -177,6 +206,7 @@ const MyPage: React.FC = () => {
   const newPasswordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [modifiedFields, setModifiedFields] = useState<UpdateUserData>({});
 
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -219,7 +249,6 @@ const MyPage: React.FC = () => {
         }
 
         const data: UserData = await response.json();
-        // Format birth date to match the desired format (YYYY.MM.DD)
         const formattedBirth = data.birth
           ? data.birth.split("-").join(".")
           : "";
@@ -252,6 +281,22 @@ const MyPage: React.FC = () => {
         ...prev,
         [field]: newValue,
       }));
+
+      // Track modified field
+      setModifiedFields((prev) => {
+        const updatedFields = { ...prev };
+
+        if (field === "birth") {
+          updatedFields[field] = newValue.split(".").join("-");
+        } else if (field === "id") {
+          updatedFields.identifier = newValue;
+        } else {
+          updatedFields[field] = newValue;
+        }
+
+        return updatedFields;
+      });
+
       setHasChanges(true);
     },
     [],
@@ -264,7 +309,18 @@ const MyPage: React.FC = () => {
         ...prev,
         [name]: value,
       }));
-      setHasChanges(true);
+
+      if (name === "newPassword") {
+        setModifiedFields((prev) => ({
+          ...prev,
+          password: value,
+        }));
+      } else if (name === "confirmPassword") {
+        setModifiedFields((prev) => ({
+          ...prev,
+          confirmPassword: value,
+        }));
+      }
 
       if (name === "confirmPassword") {
         if (value !== passwordInfo.newPassword) {
@@ -280,9 +336,80 @@ const MyPage: React.FC = () => {
           setPasswordError("");
         }
       }
+
+      setHasChanges(true);
     },
     [passwordInfo.newPassword, passwordInfo.confirmPassword],
   );
+
+  const handleSubmit = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const updateData: UpdateUserData = {};
+      Object.entries(modifiedFields).forEach(([key, value]) => {
+        if (value && value.trim() !== "") {
+          updateData[key as keyof UpdateUserData] = value;
+        }
+      });
+
+      if (Object.keys(updateData).length === 0) {
+        alert("변경된 정보가 없습니다.");
+        return;
+      }
+
+      if (updateData.password) {
+        if (
+          passwordError ||
+          updateData.password !== updateData.confirmPassword
+        ) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return;
+        }
+      }
+
+      const queryString = Object.entries(updateData)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+        )
+        .join("&");
+
+      const response = await fetch(
+        `http://localhost:9090/api/users/me?${queryString}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update user data");
+      }
+
+      setModifiedFields({});
+      setHasChanges(false);
+      setPasswordInfo({
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordError("");
+
+      alert("정보가 성공적으로 업데이트되었습니다.");
+
+      window.location.reload();
+    } catch (err) {
+      console.error("Error updating user data:", err);
+      alert("정보 업데이트에 실패했습니다.");
+    }
+  };
 
   const resetFileInput = useCallback(() => {
     if (fileInputRef.current) {
@@ -398,6 +525,7 @@ const MyPage: React.FC = () => {
             value={userInfo.birth}
             startIcon={<img src={EmailIcon} alt="email icon" />}
             onSave={handleSave("birth")}
+            type="date"
           />
           <PasswordSection
             passwordInfo={passwordInfo}
@@ -406,7 +534,9 @@ const MyPage: React.FC = () => {
           />
         </styled.InputWrapper>
       </styled.InputContainer>
-      <styled.RegisterButton>변경하기</styled.RegisterButton>
+      <styled.RegisterButton onClick={handleSubmit}>
+        변경하기
+      </styled.RegisterButton>
     </styled.Container>
   );
 };
