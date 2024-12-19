@@ -12,6 +12,8 @@ export const GoalListContainer = styled.div`
   gap: 20px;
   padding: 30px;
   position: relative;
+  height: 90vh;
+  overflow-y: scroll;
 `;
 
 export const GoalRegisterButton = styled.div`
