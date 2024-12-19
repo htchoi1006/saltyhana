@@ -207,7 +207,11 @@ export default function Calendar() {
           onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달
         />
       </CalendarContainer>
-      <GoalList goals={goals} onGoalClick={handleGoalClick} />
+      <GoalList
+        goals={goals}
+        onGoalClick={handleGoalClick}
+        setGoals={setGoals}
+      />
     </Container>
   );
 }
