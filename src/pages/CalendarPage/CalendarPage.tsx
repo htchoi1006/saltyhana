@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalendarContainer, Container } from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
@@ -7,6 +7,17 @@ import beer from "../../images/goal_icon_beer.png";
 import phone from "../../images/goal_icon_phone.webp";
 import MonthCalendar from "../../components/MonthCalendar/MonthCalendar";
 import GoalList from "../../components/GoalList/GoalList";
+
+interface APIGoal {
+  id: number;
+  userName: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  connected_account: string | null;
+  amount: number;
+  percentage: number;
+}
 export interface Goal {
   id: number;
   title: string;
@@ -17,42 +28,94 @@ export interface Goal {
   icon: string;
 }
 
+const transformAPIGoals = (apiGoals: APIGoal[]): Goal[] => {
+  const colors = ["#eab308", "#3b82f6", "#718ebf", "#ef4444", "#22c55e"];
+
+  return apiGoals.map((apiGoal, index) => ({
+    id: apiGoal.id,
+    title: apiGoal.title,
+    startDate: apiGoal.startAt.split("T")[0], // Convert to YYYY-MM-DD format
+    endDate: apiGoal.endAt.split("T")[0],
+    color: colors[index % colors.length], // Cycle through colors
+    progress: apiGoal.percentage,
+    icon: travel,
+  }));
+};
+
 export default function Calendar() {
   const navigate = useNavigate();
   const apiKey: string | undefined = process.env.REACT_APP_CAL_API_KEY;
-  const goals: Goal[] = [
-    {
-      id: 1,
-      title: "프로젝트 완성",
-      startDate: "2024-11-15",
-      endDate: "2024-11-29",
-      color: "#eab308",
-      progress: 40,
-      icon: beer,
-    },
-    {
-      id: 2,
-      title: "파리 여행",
-      startDate: "2024-11-29",
-      endDate: "2024-12-04",
-      color: "#3b82f6",
-      progress: 0,
-      icon: travel,
-    },
-    {
-      id: 3,
-      title: "맥북 구매",
-      startDate: "2024-11-08",
-      endDate: "2024-12-05",
-      color: "#718ebf",
-      progress: 30,
-      icon: phone,
-    },
-  ];
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
+  const [calendarKey, setCalendarKey] = useState(0);
+  // const goals: Goal[] = [
+  // 	{
+  // 		id: 1,
+  // 		title: "프로젝트 완성",
+  // 		startDate: "2024-11-15",
+  // 		endDate: "2024-11-29",
+  // 		color: "#eab308",
+  // 		progress: 40,
+  // 		icon: beer,
+  // 	},
+  // 	{
+  // 		id: 2,
+  // 		title: "파리 여행",
+  // 		startDate: "2024-11-29",
+  // 		endDate: "2024-12-04",
+  // 		color: "#3b82f6",
+  // 		progress: 0,
+  // 		icon: travel,
+  // 	},
+  // 	{
+  // 		id: 3,
+  // 		title: "맥북 구매",
+  // 		startDate: "2024-11-08",
+  // 		endDate: "2024-12-05",
+  // 		color: "#718ebf",
+  // 		progress: 30,
+  // 		icon: phone,
+  // 	},
+  // ];
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:9090/api/goals?activeOnly=false",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch goals");
+        }
+
+        const apiGoals: APIGoal[] = await response.json();
+        const transformedGoals = transformAPIGoals(apiGoals);
+        setGoals(transformedGoals);
+
+        // Set first goal as selected if available
+        if (transformedGoals.length > 0 && !selectedGoal) {
+          setSelectedGoal(transformedGoals[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching goals:", error);
+      }
+    };
+
+    fetchGoals();
+  }, []);
 
   // 첫 번째 목표를 기본으로 선택
-  const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(goals[0]);
-  const [calendarKey, setCalendarKey] = useState(0); // 캘린더 강제 재렌더링 상태
+  // const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(
+  // 	goals[0]
+  // );
+  // const [calendarKey, setCalendarKey] = useState(0); // 캘린더 강제 재렌더링 상태
 
   const handleGoalClick = (goal: Goal) => {
     setSelectedGoal(goal);

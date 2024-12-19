@@ -17,6 +17,7 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import TestResultPage from "./pages/TestResultPage/TestResultPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyPage from "./pages/MyPage/MyPage";
+import AccountConnectionPage from "./pages/AccountConnectionPage/AccountConnectionPage";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/connecting-account",
     element: <ConnectingAccountPage />,
+  },
+  {
+    path: "/connecting-account-finish",
+    element: <AccountConnectionPage />,
   },
   {
     element: <DashboardLayout />,
