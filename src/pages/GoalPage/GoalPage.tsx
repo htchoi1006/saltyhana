@@ -21,6 +21,15 @@ interface InputValues {
   image: string | null;
   category: string;
   directCategory: string;
+  accountId: string;
+}
+
+interface Account {
+  id: number;
+  accountAlias: string;
+  accountNumber: string;
+  accountNickname: string;
+  main: boolean;
 }
 
 interface GoalRequest {
@@ -31,6 +40,7 @@ interface GoalRequest {
   goalType: number;
   iconId: number;
   goalImg: string | null;
+  connectedAccount: number;
 }
 
 interface ImageUploadBoxProps {
@@ -103,7 +113,34 @@ export default function GoalPage() {
     image: null,
     category: "",
     directCategory: "",
+    accountId: "",
   });
+
+  const [accounts, setAccounts] = useState<Account[]>([]);
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const response = await fetch("http://localhost:9090/api/accounts", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch accounts");
+        }
+
+        const data = await response.json();
+        setAccounts(data);
+      } catch (error) {
+        console.error("Error fetching accounts:", error);
+      }
+    };
+
+    fetchAccounts();
+  }, []);
 
   // useLocation 사용, 다른 페이지 전달 값 받기
   const location = useLocation();
@@ -212,6 +249,7 @@ export default function GoalPage() {
       values.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원",
     );
     console.log("목표 날짜:", values.endDate);
+    console.log("선택 계좌:", values.accountId);
 
     if (values.image) {
       console.log("등록된 이미지:", values.image);
@@ -247,12 +285,13 @@ export default function GoalPage() {
           iconId: selectedIcon ? iconToNumber[selectedIcon] : 0,
           goalImg:
             values.image && values.image !== selectedIcon ? values.image : null,
+
+          connectedAccount: parseInt(values.accountId),
         };
 
         await registerGoal(goalRequest);
         modalManagerRef.current?.openModal("목표등록");
 
-        // Reset form
         setValues({
           name: "",
           amount: "",
@@ -261,12 +300,12 @@ export default function GoalPage() {
           image: null,
           category: "",
           directCategory: "",
+          accountId: "",
         });
         setSelectedIcon("");
         setSelectedDate("");
       } catch (error) {
         console.error("Failed to register goal:", error);
-        // Handle error (e.g., show error modal)
       }
     }
   };
@@ -375,7 +414,7 @@ export default function GoalPage() {
           </styled.CategoryContainer>
         </styled.InputWrapper>
         <styled.InputWrapper style={{ marginTop: "16px" }}>
-          <styled.InputContainer style={{ width: "217px" }}>
+          <styled.InputContainer style={{ width: "156px" }}>
             <styled.SetGoalCalendar
               src={commonIcons.setGoalCalendar}
               alt="목표 시작 날짜 입력"
@@ -404,6 +443,29 @@ export default function GoalPage() {
               min={values.startDate || formatDate(new Date().toISOString())}
             />
           </styled.InputContainer>
+          <styled.CategoryContainer>
+            <styled.CategorySelect
+              value={values.accountId}
+              onChange={(e) =>
+                handleChange({
+                  target: {
+                    name: "accountId",
+                    value: e.target.value,
+                  },
+                } as React.ChangeEvent<HTMLInputElement>)
+              }
+              className={values.accountId ? "" : "placeholder"}
+            >
+              <option value="" disabled>
+                입금 계좌 선택
+              </option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.accountAlias} ({account.accountNumber})
+                </option>
+              ))}
+            </styled.CategorySelect>
+          </styled.CategoryContainer>
         </styled.InputWrapper>
         <styled.SubText>
           {savingsMessage ||
