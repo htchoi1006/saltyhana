@@ -10,24 +10,25 @@ import {
 
 interface Props {
   product: ProductType;
+  color: string; // color 추가
+  image: string; // image 추가
 }
+
 export default function ProductCard(props: Props) {
-  const { product } = props;
+  const { product, color, image } = props;
+
   return (
     <Wrapper>
       <Card
         style={{
-          backgroundColor: product.color || "#f5f5f5",
+          backgroundColor: color || "#f5f5f5",
           opacity: product.opacity || 1,
         }}
       >
         <CardTitle>{product.title}</CardTitle>
         <CardSubTitle>{product.subtitle}</CardSubTitle>
         <Info>{product.description}</Info>
-        {/* {product.image && <CardImage style={{ backgroundImage: `url(${product.image})` }} />} */}
-        {product.image && (
-          <CardImage src={product.image} alt={`${product.title} 이미지`} />
-        )}
+        {image && <CardImage src={image} alt={`${product.title} 이미지`} />}
       </Card>
     </Wrapper>
   );

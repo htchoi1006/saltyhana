@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PageContainer } from "./styles";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
 import GoalContainer from "../../components/GoalContainer/GoalContainer";
@@ -9,67 +9,85 @@ import {
   NavigationDots,
   Dot,
 } from "./styles";
-import dayjs from "dayjs";
-import _ from "underscore";
+import { ProductType, WeekDayType } from "../../type";
+
+interface DashBoardResponseDTO {
+  goal: {
+    id: number;
+    userName: string;
+    title: string;
+    goalPeriod: string;
+    iconImage: string;
+    currentMoney: number;
+    totalMoney: number;
+    percentage: number;
+  };
+  weekdayCalendar: {
+    weekday: {
+      date: string;
+      isAchieve: boolean;
+    }[];
+  };
+  bestProductList: {
+    id: number;
+    title: string;
+    type: string;
+    subtitle: string;
+    imageUrl: string;
+    description: string;
+  }[];
+}
 
 export default function HomePage() {
+  const [dashBoardData, setDashBoardData] = useState<DashBoardResponseDTO[]>(
+    [],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const dateCount = 12;
 
-  const goals = [
-    {
-      goal: "파리 여행",
-      startdate: "2024.11.01",
-      enddate: "2024.11.28",
-      progress: 70,
-      totalmoney: 1500000,
-      currentmoney: 1050000,
-    },
-    {
-      goal: null,
-      startdate: "",
-      enddate: "",
-      progress: 0,
-      totalmoney: 0,
-      currentmoney: 0,
-    },
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch("http://localhost:9090/api/home", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
 
-    {
-      goal: "맥북 구매",
-      startdate: "2024.11.08",
-      enddate: "2024.12.05",
-      progress: 40,
-      totalmoney: 3000000,
-      currentmoney: 1200000,
-    },
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
 
-    {
-      goal: "내 집 마련",
-      startdate: "2024.09.01",
-      enddate: "2026.08.31",
-      progress: 10,
-      totalmoney: 200000000,
-      currentmoney: 20000000,
-    },
-  ];
+        const data: DashBoardResponseDTO[] = await response.json();
+        setDashBoardData(data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
 
-  const generateRandomDates = () => {
-    console.log(dateCount);
-    const today = dayjs();
-    return _.range(dateCount)
-      .map((v) => {
-        const date = today.subtract(v, "d").toDate();
-        return {
-          date,
-          isAchieve: Math.random() > 0.5, // 랜덤 생성
-        };
-      })
-      .reverse();
-  };
+    fetchDashboardData();
+  }, []);
 
-  const goalsWithDates = goals.map((goal) => ({
-    ...goal,
-    dates: generateRandomDates(),
+  if (dashBoardData.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const weekDays: WeekDayType[] = dashBoardData[
+    currentIndex
+  ].weekdayCalendar.weekday.map((day) => ({
+    date: new Date(day.date),
+    isAchieve: day.isAchieve,
+  }));
+
+  const products: ProductType[] = dashBoardData[
+    currentIndex
+  ].bestProductList.map((product) => ({
+    title: product.title,
+    subtitle: product.subtitle,
+    image: product.imageUrl,
+    description: product.description,
+    color: "#FFFFFF",
   }));
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -84,14 +102,22 @@ export default function HomePage() {
     <PageContainer>
       <CarouselContainer>
         <CarouselWrapper className="carousel-container" onScroll={handleScroll}>
-          {goalsWithDates.map((goalData, index) => (
-            <div key={index} className="carousel-item">
-              <GoalContainer {...goalData} />
+          {dashBoardData.map((data, index) => (
+            <div className="carousel-item" key={data.goal.id}>
+              <GoalContainer
+                goal={data.goal.title}
+                goalPeriod={data.goal.goalPeriod}
+                iconImage={data.goal.iconImage}
+                percentage={data.goal.percentage}
+                totalMoney={data.goal.totalMoney}
+                currentMoney={data.goal.currentMoney}
+                userName={data.goal.userName}
+              />
             </div>
           ))}
         </CarouselWrapper>
         <NavigationDots>
-          {goals.map((_, index) => (
+          {dashBoardData.map((_, index) => (
             <Dot
               key={index}
               active={currentIndex === index}
@@ -102,14 +128,15 @@ export default function HomePage() {
                     left: index * container.clientWidth,
                     behavior: "smooth",
                   });
+                  setCurrentIndex(index);
                 }
               }}
             />
           ))}
         </NavigationDots>
       </CarouselContainer>
-      <WeekdayCalendar dates={goalsWithDates[currentIndex].dates} />
-      <ProductList />
+      <WeekdayCalendar dates={weekDays} />
+      <ProductList products={products} />
     </PageContainer>
   );
 }
