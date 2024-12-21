@@ -14,6 +14,9 @@ interface APIGoal {
   title: string;
   startAt: string;
   endAt: string;
+  iconImage: string | null; // icon 테이블의 icon_image
+  iconColor: string | null; // icon 테이블의 color
+  customImage: string | null;
   connected_account: string | null;
   amount: number;
   percentage: number;
@@ -29,16 +32,14 @@ export interface Goal {
 }
 
 const transformAPIGoals = (apiGoals: APIGoal[]): Goal[] => {
-  const colors = ["#eab308", "#3b82f6", "#718ebf", "#ef4444", "#22c55e"];
-
-  return apiGoals.map((apiGoal, index) => ({
+  return apiGoals.map((apiGoal) => ({
     id: apiGoal.id,
     title: apiGoal.title,
-    startDate: apiGoal.startAt.split("T")[0], // Convert to YYYY-MM-DD format
+    startDate: apiGoal.startAt.split("T")[0],
     endDate: apiGoal.endAt.split("T")[0],
-    color: colors[index % colors.length], // Cycle through colors
+    color: apiGoal.iconColor || "#718ebf",
     progress: apiGoal.percentage,
-    icon: travel,
+    icon: apiGoal.iconImage || apiGoal.customImage || travel,
   }));
 };
 
@@ -48,35 +49,6 @@ export default function Calendar() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
   const [calendarKey, setCalendarKey] = useState(0);
-  // const goals: Goal[] = [
-  // 	{
-  // 		id: 1,
-  // 		title: "프로젝트 완성",
-  // 		startDate: "2024-11-15",
-  // 		endDate: "2024-11-29",
-  // 		color: "#eab308",
-  // 		progress: 40,
-  // 		icon: beer,
-  // 	},
-  // 	{
-  // 		id: 2,
-  // 		title: "파리 여행",
-  // 		startDate: "2024-11-29",
-  // 		endDate: "2024-12-04",
-  // 		color: "#3b82f6",
-  // 		progress: 0,
-  // 		icon: travel,
-  // 	},
-  // 	{
-  // 		id: 3,
-  // 		title: "맥북 구매",
-  // 		startDate: "2024-11-08",
-  // 		endDate: "2024-12-05",
-  // 		color: "#718ebf",
-  // 		progress: 30,
-  // 		icon: phone,
-  // 	},
-  // ];
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -94,6 +66,8 @@ export default function Calendar() {
         if (!response.ok) {
           throw new Error("Failed to fetch goals");
         }
+
+        console.log(response);
 
         const apiGoals: APIGoal[] = await response.json();
         const transformedGoals = transformAPIGoals(apiGoals);

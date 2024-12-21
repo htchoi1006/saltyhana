@@ -59,23 +59,23 @@ const categoryToNumber: Record<string, number> = {
 };
 
 const iconToNumber: Record<string, number> = {
-  travel: 11,
-  anniversary: 12,
-  shopping: 13,
-  money: 14,
-  beer: 15,
-  coffee: 16,
-  car: 17,
-  ticket: 18,
-  cake: 19,
-  lobstar: 20,
-  beach: 21,
-  pet: 22,
-  party: 23,
-  cruise: 24,
-  amusementpark: 25,
-  christmas: 26,
-  phone: 27,
+  travel: 23,
+  anniversary: 8,
+  shopping: 21,
+  money: 17,
+  beer: 10,
+  coffee: 14,
+  car: 12,
+  ticket: 22,
+  cake: 11,
+  lobstar: 16,
+  beach: 9,
+  pet: 19,
+  party: 18,
+  cruise: 15,
+  amusementpark: 7,
+  christmas: 13,
+  phone: 20,
 };
 
 const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
@@ -118,6 +118,7 @@ export default function GoalPage() {
 
   const [accounts, setAccounts] = useState<Account[]>([]);
 
+  // 유저의 계좌 정보를 가져오기 위함
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
