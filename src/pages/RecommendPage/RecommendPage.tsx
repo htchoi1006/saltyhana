@@ -22,6 +22,24 @@ import {
 } from "./styles";
 
 export default function RecommendPage() {
+  //임시 생성
+  const productList = [
+    {
+      title: "369 정기예금",
+      subtitle: "3개월마다 중도해지 혜택",
+      color: "#E6F8E0",
+      image: ConsumeTestImage, // 이미지 경로를 실제 이미지로 변경하세요.
+      description: "연(세전, 1년)\n연 4.50% ~ 6.00%",
+    },
+    {
+      title: "트래블로그 여행 적금",
+      subtitle: "여행 준비의 시작",
+      color: "#f2f2f2",
+      image: ConsumeTestImage, // 이미지 경로를 실제 이미지로 변경하세요.
+      description: "연(세전, 1년)\n연 2.40% ~ 4.40%",
+    },
+  ];
+
   return (
     <BodyWrapper>
       <InnerBodyWrapper>
@@ -34,8 +52,8 @@ export default function RecommendPage() {
           </PageDescription>
         </TextWrapper>
 
-        {/* ProductList 컴포넌트 사용 */}
-        <ProductList />
+        {/* ProductList 컴포넌트에 products prop 전달 */}
+        <ProductList products={productList} />
 
         <TestCardWrapper>
           <TestCard>
