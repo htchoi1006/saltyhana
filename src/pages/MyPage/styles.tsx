@@ -174,22 +174,6 @@ export const ProfileSection = styled.div`
   align-items: center;
 `;
 
-// export const DefaultProfileImg = styled.div`
-// 	width: 60%;
-// 	height: 60%;
-// 	background-color: #e5e7eb;
-// 	border-radius: 50%;
-// 	display: flex;
-// 	align-items: center;
-// 	justify-content: center;
-
-// 	svg {
-// 		width: 50%;
-// 		height: 50%;
-// 		color: #9ca3af;
-// 	}
-// `;
-
 export const NameDiv = styled.div`
   opacity: 0;
   animation: ${fadeIn} 1s ease-out forwards;
@@ -229,30 +213,11 @@ export const InputLabel = styled.span`
   font-weight: 500;
 `;
 
-// export const DisplayWrapper = styled.div`
-// 	display: flex;
-// 	align-items: center;
-// 	padding: 12px 16px;
-// 	border: 1px solid #e2e8f0;
-// 	border-radius: 8px;
-// 	background-color: #f8fafc;
-// 	gap: 8px;
-// `;
-
 export const DisplayText = styled.span`
   flex: 1;
   margin-left: 8px;
   color: #1e293b;
 `;
-
-// export const EditInput = styled.input`
-// 	flex: 1;
-// 	margin-left: 8px;
-// 	padding: 4px 8px;
-// 	border: 1px solid #e2e8f0;
-// 	border-radius: 4px;
-// 	font-size: 14px;
-// `;
 
 export const Button = styled.button`
   padding: 6px 12px;
@@ -301,20 +266,6 @@ export const ButtonWrapper = styled.div`
   justify-content: flex-end;
   margin-top: 8px;
 `;
-
-// 기존 EditInput 스타일 수정
-// export const EditInput = styled.input`
-// 	flex: 1;
-// 	margin-left: 8px;
-// 	padding: 4px 8px;
-// 	border: 1px solid #e2e8f0;
-// 	border-radius: 4px;
-// 	font-size: 14px;
-
-// 	&::placeholder {
-// 		color: #a0aec0;
-// 	}
-// `;
 
 export const PasswordInputWrapper = styled.div`
   display: flex;
@@ -417,5 +368,19 @@ export const EditInput = styled.input`
 
   &::placeholder {
     color: #a0aec0;
+  }
+`;
+
+export const UnsubscribeDiv = styled.div`
+  opacity: 0;
+  animation: ${fadeIn} 1s ease-out forwards;
+  animation-delay: 1s;
+  cursor: pointer;
+  color: black;
+  text-align: right;
+  font-size: 14px;
+  margin-right: 5px;
+  &:hover {
+    text-decoration: underline;
   }
 `;
