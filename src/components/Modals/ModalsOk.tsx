@@ -1,25 +1,16 @@
 import { CloseButton } from "./styles";
-import { FC } from "react";
 import icon_ok from "../../images/modal_ok.png";
 import ModalsBackground from "./ModalsBackground";
 
 interface ModalsOkProps {
   onClose: () => void;
+  statusCode: number | null;
+  selectedBank: string | null;
+  selectedDate: string;
+  selectedTime: string | null;
 }
 
-interface ModalsOkProps {
-  onClose: () => void; // onClose
-  selectedBank: string | null; // 선택된 은행
-  selectedDate: string; // 선택된 날짜
-  selectedTime: string | null; // 선택된 시간
-}
-
-const ModalsOk: FC<ModalsOkProps> = ({
-  onClose,
-  selectedBank,
-  selectedDate,
-  selectedTime,
-}) => {
+export default function ModalsOk({ onClose, statusCode }: ModalsOkProps) {
   return (
     <ModalsBackground onClose={onClose}>
       <img
@@ -27,15 +18,12 @@ const ModalsOk: FC<ModalsOkProps> = ({
         alt="Reservation Confirmation"
         style={{ width: "35%" }}
       />
-
-      <h2>예약이 완료되었습니다</h2>
-      <p>
-        {selectedDate} {selectedBank} {selectedTime}
-      </p>
-
+      {statusCode === 200 ? (
+        <h2>예약이 완료되었습니다</h2>
+      ) : (
+        <h2>예약에 실패했습니다.</h2>
+      )}
       <CloseButton onClick={onClose}>닫기</CloseButton>
     </ModalsBackground>
   );
-};
-
-export default ModalsOk;
+}

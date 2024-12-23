@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { CalendarContainer, Container } from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
 import travel from "../../images/goal_icon_travel.png";
-import beer from "../../images/goal_icon_beer.png";
-import phone from "../../images/goal_icon_phone.webp";
 import MonthCalendar from "../../components/MonthCalendar/MonthCalendar";
 import GoalList from "../../components/GoalList/GoalList";
+
+import { CloseButton } from "../../components/Modals/styles";
 
 interface APIGoal {
   id: number;
@@ -170,9 +170,41 @@ export default function Calendar() {
     navigate("/goal", { state: { selectedDate: date } }); // 날짜를 목표 정하기 페이지 state로 전달
   };
 
+  const handleLoadCalendar = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/auth`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to authenticate");
+      }
+
+      const authUrl = await response.text();
+      if (!authUrl) {
+        throw new Error("No authentication URL received");
+      }
+
+      console.log("Authentication URL received:", authUrl);
+
+      // 브라우저를 Google 인증 URL로 이동
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error("Error during authentication:", error);
+    }
+  };
+
   return (
     <Container>
       <CalendarContainer>
+        <CloseButton onClick={handleLoadCalendar}>구글 연동</CloseButton>
         <MonthCalendar
           calendarKey={calendarKey}
           apiKey={apiKey}
