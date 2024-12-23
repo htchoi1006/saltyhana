@@ -29,6 +29,7 @@ interface UpdateUserData {
   confirmPassword?: string;
   name?: string;
   birth?: string;
+  profileImage?: string;
 }
 
 interface PasswordInputFieldProps {
@@ -345,23 +346,30 @@ const MyPage: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-
       if (!token) {
         throw new Error("No authentication token found");
       }
 
-      const updateData: UpdateUserData = {};
+      const updateData: UpdateUserData & { profileImage?: string } = {}; // 타입 확장
+
+      // 기존 필드들 처리
       Object.entries(modifiedFields).forEach(([key, value]) => {
         if (value && value.trim() !== "") {
           updateData[key as keyof UpdateUserData] = value;
         }
       });
 
+      // 프로필 이미지가 변경되었다면 추가
+      if (profileImage !== null) {
+        updateData.profileImage = profileImage;
+      }
+
       if (Object.keys(updateData).length === 0) {
         alert("변경된 정보가 없습니다.");
         return;
       }
 
+      // 비밀번호 검증
       if (updateData.password) {
         if (
           passwordError ||
@@ -372,23 +380,15 @@ const MyPage: React.FC = () => {
         }
       }
 
-      const queryString = Object.entries(updateData)
-        .map(
-          ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-        )
-        .join("&");
-
-      const response = await fetch(
-        `http://localhost:9090/api/users/me?${queryString}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
-          },
+      const response = await fetch(`http://localhost:9090/api/users/me`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: "*/*",
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(updateData),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update user data");
@@ -403,7 +403,6 @@ const MyPage: React.FC = () => {
       setPasswordError("");
 
       alert("정보가 성공적으로 업데이트되었습니다.");
-
       window.location.reload();
     } catch (err) {
       console.error("Error updating user data:", err);
@@ -447,7 +446,8 @@ const MyPage: React.FC = () => {
               setHasChanges(true);
             }
           };
-          reader.readAsDataURL(file);
+          const aaa = reader.readAsDataURL(file);
+          console.log(aaa);
         } catch (error) {
           console.error("Upload error:", error);
           alert("이미지 업로드 중 오류가 발생했습니다.");
