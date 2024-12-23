@@ -150,3 +150,10 @@ export const ProgressFill = styled.div`
   border-radius: 4px;
   transition: width 0.3s ease;
 `;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 10px 0;
+`;

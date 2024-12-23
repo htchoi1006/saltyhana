@@ -13,6 +13,7 @@ import {
   GoalRegisterButton,
   DeleteButton,
   EditButton,
+  Divider,
 } from "./styles";
 import { Goal } from "../../pages/CalendarPage/CalendarPage";
 import { Link } from "react-router-dom";
@@ -28,9 +29,36 @@ interface GoalListProps {
 export default function GoalList(props: GoalListProps) {
   const navigate = useNavigate();
   const { goals, onGoalClick, setGoals } = props;
+
+  // 목표들을 정렬하는 함수
+  const sortGoals = (goalsToSort: Goal[]) => {
+    const currentDate = new Date().toISOString().split("T")[0];
+
+    // 목표를 활성(진행 중)과 비활성(종료됨)으로 분류
+    const activeGoals = goalsToSort.filter(
+      (goal) => goal.endDate >= currentDate,
+    );
+    const inactiveGoals = goalsToSort.filter(
+      (goal) => goal.endDate < currentDate,
+    );
+
+    // 활성 목표는 시작일 기준 오름차순 정렬
+    const sortedActiveGoals = activeGoals.sort((a, b) =>
+      a.startDate.localeCompare(b.startDate),
+    );
+
+    return {
+      activeGoals: sortedActiveGoals,
+      inactiveGoals: inactiveGoals,
+    };
+  };
+
+  // 정렬된 목표 배열들
+  const { activeGoals, inactiveGoals } = sortGoals(goals);
+
   const [activeGoalId, setActiveGoalId] = useState<string | null>(
-    goals.length > 0 ? String(goals[0].id) : null,
-  ); // 첫 번째 요소를 기본 선택
+    activeGoals.length > 0 ? String(activeGoals[0].id) : null,
+  );
 
   const handleGoalClick = (goal: Goal) => {
     setActiveGoalId(String(goal.id));
@@ -62,9 +90,10 @@ export default function GoalList(props: GoalListProps) {
 
       // If the deleted goal was active, select the first remaining goal
       if (String(goalId) === activeGoalId) {
-        if (updatedGoals.length > 0) {
-          setActiveGoalId(String(updatedGoals[0].id));
-          onGoalClick(updatedGoals[0]);
+        const { activeGoals } = sortGoals(updatedGoals);
+        if (activeGoals.length > 0) {
+          setActiveGoalId(String(activeGoals[0].id));
+          onGoalClick(activeGoals[0]);
         } else {
           setActiveGoalId(null);
         }
@@ -73,6 +102,31 @@ export default function GoalList(props: GoalListProps) {
       console.error("Error deleting goal:", error);
       alert("목표 삭제에 실패했습니다. 다시 시도해주세요.");
     }
+  };
+
+  const getIconIdFromImageUrl = (imageUrl: string) => {
+    // URL에서 파일 이름 추출
+    const fileName = imageUrl.split("/").pop()?.split(".")[0];
+
+    // 아이콘 이름을 ID로 매핑
+    if (fileName?.includes("travel")) return 23;
+    if (fileName?.includes("anniversary")) return 8;
+    if (fileName?.includes("shopping")) return 21;
+    if (fileName?.includes("money")) return 17;
+    if (fileName?.includes("beer")) return 10;
+    if (fileName?.includes("coffee")) return 14;
+    if (fileName?.includes("car")) return 12;
+    if (fileName?.includes("ticket")) return 22;
+    if (fileName?.includes("cake")) return 11;
+    if (fileName?.includes("lobstar")) return 16;
+    if (fileName?.includes("beach")) return 9;
+    if (fileName?.includes("pet")) return 19;
+    if (fileName?.includes("party")) return 18;
+    if (fileName?.includes("cruise")) return 15;
+    if (fileName?.includes("amusement")) return 7;
+    if (fileName?.includes("christmas")) return 13;
+    if (fileName?.includes("phone")) return 20;
+    return 0;
   };
 
   const handleEdit = async (goalId: number, event: React.MouseEvent) => {
@@ -116,8 +170,6 @@ export default function GoalList(props: GoalListProps) {
         category: goalToEdit.category,
       };
 
-      console.log(formattedGoalData);
-
       // 페이지 이동
       navigate("/goal", {
         state: {
@@ -132,30 +184,44 @@ export default function GoalList(props: GoalListProps) {
     }
   };
 
-  const getIconIdFromImageUrl = (imageUrl: string) => {
-    // URL에서 파일 이름 추출
-    const fileName = imageUrl.split("/").pop()?.split(".")[0];
-
-    // 아이콘 이름을 ID로 매핑
-    if (fileName?.includes("travel")) return 23;
-    if (fileName?.includes("anniversary")) return 8;
-    if (fileName?.includes("shopping")) return 21;
-    if (fileName?.includes("money")) return 17;
-    if (fileName?.includes("beer")) return 10;
-    if (fileName?.includes("coffee")) return 14;
-    if (fileName?.includes("car")) return 12;
-    if (fileName?.includes("ticket")) return 22;
-    if (fileName?.includes("cake")) return 11;
-    if (fileName?.includes("lobstar")) return 16;
-    if (fileName?.includes("beach")) return 9;
-    if (fileName?.includes("pet")) return 19;
-    if (fileName?.includes("party")) return 18;
-    if (fileName?.includes("cruise")) return 15;
-    if (fileName?.includes("amusement")) return 7;
-    if (fileName?.includes("christmas")) return 13;
-    if (fileName?.includes("phone")) return 20;
-    return 0;
-  };
+  const renderGoalItem = (goal: Goal) => (
+    <GoalItem
+      key={goal.id}
+      color={goal.color}
+      isActive={String(goal.id) === activeGoalId}
+      onClick={() => handleGoalClick(goal)}
+    >
+      <GoalDiv>
+        <GoalInfo>
+          <GoalTitle>
+            {goal.title}
+            <EditButton
+              src={editIcon}
+              onClick={(e) => handleEdit(goal.id, e)}
+            />
+          </GoalTitle>
+          <GoalDate>
+            {goal.startDate} - {goal.endDate}
+          </GoalDate>
+        </GoalInfo>
+        <GoalIcon src={goal.icon} alt="Goal Icon" />
+      </GoalDiv>
+      <ProgressBar>
+        <ProgressFill
+          style={{
+            width: `${goal.progress}%`,
+            bottom: "50px",
+            backgroundColor: goal.color,
+            opacity: "0.5",
+          }}
+        />
+      </ProgressBar>
+      <DeleteButton
+        src={deleteIcon}
+        onClick={(e) => handleDelete(goal.id, e)}
+      />
+    </GoalItem>
+  );
 
   return (
     <GoalListContainer>
@@ -166,46 +232,14 @@ export default function GoalList(props: GoalListProps) {
           gap: "20px",
         }}
       >
-        {goals.map((goal) => (
-          <GoalItem
-            key={goal.id}
-            color={goal.color}
-            isActive={String(goal.id) === activeGoalId}
-            onClick={() => handleGoalClick(goal)}
-          >
-            <GoalDiv>
-              <GoalInfo>
-                <GoalTitle>
-                  {goal.title}
-                  {/* <Link to="/goal"> */}
-                  <EditButton
-                    src={editIcon}
-                    onClick={(e) => handleEdit(goal.id, e)}
-                  />
-                  {/* </Link> */}
-                </GoalTitle>
-                <GoalDate>
-                  {goal.startDate} - {goal.endDate}
-                </GoalDate>
-              </GoalInfo>
-              <GoalIcon src={goal.icon} alt="Goal Icon" />
-            </GoalDiv>
-            <ProgressBar>
-              <ProgressFill
-                style={{
-                  width: `${goal.progress}%`,
-                  bottom: "50px",
-                  backgroundColor: goal.color,
-                  opacity: "0.5",
-                }}
-              />
-            </ProgressBar>
-            <DeleteButton
-              src={deleteIcon}
-              onClick={(e) => handleDelete(goal.id, e)}
-            />
-          </GoalItem>
-        ))}
+        {/* 활성 목표 렌더링 */}
+        {activeGoals.map(renderGoalItem)}
+
+        {/* 비활성 목표가 있을 경우에만 구분선 표시 */}
+        {inactiveGoals.length > 0 && activeGoals.length > 0 && <Divider />}
+
+        {/* 비활성 목표 렌더링 */}
+        {inactiveGoals.map(renderGoalItem)}
       </div>
       <div>
         <Link to="/goal" style={{ textDecoration: "none" }}>
