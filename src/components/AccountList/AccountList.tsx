@@ -1,12 +1,9 @@
-import React from "react";
 import { AccountListContainer, AccountItem } from "./styles";
-
 interface Account {
-  accountNumber: string;
-  accountName: string;
-  balance: number;
+  accountNumber: string; // 계좌 번호
+  accountAlias: string; // 계좌 별칭
+  accountBalance: number; // 계좌 잔액
 }
-
 interface AccountListProps {
   accounts: Account[];
   selectedAccount: Account;
@@ -28,7 +25,7 @@ export default function AccountList(props: AccountListProps) {
           }
           onClick={() => onSelectAccount(account)}
         >
-          {account.accountName}
+          {account.accountAlias}
           <br />
           {account.accountNumber}
         </AccountItem>

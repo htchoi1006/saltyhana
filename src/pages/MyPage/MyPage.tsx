@@ -451,8 +451,6 @@ const MyPage: React.FC = () => {
               setHasChanges(true);
             }
           };
-          const aaa = reader.readAsDataURL(file);
-          console.log(aaa);
         } catch (error) {
           console.error("Upload error:", error);
           alert("이미지 업로드 중 오류가 발생했습니다.");

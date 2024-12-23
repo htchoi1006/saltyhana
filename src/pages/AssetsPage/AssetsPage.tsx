@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { subDays, format } from "date-fns";
+import { format } from "date-fns";
 import AccountList from "../../components/AccountList/AccountList";
 import AssetsChart from "../../components/AssetsChart/AssetsChart";
 import AssetsInfo from "../../components/AssetsInfo/AssetsInfo";
@@ -10,43 +10,97 @@ import {
   Header,
   HeaderDescription,
 } from "./styles";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+
+interface TransferList {
+  date: string; // 날짜 (YYYY-MM-DD 형식)
+  balance: number; // 잔액
+  totalDeposit: number; // 총 입금액
+  totalWithdrawal: number; // 총 출금액
+}
+interface AccountTransfer {
+  accountNumber: string; // 계좌 번호
+  accountAlias: string; // 계좌 별칭
+  accountBalance: number; // 계좌 잔액
+  transferList: TransferList[]; // 거래 내역 리스트
+}
+interface Account {
+  accountNumber: string; // 계좌 번호
+  accountAlias: string; // 계좌 별칭
+  accountBalance: number; // 계좌 잔액
+}
 
 export default function AssetsPage() {
-  const accounts = [
-    {
-      accountNumber: "352-000-0000-01",
-      accountName: "주거래 하나 통장*",
-      balance: 2005333,
-    },
-    {
-      accountNumber: "352-000-0000-02",
-      accountName: "369 정기예금",
-      balance: 1523000,
-    },
-    {
-      accountNumber: "352-000-0000-03",
-      accountName: "부자씨 적금",
-      balance: 780000,
-    },
-  ];
-
-  const [selectedAccount, setSelectedAccount] = useState(accounts[0]);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [accountTransfer, setAccountTransfer] =
+    useState<AccountTransfer | null>(null);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [lineData, setLineData] = useState<any>(null);
   const [cumulativeSum, setCumulativeSum] = useState<number>(0);
   const [zoomedRange, setZoomedRange] = useState<string>("");
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 1);
+  const endDate = new Date();
 
-  const generateLineData = () => {
-    let labels = [];
-    let endDate = new Date();
-    let startDate = subDays(endDate, 30);
-    const diffDays = Math.ceil(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+  const assetDataApi = async (startDate: string, endDate: string) => {
+    try {
+      const params = new URLSearchParams({ startDate, endDate });
+
+      const response = await fetch(
+        `http://localhost:9090/api/accounts/transfers?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.message ||
+          "고객님의 자산 데이터를 불러오는데 문제가 발생하였습니다.";
+        throw new Error(errorMessage);
+      }
+
+      const assetData = await response.json();
+
+      setSelectedAccount(assetData[0]);
+      setAccountTransfer(assetData);
+      setAccounts(assetData);
+
+      return Array.isArray(assetData) ? assetData : [];
+    } catch (error) {
+      console.error("Error getting asset data: ", error);
+      alert("고객님의 자산 데이터를 불러오는 데 실패했습니다.");
+      return [];
+    }
+  };
+
+  const generateLineData = (accountTransfer: AccountTransfer) => {
+    if (!accountTransfer || !accountTransfer.transferList) return null;
+
+    // 날짜와 데이터를 그래프 형식으로 변환
+    const labels = accountTransfer.transferList.map(
+      (transfer) => transfer.date,
     );
-    labels = Array.from({ length: diffDays }, (_, i) =>
-      subDays(endDate, diffDays - i - 1),
+    const withdrawals = accountTransfer.transferList.map(
+      (transfer) => transfer.totalWithdrawal || 0,
     );
-    const data = labels.map(() => Math.floor(Math.random() * 100000));
-    const sum = data.reduce((a, b) => a + b, 0);
+    const data = accountTransfer.transferList.map((transfer) => ({
+      deposit: transfer.totalDeposit || 0,
+      withdrawal: transfer.totalWithdrawal || 0,
+      balance: transfer.balance || 0,
+    }));
+
+    if (!labels.length || !data.length) {
+      console.error("Labels or data array is empty.");
+      return null;
+    }
+
+    const sum = withdrawals.reduce((a, b) => a + b, 0);
     setCumulativeSum(sum - (sum % 100));
 
     const minDate = format(new Date(labels[0]), "M월 dd일");
@@ -57,21 +111,50 @@ export default function AssetsPage() {
       labels,
       datasets: [
         {
-          label: `${minDate}부터 ${maxDate}까지의 지출 내역`,
+          label: `계좌 거래 내역`,
           data: data,
           fill: true,
           borderColor: "#2A9D8F",
           backgroundColor: "rgba(42, 157, 143, 0.3)",
-          tension: 0.5, // 곡선 정도
+          tension: 0.5,
         },
       ],
     };
   };
 
   useEffect(() => {
-    const newData = generateLineData();
-    setLineData(newData);
+    const fetchData = async () => {
+      const transferList = await assetDataApi(
+        startDate.toISOString().split("T")[0],
+        endDate.toISOString().split("T")[0],
+      );
+
+      if (transferList.length > 0) {
+        const newData = generateLineData(transferList[0]);
+        setLineData(newData);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  // selectedAccount가 변경될 때 그래프 데이터 업데이트
+  useEffect(() => {
+    if (selectedAccount && accountTransfer && Array.isArray(accountTransfer)) {
+      const transfer = accountTransfer.find(
+        (account: AccountTransfer) =>
+          account.accountNumber === selectedAccount.accountNumber,
+      );
+      if (transfer) {
+        const newData = generateLineData(transfer);
+        setLineData(newData);
+      }
+    }
+  }, [selectedAccount, accountTransfer]);
+
+  if (!accounts.length || !selectedAccount) {
+    return <LoadingSpinner></LoadingSpinner>; // 로딩 상태 표시
+  }
 
   return (
     <PageContainer>
@@ -87,8 +170,8 @@ export default function AssetsPage() {
             {/* 계좌 박스 */}
             <Account
               accountNumber={selectedAccount.accountNumber}
-              accountName={selectedAccount.accountName}
-              balance={selectedAccount.balance}
+              accountName={selectedAccount.accountAlias}
+              balance={selectedAccount.accountBalance}
             />
           </div>
           <div style={{ flex: 0.5, paddingLeft: "10px" }}>
