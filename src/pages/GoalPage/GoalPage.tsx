@@ -209,16 +209,60 @@ export default function GoalPage() {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const cropImageToCircle = (
+    image: HTMLImageElement,
+    size: number = 200,
+  ): Promise<string> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = size;
+      canvas.height = size;
+
+      if (ctx) {
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+
+        // Calculate dimensions to maintain aspect ratio
+        const aspectRatio = image.width / image.height;
+        let drawWidth = size;
+        let drawHeight = size;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (aspectRatio > 1) {
+          drawWidth = size * aspectRatio;
+          offsetX = -(drawWidth - size) / 2;
+        } else {
+          drawHeight = size / aspectRatio;
+          offsetY = -(drawHeight - size) / 2;
+        }
+
+        ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+      }
+
+      resolve(canvas.toDataURL("image/png"));
+    });
+  };
+
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setValues((prev) => ({
-          ...prev,
-          image: reader.result as string,
-        }));
-        setSelectedIcon("");
+        const img = new Image();
+        img.onload = async () => {
+          const croppedImage = await cropImageToCircle(img);
+          setValues((prev) => ({
+            ...prev,
+            image: croppedImage,
+          }));
+          setSelectedIcon("");
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
