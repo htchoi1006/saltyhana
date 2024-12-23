@@ -1,7 +1,6 @@
 import React, { useRef, useState, memo, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as styled from "./styles";
-import profileImg from "../../images/mypage_profileImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 
 // Props 타입 정의
@@ -203,9 +202,7 @@ const AuthDisplay = memo(
 );
 
 const MyPage: React.FC = () => {
-  const emailInputRef = useRef<HTMLInputElement | null>(null);
-  const newPasswordRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [modifiedFields, setModifiedFields] = useState<UpdateUserData>({});
 
@@ -217,11 +214,11 @@ const MyPage: React.FC = () => {
     password: "",
   });
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const setIsLoading = useState(true)[1];
+  const setError = useState<string | null>(null)[1];
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  const setIsUploading = useState(false)[1];
+  const setHasChanges = useState(false)[1];
 
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
@@ -468,6 +465,28 @@ const MyPage: React.FC = () => {
     }
   };
 
+  const handleUnsubscribe = async () => {
+    if (window.confirm("정말로 회원탈퇴를 진행하시겠습니까?")) {
+      // 회원탈퇴 API 호출 또는 로직 처리
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      await fetch(`http://localhost:9090/api/auth/unsubscribe`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: "*/*",
+        },
+      });
+
+      // 루트 페이지로 이동
+      navigate("/");
+    }
+  };
+
   return (
     <styled.Container>
       <styled.ProfileSection>
@@ -532,6 +551,9 @@ const MyPage: React.FC = () => {
             passwordError={passwordError}
             onPasswordChange={handlePasswordChange}
           />
+          <styled.UnsubscribeDiv onClick={handleUnsubscribe}>
+            회원탈퇴
+          </styled.UnsubscribeDiv>
         </styled.InputWrapper>
       </styled.InputContainer>
       <styled.RegisterButton onClick={handleSubmit}>

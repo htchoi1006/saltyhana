@@ -1,17 +1,14 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
-import * as styled from "./styles";
+import ModalManager, { ModalManagerType } from "../Modals/ModalManager";
 import sidebar_home from "../../images/sidebar_home.png";
 import sidebar_calendar from "../../images/sidebar_calendar.png";
 import sidebar_goal from "../../images/sidebar_goal.png";
 import sidebar_assets from "../../images/sidebar_assets.png";
 import sidebar_recommend from "../../images/sidebar_recommend.png";
-import sidebar_reservation from "../../images/sidebar_reservation.png";
 import sidebar_setting from "../../images/sidebar_setting.png";
 import sidebar_user from "../../images/sidebar_user.png";
-
-import ModalManager, { ModalManagerType } from "../Modals/ModalManager";
+import * as styled from "./styles";
 
 interface INav {
   to: string;
@@ -36,22 +33,14 @@ export default function Sidebar() {
     { to: "/mypage", imgSrc: sidebar_user, displayName: "내 정보" },
   ];
 
-  const handleOpenModal = () => {
-    modalManagerRef.current?.openModal("창구예약");
-  };
+  const handleLogout = async () => {
+    const token = localStorage.getItem("accessToken");
 
-  const handleLogout = () => {
-    // 로컬 스토리지에서 사용자 정보 가져오기
-    const userInfoStr = localStorage.getItem("userInfo");
-    if (userInfoStr) {
-      const userInfo = JSON.parse(userInfoStr);
-
-      // isLoggedIn을 false로 변경
-      userInfo.isLoggedIn = false;
-
-      // 변경된 정보를 다시 로컬 스토리지에 저장
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    if (!token) {
+      throw new Error("No authentication token found");
     }
+
+    localStorage.removeItem("accessToken");
 
     // 루트 페이지로 이동
     navigate("/");
@@ -70,10 +59,6 @@ export default function Sidebar() {
             )}
           </styled.NavItemLink>
         ))}
-        {/* <styled.MenuItem onClick={handleOpenModal}>
-          <styled.ReservationIcon src={sidebar_reservation} />
-          <span>창구 예약</span>
-        </styled.MenuItem> */}
         <ModalManager ref={modalManagerRef} />
       </styled.MenuSection>
       <styled.SettingsSection>

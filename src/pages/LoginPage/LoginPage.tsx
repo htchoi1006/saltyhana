@@ -8,25 +8,12 @@ import {
   FormWrapper,
   InputsWrapper,
   StyledButton,
-  FooterParagraph,
 } from "../SignupPage/styles";
 import { StyledLink } from "./styles";
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
-
-interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface UserInfo {
-  identifier: string;
-  isLoggedIn: boolean;
-  accessToken: string;
-  refreshToken: string;
-}
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -55,7 +42,11 @@ export default function LoginPage() {
       );
 
       if (!response.ok) {
-        throw new Error("아이디 또는 비밀번호가 일치하지 않습니다.");
+        // 서버에서 보낸 에러 메시지를 파싱
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.message || "아이디 또는 비밀번호가 일치하지 않습니다.";
+        throw new Error(errorMessage);
       }
 
       return await response.json();
