@@ -28,7 +28,7 @@ interface UpdateUserData {
   confirmPassword?: string;
   name?: string;
   birth?: string;
-  profileImage?: string;
+  profileImage?: string | null;
 }
 
 interface PasswordInputFieldProps {
@@ -203,6 +203,9 @@ const AuthDisplay = memo(
 
 const MyPage: React.FC = () => {
   const navigate = useNavigate();
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
+  const newPasswordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [modifiedFields, setModifiedFields] = useState<UpdateUserData>({});
 
@@ -214,11 +217,11 @@ const MyPage: React.FC = () => {
     password: "",
   });
 
-  const setIsLoading = useState(true)[1];
-  const setError = useState<string | null>(null)[1];
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const setIsUploading = useState(false)[1];
-  const setHasChanges = useState(false)[1];
+  const [isUploading, setIsUploading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
@@ -351,7 +354,12 @@ const MyPage: React.FC = () => {
 
       // 기존 필드들 처리
       Object.entries(modifiedFields).forEach(([key, value]) => {
-        if (value && value.trim() !== "") {
+        // profileImage는 null값도 허용하도록 조건 수정
+        if (key === "profileImage") {
+          updateData[key] = value; // null이어도 포함
+        }
+        // 다른 필드들은 기존 검증 유지
+        else if (value && value.trim() !== "") {
           updateData[key as keyof UpdateUserData] = value;
         }
       });
@@ -462,6 +470,10 @@ const MyPage: React.FC = () => {
       setProfileImage(null);
       resetFileInput();
       setHasChanges(true);
+      setModifiedFields((prev) => ({
+        ...prev,
+        profileImage: null,
+      }));
     }
   };
 
