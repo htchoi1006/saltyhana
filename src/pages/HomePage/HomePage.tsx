@@ -18,6 +18,7 @@ interface DashBoardResponseDTO {
     title: string;
     goalPeriod: string;
     iconImage: string;
+    customImage: string;
     currentMoney: number;
     totalMoney: number;
     percentage: number;
@@ -108,6 +109,7 @@ export default function HomePage() {
                 goal={data.goal.title}
                 goalPeriod={data.goal.goalPeriod}
                 iconImage={data.goal.iconImage}
+                customImage={data.goal.customImage}
                 percentage={data.goal.percentage}
                 totalMoney={data.goal.totalMoney}
                 currentMoney={data.goal.currentMoney}

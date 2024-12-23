@@ -29,6 +29,7 @@ interface GoalContainerProps {
   goalPeriod: string | null;
   userName: string | null;
   iconImage: string | undefined;
+  customImage: string | undefined;
   currentMoney: number | 0;
   totalMoney: number | 0;
   percentage: number | 0;
@@ -43,6 +44,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
     currentMoney,
     userName,
     iconImage,
+    customImage,
   } = props;
 
   const [currentProgress, setCurrentProgress] = useState(0);
@@ -88,6 +90,9 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
     return () => clearTimeout(startDelay);
   }, [percentage]);
 
+  // customImage 또는 iconImage 중 유효한 이미지를 선택
+  const imageToDisplay = customImage || iconImage || travel; // 기본값으로 travel 이미지를 설정
+
   return (
     <StyledGoalContainer>
       <GoalContainerDiv>
@@ -113,7 +118,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
           </MoneyProgress>
         </ProgressContainer>
       </GoalContainerDiv>
-      <GoalIcon src={iconImage} />
+      <GoalIcon src={imageToDisplay} />
     </StyledGoalContainer>
   );
 };
@@ -156,6 +161,7 @@ export default function GoalContainer(props: GoalContainerProps) {
     currentMoney,
     userName,
     iconImage,
+    customImage,
   } = props;
 
   return goal == null ? (
@@ -169,6 +175,7 @@ export default function GoalContainer(props: GoalContainerProps) {
       currentMoney={currentMoney}
       userName={userName}
       iconImage={iconImage}
+      customImage={customImage}
     />
   );
 }
