@@ -62,15 +62,22 @@ export const Spinner = styled.div`
   }
 `;
 
+const CenteredContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 화면 전체 높이를 사용 */
+`;
+
 export default function LoadingSpinner() {
   return (
-    <div>
+    <CenteredContainer>
       <Spinner>
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </Spinner>
-    </div>
+    </CenteredContainer>
   );
 }
