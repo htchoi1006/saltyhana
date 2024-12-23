@@ -445,12 +445,18 @@ const MyPage: React.FC = () => {
         try {
           setIsUploading(true);
           const reader = new FileReader();
-          reader.onload = (e) => {
-            if (e.target?.result) {
-              setProfileImage(e.target.result as string);
+          reader.onload = (e: ProgressEvent<FileReader>) => {
+            const result = e.target?.result;
+            if (result && typeof result === "string") {
+              setProfileImage(result);
+              setModifiedFields((prev) => ({
+                ...prev,
+                profileImage: result,
+              }));
               setHasChanges(true);
             }
           };
+          reader.readAsDataURL(file);
         } catch (error) {
           console.error("Upload error:", error);
           alert("이미지 업로드 중 오류가 발생했습니다.");
