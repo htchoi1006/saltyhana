@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import AccountList from "../../components/AccountList/AccountList";
 import AssetsChart from "../../components/AssetsChart/AssetsChart";
 import AssetsInfo from "../../components/AssetsInfo/AssetsInfo";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import {
   Account,
   ChartsContainer,
@@ -10,7 +11,6 @@ import {
   Header,
   HeaderDescription,
 } from "./styles";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 interface TransferList {
   date: string; // 날짜 (YYYY-MM-DD 형식)
@@ -38,16 +38,11 @@ export default function AssetsPage() {
   const [lineData, setLineData] = useState<any>(null);
   const [cumulativeSum, setCumulativeSum] = useState<number>(0);
   const [zoomedRange, setZoomedRange] = useState<string>("");
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 1);
-  const endDate = new Date();
 
-  const assetDataApi = async (startDate: string, endDate: string) => {
+  const fetchAssetDataApi = async () => {
     try {
-      const params = new URLSearchParams({ startDate, endDate });
-
       const response = await fetch(
-        `http://localhost:9090/api/accounts/transfers?${params.toString()}`,
+        `http://localhost:9090/api/accounts/transfers`,
         {
           method: "GET",
           headers: {
@@ -124,10 +119,7 @@ export default function AssetsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const transferList = await assetDataApi(
-        startDate.toISOString().split("T")[0],
-        endDate.toISOString().split("T")[0],
-      );
+      const transferList = await fetchAssetDataApi();
 
       if (transferList.length > 0) {
         const newData = generateLineData(transferList[0]);
@@ -153,7 +145,7 @@ export default function AssetsPage() {
   }, [selectedAccount, accountTransfer]);
 
   if (!accounts.length || !selectedAccount) {
-    return <LoadingSpinner></LoadingSpinner>; // 로딩 상태 표시
+    return <LoadingSpinner />;
   }
 
   return (
