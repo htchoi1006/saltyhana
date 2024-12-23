@@ -5,7 +5,7 @@ import React, {
   ChangeEvent,
   useEffect,
 } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
@@ -38,7 +38,7 @@ interface GoalRequest {
   startDate: string;
   endDate: string;
   goalType: number;
-  iconId: number;
+  iconId: number | null;
   goalImg: string | null;
   connectedAccount: number;
 }
@@ -58,24 +58,26 @@ const categoryToNumber: Record<string, number> = {
   소비: 6,
 };
 
+const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
+
 const iconToNumber: Record<string, number> = {
-  travel: 11,
-  anniversary: 12,
-  shopping: 13,
-  money: 14,
-  beer: 15,
-  coffee: 16,
-  car: 17,
-  ticket: 18,
-  cake: 19,
-  lobstar: 20,
-  beach: 21,
-  pet: 22,
-  party: 23,
-  cruise: 24,
-  amusementpark: 25,
-  christmas: 26,
-  phone: 27,
+  travel: 23,
+  anniversary: 8,
+  shopping: 21,
+  money: 17,
+  beer: 10,
+  coffee: 14,
+  car: 12,
+  ticket: 22,
+  cake: 11,
+  lobstar: 16,
+  beach: 9,
+  pet: 19,
+  party: 18,
+  cruise: 15,
+  amusementpark: 7,
+  christmas: 13,
+  phone: 20,
 };
 
 const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
@@ -105,19 +107,58 @@ const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
 };
 
 export default function GoalPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isEdit, goalId, goalData } = location.state || {};
+
+  const determineCategory = (goalType: number | undefined) => {
+    if (!goalType) return "";
+
+    // category 번호와 이름을 매핑하는 역방향 매핑 생성
+    const numberToCategory = Object.entries(categoryToNumber).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [value]: key,
+      }),
+      {} as Record<number, string>,
+    );
+
+    return numberToCategory[goalType] || "";
+  };
+
   const [values, setValues] = useState<InputValues>({
-    name: "",
-    amount: "",
-    startDate: "", // 목표 시작 날짜
-    endDate: "", // 목표 완료 날짜
-    image: null,
-    category: "",
+    name: goalData?.goalName || "",
+    amount: goalData?.goalMoney?.toString() || "",
+    startDate: goalData?.startDate || "",
+    endDate: goalData?.endDate || "",
+    image: goalData?.goalImg || null,
+    category: determineCategory(goalData?.goalType),
     directCategory: "",
-    accountId: "",
+    accountId: goalData?.connectedAccount?.toString() || "",
   });
 
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [selectedIcon, setSelectedIcon] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const amountInputRef = useRef<HTMLInputElement>(null);
+  const modalManagerRef = useRef<ModalManagerType>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    location.state?.selectedDate || "",
+  );
 
+  useEffect(() => {
+    if (goalData?.iconId) {
+      const iconEntries = Object.entries(iconToNumber);
+      const iconName = iconEntries.find(
+        ([_, value]) => value === goalData.iconId,
+      )?.[0];
+      if (iconName) {
+        setSelectedIcon(iconName);
+      }
+    }
+  }, [goalData]);
+
+  // 유저의 계좌 정보를 가져오기 위함
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
@@ -142,42 +183,6 @@ export default function GoalPage() {
     fetchAccounts();
   }, []);
 
-  // useLocation 사용, 다른 페이지 전달 값 받기
-  const location = useLocation();
-
-  const [selectedIcon, setSelectedIcon] = useState<string>("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const amountInputRef = useRef<HTMLInputElement>(null);
-  const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
-  const modalManagerRef = useRef<ModalManagerType>(null);
-  // 캘린더 페이지에서 전달된 state에서 날짜 값 가져오기
-  const [selectedDate, setSelectedDate] = useState<string>(
-    location.state?.selectedDate || "",
-  );
-
-  const registerGoal = async (goalData: GoalRequest) => {
-    try {
-      const response = await fetch("http://localhost:9090/api/goals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Assuming token is stored in localStorage
-          accept: "*/*",
-        },
-        body: JSON.stringify(goalData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to register goal");
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error registering goal:", error);
-      throw error;
-    }
-  };
-
   const handleCategoryChange = (category: string) => {
     setValues((prev) => ({ ...prev, category }));
   };
@@ -187,21 +192,16 @@ export default function GoalPage() {
   };
 
   const handleIconClick = (iconName: string) => {
-    // 같은 아이콘을 다시 클릭하면 선택 취소
     if (selectedIcon === iconName) {
       setSelectedIcon("");
-      console.log("아이콘 선택 취소");
       return;
     }
 
-    // 이미지가 있으면 아이콘 선택 불가
     if (values.image) {
-      console.log("이미지가 등록된 경우 아이콘을 선택할 수 없습니다.");
       return;
     }
 
     setSelectedIcon(iconName);
-    console.log("Selected icon:", iconName);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,7 +218,6 @@ export default function GoalPage() {
           ...prev,
           image: reader.result as string,
         }));
-        // 이미지가 업로드되면 선택된 아이콘 취소
         setSelectedIcon("");
       };
       reader.readAsDataURL(file);
@@ -242,80 +241,86 @@ export default function GoalPage() {
   };
 
   const handleRegister = async () => {
-    console.log("=== 목표 등록 정보 ===");
-    console.log("목표 이름:", values.name);
-    console.log(
-      "목표 금액:",
-      values.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원",
-    );
-    console.log("목표 날짜:", values.endDate);
-    console.log("선택 계좌:", values.accountId);
+    // 필수 필드만 체크
+    const requiredFields = {
+      name: values.name,
+      amount: values.amount,
+      startDate: values.startDate || selectedDate,
+      endDate: values.endDate,
+      category: values.category,
+      accountId: values.accountId,
+    };
 
-    if (values.image) {
-      console.log("등록된 이미지:", values.image);
-    } else if (selectedIcon) {
-      values.image = selectedIcon;
-      console.log("선택한 아이콘:", selectedIcon);
-    }
-
-    if (values.category) {
-      values.directCategory = values.category;
-    } else if (values.directCategory) {
-      values.category = values.directCategory;
-    }
-
-    if (!values.startDate) {
-      values.startDate = selectedDate;
-    }
-
-    const anyValueMissing = Object.values(values).some(
-      (value) => value === null || value === "",
+    const anyRequiredFieldMissing = Object.values(requiredFields).some(
+      (value) => !value || value.trim() === "",
     );
 
-    console.log(values, anyValueMissing);
-
-    if (!anyValueMissing) {
+    if (!anyRequiredFieldMissing) {
       try {
         const goalRequest: GoalRequest = {
           goalName: values.name,
-          goalMoney: parseInt(values.amount),
+          goalMoney: parseInt(values.amount.replace(/,/g, "")),
           startDate: values.startDate || selectedDate,
           endDate: values.endDate,
           goalType: categoryToNumber[values.category],
-          iconId: selectedIcon ? iconToNumber[selectedIcon] : 0,
-          goalImg:
-            values.image && values.image !== selectedIcon ? values.image : null,
-
+          // 사용자 정의 이미지가 있으면 iconId는 null로, 없으면 선택된 아이콘의 ID
+          iconId: values.image
+            ? null
+            : selectedIcon
+              ? iconToNumber[selectedIcon]
+              : null,
+          // 사용자 정의 이미지가 있으면 해당 이미지를, 없으면 null
+          goalImg: values.image || null,
           connectedAccount: parseInt(values.accountId),
         };
 
-        await registerGoal(goalRequest);
-        modalManagerRef.current?.openModal("목표등록");
+        console.log("Request body:", goalRequest);
 
-        setValues({
-          name: "",
-          amount: "",
-          startDate: "",
-          endDate: "",
-          image: null,
-          category: "",
-          directCategory: "",
-          accountId: "",
+        const method = isEdit ? "PUT" : "POST";
+        const url = isEdit
+          ? `http://localhost:9090/api/goals/${goalId}`
+          : "http://localhost:9090/api/goals";
+
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+          body: JSON.stringify(goalRequest),
         });
-        setSelectedIcon("");
-        setSelectedDate("");
+
+        console.log("Response status:", response.status);
+        const responseData = await response.json();
+        console.log("Response data:", responseData);
+
+        if (!response.ok) {
+          throw new Error(`Failed to ${isEdit ? "update" : "register"} goal`);
+        }
+
+        modalManagerRef.current?.openModal(isEdit ? "목표수정" : "목표등록");
+        navigate("/calendar");
       } catch (error) {
-        console.error("Failed to register goal:", error);
+        console.error(
+          `Failed to ${isEdit ? "update" : "register"} goal:`,
+          error,
+        );
+        alert(`목표 ${isEdit ? "수정" : "등록"}에 실패했습니다.`);
       }
+    } else {
+      alert(
+        "필수 정보(목표 이름, 금액, 날짜, 종류, 계좌)를 모두 입력해주세요.",
+      );
     }
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value.replace(/,/g, ""); // 콤마 제거
+    const rawValue = e.target.value.replace(/,/g, "");
     if (!isNaN(Number(rawValue))) {
       setValues((prevValues) => ({
         ...prevValues,
-        amount: rawValue, // 실제 값은 콤마 없이 저장
+        amount: rawValue,
       }));
     }
   };
@@ -364,7 +369,9 @@ export default function GoalPage() {
   return (
     <>
       <styled.Container>
-        <styled.ContainerHeader>목표 설정하기</styled.ContainerHeader>
+        <styled.ContainerHeader>
+          {isEdit ? "목표 수정하기" : "목표 설정하기"}
+        </styled.ContainerHeader>
         <styled.InputWrapper>
           <styled.InputContainer>
             <styled.SetGoalPen
@@ -615,7 +622,7 @@ export default function GoalPage() {
         </styled.IconList>
 
         <styled.RegisterButton onClick={handleRegister}>
-          등록하기
+          {isEdit ? "수정하기" : "등록하기"}
         </styled.RegisterButton>
         <ModalManager ref={modalManagerRef} />
       </styled.Container>

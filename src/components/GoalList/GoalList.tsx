@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   GoalListContainer,
   GoalItem,
@@ -25,6 +26,7 @@ interface GoalListProps {
 }
 
 export default function GoalList(props: GoalListProps) {
+  const navigate = useNavigate();
   const { goals, onGoalClick, setGoals } = props;
   const [activeGoalId, setActiveGoalId] = useState<string | null>(
     goals.length > 0 ? String(goals[0].id) : null,
@@ -73,6 +75,88 @@ export default function GoalList(props: GoalListProps) {
     }
   };
 
+  const handleEdit = async (goalId: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    try {
+      // 전체 목표 리스트 조회
+      const response = await fetch(
+        "http://localhost:9090/api/goals?activeOnly=false",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch goals");
+      }
+
+      const goals = await response.json();
+      const goalToEdit = goals.find((goal: any) => goal.id === goalId);
+
+      if (!goalToEdit) {
+        throw new Error("Goal not found");
+      }
+
+      // 응답 데이터를 PUT 요청 형식에 맞게 변환
+      const formattedGoalData = {
+        goalName: goalToEdit.title,
+        goalMoney: goalToEdit.totalMoney,
+        startDate: goalToEdit.startAt.split("T")[0],
+        endDate: goalToEdit.endAt.split("T")[0],
+        goalType: parseInt(goalToEdit.category),
+        iconId: goalToEdit.iconImage
+          ? getIconIdFromImageUrl(goalToEdit.iconImage)
+          : 0,
+        goalImg: goalToEdit.customImage,
+        connectedAccount: goalToEdit.connected_account,
+        category: goalToEdit.category,
+      };
+
+      console.log(formattedGoalData);
+
+      // 페이지 이동
+      navigate("/goal", {
+        state: {
+          isEdit: true,
+          goalId,
+          goalData: formattedGoalData,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching goal details:", error);
+      alert("목표 정보를 불러오는데 실패했습니다.");
+    }
+  };
+
+  const getIconIdFromImageUrl = (imageUrl: string) => {
+    // URL에서 파일 이름 추출
+    const fileName = imageUrl.split("/").pop()?.split(".")[0];
+
+    // 아이콘 이름을 ID로 매핑
+    if (fileName?.includes("travel")) return 23;
+    if (fileName?.includes("anniversary")) return 8;
+    if (fileName?.includes("shopping")) return 21;
+    if (fileName?.includes("money")) return 17;
+    if (fileName?.includes("beer")) return 10;
+    if (fileName?.includes("coffee")) return 14;
+    if (fileName?.includes("car")) return 12;
+    if (fileName?.includes("ticket")) return 22;
+    if (fileName?.includes("cake")) return 11;
+    if (fileName?.includes("lobstar")) return 16;
+    if (fileName?.includes("beach")) return 9;
+    if (fileName?.includes("pet")) return 19;
+    if (fileName?.includes("party")) return 18;
+    if (fileName?.includes("cruise")) return 15;
+    if (fileName?.includes("amusement")) return 7;
+    if (fileName?.includes("christmas")) return 13;
+    if (fileName?.includes("phone")) return 20;
+    return 0;
+  };
+
   return (
     <GoalListContainer>
       <div
@@ -93,9 +177,12 @@ export default function GoalList(props: GoalListProps) {
               <GoalInfo>
                 <GoalTitle>
                   {goal.title}
-                  <Link to="/goal">
-                    <EditButton src={editIcon} />
-                  </Link>
+                  {/* <Link to="/goal"> */}
+                  <EditButton
+                    src={editIcon}
+                    onClick={(e) => handleEdit(goal.id, e)}
+                  />
+                  {/* </Link> */}
                 </GoalTitle>
                 <GoalDate>
                   {goal.startDate} - {goal.endDate}
