@@ -8,25 +8,12 @@ import {
   FormWrapper,
   InputsWrapper,
   StyledButton,
-  FooterParagraph,
 } from "../SignupPage/styles";
 import { StyledLink } from "./styles";
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
-
-interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface UserInfo {
-  identifier: string;
-  isLoggedIn: boolean;
-  accessToken: string;
-  refreshToken: string;
-}
 
 export default function LoginPage() {
   const navigate = useNavigate();

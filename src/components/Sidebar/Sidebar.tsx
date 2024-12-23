@@ -33,20 +33,14 @@ export default function Sidebar() {
     { to: "/mypage", imgSrc: sidebar_user, displayName: "내 정보" },
   ];
 
-  const handleLogoutApi = async () => {
+  const handleLogout = async () => {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
       throw new Error("No authentication token found");
     }
 
-    await fetch(`http://localhost:9090/api/auth/logout`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        accept: "*/*",
-      },
-    });
+    localStorage.removeItem("accessToken");
 
     // 루트 페이지로 이동
     navigate("/");
@@ -68,7 +62,7 @@ export default function Sidebar() {
         <ModalManager ref={modalManagerRef} />
       </styled.MenuSection>
       <styled.SettingsSection>
-        <styled.MenuItem onClick={handleLogoutApi}>
+        <styled.MenuItem onClick={handleLogout}>
           <styled.SettingIcon src={sidebar_setting} />
           <span style={{ color: "#b1b1b1" }}>로그아웃</span>
         </styled.MenuItem>
