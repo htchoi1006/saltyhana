@@ -124,7 +124,7 @@ const TestPage: React.FC = () => {
 
     // 마지막 질문이면 결과 페이지로 이동
     if (currentQuestionIndex === 9) {
-      sendTestResult();
+      await sendTestResult();
       const consumptionType = await fetchTestResult();
       navigate(`/result/consumption`, { state: { type: consumptionType } });
     } else {
