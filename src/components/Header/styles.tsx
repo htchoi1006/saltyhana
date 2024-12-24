@@ -29,12 +29,11 @@ export const HanaLogoDiv = styled.div`
   font-weight: 700;
   font-size: 26px;
   line-height: 41px;
-  margin-left: 10px;
   color: #000000;
 `;
 
 export const HanaLogo = styled.img`
-  width: 45px;
+  width: 50px;
   height: auto;
 `;
 
@@ -64,6 +63,20 @@ export const StyledHeaderLink = styled(HeaderLink)`
   }
 `;
 
+// 프로필 이미지 설정
+export const ProfileImage = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 1px solid #ccc;
+  margin-right: 5px;
+  margin-top: 5px;
+`;
+
 export const WelcomeSpan = styled.span`
   font-weight: 700;
+  padding-top: 2px;
+  margin-right: 30px;
 `;

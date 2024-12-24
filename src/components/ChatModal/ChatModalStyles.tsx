@@ -104,17 +104,20 @@ export const ChatArea = styled.div`
 `;
 
 // 메시지와 시간 래퍼
-export const MessageWrapper = styled.div<{ isUser: boolean }>`
+export const MessageWrapper = styled.div<{ sender: "client" | "server" }>`
   display: flex;
-  flex-direction: column;
-  align-items: ${({ isUser }) =>
-    isUser ? "flex-end" : "flex-start"}; /* isUser에 따라 정렬 */
+  flex-direction: row;
   position: relative;
+  ${({ sender }) =>
+    sender === "client"
+      ? "margin-left: auto; align-self: flex-start;"
+      : "margin-right: auto; align-self: flex-end;"};
 `;
 
 // 메시지 스타일
-export const Message = styled.p<{ isUser: boolean }>`
-  background-color: ${({ isUser }) => (isUser ? "#d0f4f3" : "#f1f1f1")};
+export const Message = styled.p<{ sender: "client" | "server" }>`
+  background-color: ${({ sender }) =>
+    sender === "client" ? "#d0f4f3" : "#f1f1f1"};
   color: #333;
   padding: 10px 15px;
   border-radius: 20px;
@@ -124,12 +127,16 @@ export const Message = styled.p<{ isUser: boolean }>`
   line-height: 1.5;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
-
   transition: transform 0.2s ease;
 
   &:hover {
     transform: scale(1.1);
   }
+
+  ${({ sender }) =>
+    sender === "client"
+      ? " align-self: flex-start;"
+      : "margin-right: auto; align-self: flex-end;"};
 `;
 
 // 채팅 입력 영역
@@ -162,10 +169,15 @@ export const ChatInput = styled.div`
 `;
 
 // 메시지 시간 스타일
-export const Timestamp = styled.span<{ isUser: boolean }>`
+export const Timestamp = styled.span<{ sender: "client" | "server" }>`
   font-size: 12px;
   color: #888;
-  position: absolute;
+  margin: 0 10px 10px 10px;
   bottom: -5px;
-  margin: ${({ isUser }) => (isUser ? "0px 2% 0px 0px" : "0px 0px 0px 2%")};
+  align-self: flex-end;
+
+  ${({ sender }) =>
+    sender === "client"
+      ? "order: 0;" /* 클라이언트 메시지인 경우 시간 오른쪽 */
+      : "order: 1;"}/* 서버 메시지인 경우 시간 왼쪽 */
 `;

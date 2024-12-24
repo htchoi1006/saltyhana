@@ -11,11 +11,17 @@ interface CustomCalendarProps {
   apiKey?: string;
   handleDayCellDidMount: (arg: DayCellMountArg) => void;
   handleDayCellContent: (args: DayCellContentArg) => JSX.Element;
+  onDateClick: (date: string) => void;
 }
 
 export default function MonthCalendar(props: CustomCalendarProps) {
-  const { calendarKey, apiKey, handleDayCellDidMount, handleDayCellContent } =
-    props;
+  const {
+    calendarKey,
+    apiKey,
+    handleDayCellDidMount,
+    handleDayCellContent,
+    onDateClick,
+  } = props;
 
   return (
     <FullCalendarWrapper>
@@ -58,6 +64,9 @@ export default function MonthCalendar(props: CustomCalendarProps) {
         }}
         dayCellDidMount={handleDayCellDidMount}
         dayCellContent={handleDayCellContent}
+        dateClick={(info) => {
+          onDateClick(info.dateStr); // 날짜 클릭 시 부모 컴포넌트로 날짜 전달
+        }}
       />
     </FullCalendarWrapper>
   );

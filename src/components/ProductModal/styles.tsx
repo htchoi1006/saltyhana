@@ -19,6 +19,7 @@ export const ChoiceCard = styled.div`
   margin: 5px 20px;
   text-align: center;
   transition: transform 0.3s;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);

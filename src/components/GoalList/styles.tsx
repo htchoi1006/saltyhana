@@ -12,6 +12,8 @@ export const GoalListContainer = styled.div`
   gap: 20px;
   padding: 30px;
   position: relative;
+  height: 90vh;
+  overflow-y: scroll;
 `;
 
 export const GoalRegisterButton = styled.div`
@@ -147,4 +149,11 @@ export const ProgressFill = styled.div`
   height: 100%;
   border-radius: 4px;
   transition: width 0.3s ease;
+`;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 10px 0;
 `;

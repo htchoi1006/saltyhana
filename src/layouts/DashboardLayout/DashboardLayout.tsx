@@ -2,14 +2,11 @@ import { useRef } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
 
 import Sidebar from "../../components/Sidebar/Sidebar";
-import CounselButton from "../../components/CounselButton/CounselButton";
 import Header from "../../components/Header/Header";
 import { Main } from "./styles";
 import { HeaderOffset } from "../../components/Header/styles";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import ModalManager, {
-  ModalManagerType,
-} from "../../components/Modals/ModalManager";
+import { ModalManagerType } from "../../components/Modals/ModalManager";
 
 export default function DashboardLayout() {
   const navigation = useNavigation();
@@ -47,12 +44,6 @@ export default function DashboardLayout() {
               <Outlet />
             </>
           )}
-        </div>
-
-        <div style={{}}>
-          {/* 상담 모달 */}
-          <ModalManager ref={modalManagerRef} />
-          <CounselButton onClick={handleButtonClick} />
         </div>
       </Main>
     </>

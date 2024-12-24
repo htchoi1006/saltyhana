@@ -1,11 +1,8 @@
-// 여기서는 이렇게 Landing Page에 대한 CSS 코드를 분리하시면 됩니다 !
-// 화면 2분할하고 왼쪽에는 페이지코드, 오른쪽에는 CSS 코드를 띄워놓고 작업하시면 능률이 올라요
 import { Link } from "react-router-dom";
-import styled from "styled-components"; //1. styled-component를 import 합니다.
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
-  font-family: "Noto Sans KR";
 `;
 
 export const CarouselWrapper = styled.div`
@@ -28,12 +25,11 @@ export const CenterFlexBox = styled.div`
 export const Stack = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Con = styled.div`
-  //2. 어떤 컴포넌트에 대해 스타일을 선언할 때는 [export const 이름 = styled.div] 로 선언합니다.
-
   h1 {
     color: #333;
   }
@@ -42,7 +38,7 @@ export const Con = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; // 수직 중앙 정렬
+    align-items: center;
     width: 100%;
     height: 100vh;
   }
@@ -58,9 +54,9 @@ export const Container1 = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; // 수직 중앙 정렬
-    width: 100vh; // 부모 div 높이 조정
-    height: 100vh; // 부모 div 높이 조정
+    align-items: center;
+    width: 100vh;
+    height: 100vh;
   }
 `;
 
@@ -68,7 +64,7 @@ export const Con1Link = styled(Link)`
   width: 342.78px;
   height: 62.74px;
 
-  margin-top: 40px;
+  margin-top: 30px;
   border: none;
   background: #008485;
   border-radius: 20px;
@@ -102,24 +98,35 @@ export const Con1Link = styled(Link)`
 `;
 
 export const StyledMainText = styled.span`
-  font-family: "Noto Sans KR";
-  font-style: normal;
   font-weight: 700;
   font-size: 72px;
   line-height: 87px;
   letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 
   color: #000000;
 `;
 
-export const SubText = styled.span`
-  font-style: normal;
-  font-weight: 300;
-  font-size: 24px;
-  line-height: 29px;
+export const TitleImg = styled.img`
+  width: 80px;
+  padding: 5px;
+  vertical-align: bottom;
+`;
 
-  color: #1d1d1d;
+export const RichText = styled.div`
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 30px;
+  color: #000;
+  margin-bottom: 8px;
+`;
+
+export const SubText = styled.div`
+  font-weight: 350;
+  font-size: 22px;
+  line-height: 29px;
+  color: #000;
+  margin-bottom: 10px;
 `;
 
 export const StyledMainText2 = styled(StyledMainText)`
@@ -143,8 +150,7 @@ export const StyleDiv = styled.div`
 
 export const Container2 = styled.div`
   background-color: #006b6b;
-  height: 100vh; // 이 값을 추가하여 내부 내용이 잘 보이도록 조정
-  width: 100vw;
+  height: 100vh;
   h1 {
     color: #333;
   }
@@ -152,7 +158,7 @@ export const Container2 = styled.div`
 
 export const Container22 = styled.div`
   background-color: #0063b2;
-  height: 100vh; // 이 값을 추가하여 내부 내용이 잘 보이도록 조정
+  height: 100vh;
   width: 100wh;
   h1 {
     color: #333;
@@ -187,7 +193,7 @@ export const Con2SubText = styled.p`
 `;
 
 export const Con22SubText = styled.p`
-  line-height: 1.5; // 예시
+  line-height: 1.5;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -198,8 +204,6 @@ export const Con22SubText = styled.p`
 `;
 
 export const Con22p2 = styled.p`
-  font-family: "Noto Sans KR";
-  font-style: normal;
   font-weight: 700;
   font-size: 20px;
 `;
@@ -238,7 +242,6 @@ export const ElementsWrapper = styled.div`
 export const Con22Button = styled.button`
   width: 342.78px;
   height: 62.74px;
-  /* margin-top: 40px; */
   border: none;
   background: #008485;
   border-radius: 20px;
@@ -303,10 +306,6 @@ export const Box = styled.div`
   background-color: #ffffff;
   border-radius: 20px;
 `;
-
-// export const Container3 = styled.div`
-// 	background-color: #e9edf08f;
-// `;
 
 export const Con3SubText = styled.p`
   font-style: normal;

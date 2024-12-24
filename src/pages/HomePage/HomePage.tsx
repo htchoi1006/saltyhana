@@ -1,46 +1,4 @@
-// import { PageContainer } from "./styles";
-// import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
-// import GoalContainer from "../../components/GoalContainer/GoalContainer";
-// import ProductList from "../RecommendPage/ProductList";
-
-// // HomePage 컴포넌트: 홈, 대시보드 페이지를 렌더링하는 함수형 컴포넌트
-// export default function HomePage() {
-// 	return (
-// 		<PageContainer>
-// 			{/* 목표, 진행도 박스 레이아웃  */}
-// 			<GoalContainer
-// 				goal={"여행"}
-// 				startdate={"2024.10.01"}
-// 				enddate={"2024.12.23"}
-// 				progress={80}
-// 			/>
-// 			{/* 주간 캘린더 레이아웃 */}
-// 			<WeekdayCalendar
-// 				dates={[
-// 					{ isAchieve: true, date: new Date("2024-10-17") },
-// 					{ isAchieve: true, date: new Date("2024-10-18") },
-// 					{ isAchieve: true, date: new Date("2024-10-19") },
-// 					{ isAchieve: true, date: new Date("2024-10-20") },
-// 					{ isAchieve: true, date: new Date("2024-10-21") },
-// 					{ isAchieve: true, date: new Date("2024-10-22") },
-// 					{ isAchieve: true, date: new Date("2024-10-23") },
-// 					{ isAchieve: false, date: new Date("2024-10-24") },
-// 					{ isAchieve: true, date: new Date("2024-10-25") },
-// 					{ isAchieve: false, date: new Date("2024-10-26") },
-// 					{ isAchieve: true, date: new Date("2024-10-27") },
-// 					{ isAchieve: false, date: new Date("2024-10-28") },
-// 					{ isAchieve: false, date: new Date("2024-10-29") },
-// 					{ isAchieve: true, date: new Date("2024-10-30") },
-// 					{ isAchieve: true, date: new Date("2024-10-31") },
-// 				]}
-// 			/>
-// 			{/* 상품 리스트가 표시되는 섹션 */}
-// 			<ProductList />
-// 		</PageContainer>
-// 	);
-// }
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PageContainer } from "./styles";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
 import GoalContainer from "../../components/GoalContainer/GoalContainer";
@@ -51,30 +9,88 @@ import {
   NavigationDots,
   Dot,
 } from "./styles";
+import { ProductType, WeekDayType } from "../../type";
+
+interface DashBoardResponseDTO {
+  goal: {
+    id: number;
+    userName: string;
+    title: string;
+    goalPeriod: string;
+    iconImage: string;
+    customImage: string;
+    currentMoney: number;
+    totalMoney: number;
+    percentage: number;
+  };
+  weekdayCalendar: {
+    weekday: {
+      date: string;
+      isAchieve: boolean;
+    }[];
+  };
+  bestProductList: {
+    id: number;
+    title: string;
+    type: string;
+    subtitle: string;
+    imageUrl: string;
+    description: string;
+  }[];
+}
 
 export default function HomePage() {
+  const [dashBoardData, setDashBoardData] = useState<DashBoardResponseDTO[]>(
+    [],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const goals = [
-    {
-      goal: "여행",
-      startdate: "2024.10.01",
-      enddate: "2024.12.23",
-      progress: 60,
-    },
-    {
-      goal: "결혼 자금",
-      startdate: "2024.11.01",
-      enddate: "2025.11.30",
-      progress: 26,
-    },
-    {
-      goal: "내 집 마련",
-      startdate: "2024.09.01",
-      enddate: "2026.08.31",
-      progress: 10,
-    },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch("http://localhost:9090/api/home", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+
+        const data: DashBoardResponseDTO[] = await response.json();
+        setDashBoardData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (dashBoardData.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  const weekDays: WeekDayType[] = dashBoardData[
+    currentIndex
+  ].weekdayCalendar.weekday.map((day) => ({
+    date: new Date(day.date),
+    isAchieve: day.isAchieve,
+  }));
+
+  const products: ProductType[] = dashBoardData[
+    currentIndex
+  ].bestProductList.map((product) => ({
+    title: product.title,
+    subtitle: product.subtitle,
+    image: product.imageUrl,
+    description: product.description,
+    color: "#FFFFFF",
+  }));
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
@@ -88,14 +104,23 @@ export default function HomePage() {
     <PageContainer>
       <CarouselContainer>
         <CarouselWrapper className="carousel-container" onScroll={handleScroll}>
-          {goals.map((goalData, index) => (
-            <div key={index} className="carousel-item">
-              <GoalContainer {...goalData} />
+          {dashBoardData.map((data, index) => (
+            <div className="carousel-item" key={data.goal.id}>
+              <GoalContainer
+                goal={data.goal.title}
+                goalPeriod={data.goal.goalPeriod}
+                iconImage={data.goal.iconImage}
+                customImage={data.goal.customImage}
+                percentage={data.goal.percentage}
+                totalMoney={data.goal.totalMoney}
+                currentMoney={data.goal.currentMoney}
+                userName={data.goal.userName}
+              />
             </div>
           ))}
         </CarouselWrapper>
         <NavigationDots>
-          {goals.map((_, index) => (
+          {dashBoardData.map((_, index) => (
             <Dot
               key={index}
               active={currentIndex === index}
@@ -106,33 +131,15 @@ export default function HomePage() {
                     left: index * container.clientWidth,
                     behavior: "smooth",
                   });
+                  setCurrentIndex(index);
                 }
               }}
             />
           ))}
         </NavigationDots>
       </CarouselContainer>
-
-      <WeekdayCalendar
-        dates={[
-          { isAchieve: true, date: new Date("2024-10-17") },
-          { isAchieve: true, date: new Date("2024-10-18") },
-          { isAchieve: true, date: new Date("2024-10-19") },
-          { isAchieve: true, date: new Date("2024-10-20") },
-          { isAchieve: true, date: new Date("2024-10-21") },
-          { isAchieve: true, date: new Date("2024-10-22") },
-          { isAchieve: true, date: new Date("2024-10-23") },
-          { isAchieve: false, date: new Date("2024-10-24") },
-          { isAchieve: true, date: new Date("2024-10-25") },
-          { isAchieve: false, date: new Date("2024-10-26") },
-          { isAchieve: true, date: new Date("2024-10-27") },
-          { isAchieve: false, date: new Date("2024-10-28") },
-          { isAchieve: false, date: new Date("2024-10-29") },
-          { isAchieve: true, date: new Date("2024-10-30") },
-          { isAchieve: true, date: new Date("2024-10-31") },
-        ]}
-      />
-      <ProductList />
+      <WeekdayCalendar dates={weekDays} />
+      <ProductList products={products} />
     </PageContainer>
   );
 }

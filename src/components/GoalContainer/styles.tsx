@@ -1,20 +1,33 @@
 import styled from "styled-components";
 
 export const StyledGoalContainer = styled.div`
-  border-radius: 35px;
-  background-color: #eaf1fa; //ebeff3
-  /* box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.25); */
+  background-color: #eaf1fa;
   font-family:
     Noto Sans KR,
     sans-serif;
   display: flex;
   flex-wrap: wrap;
-
   justify-content: space-around;
   padding: 25px 30px;
   min-height: 150px;
   font-size: 15px;
   font-weight: 700;
+  height: 200px;
+`;
+
+export const StyledSetGoalContainer = styled.div`
+  background-color: #eaf1fa;
+  font-family:
+    Noto Sans KR,
+    sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 25px 30px;
+  min-height: 150px;
+  font-size: 15px;
+  font-weight: 700;
+  height: 200px;
 `;
 
 export const GoalContainerDiv = styled.div`
@@ -52,65 +65,24 @@ export const GoalIcon = styled.img.attrs({ alt: "목표 이미지" })`
   width: 200px;
   height: 200px;
   background-size: cover;
-  margin-left: auto;
+  margin-left: 0;
 `;
 
-// export const ProgressBar = styled.div`
-// 	width: 100%;
-// 	background-color: #ececec;
-// 	border-radius: 8px;
-// 	border: 1px solid rgba(0, 0, 0, 0.1);
-// 	position: relative;
-// 	height: 24px;
-// `;
-
-// export const Progress = styled.div`
-// 	background-color: #008485;
-// 	height: 100%;
-// 	border-radius: 8px;
-// 	border: 1px solid rgba(0, 0, 0, 0.1);
-// 	position: absolute;
-// 	transition: width 1.5s ease-in-out;
-// `;
-
-// export const ProgressContainer = styled.div`
-// 	position: relative;
-// 	width: 100%;
-// 	margin-top: 30px;
-// `;
-
-// export const ProgressPercentage = styled.div`
-// 	font-size: 20px;
-// 	position: absolute;
-// 	right: 0;
-// 	bottom: 100%;
-// 	transform: translateX(50%);
-// 	margin-bottom: 5px;
-// 	transition: right 1.5s ease-in-out;
-// 	white-space: nowrap;
-// `;
-
-// export const ProgressImage = styled.img<{ leftPosition: number }>`
-// 	position: absolute;
-// 	/* top: 90%; // 원하는 수직 위치 조정 */
-// 	bottom: 90%;
-// 	left: ${({ leftPosition }) => `calc(${leftPosition}% - 20px)`};
-// 	transition: left 1.5s ease-in-out;
-// 	width: 35px;
-// 	height: 35px;
-// 	margin-top: -5%;
-// 	transform: scaleX(-1); // 좌우 반전
-// `;
-
-// styles.ts 수정사항
 export const ProgressBar = styled.div`
-  width: 100%;
+  width: 75%;
   background-color: #ececec;
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   height: 24px;
   margin-top: 15px;
+`;
+
+export const MoneyProgress = styled.div`
+  margin-left: 20px;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 800;
 `;
 
 export const Progress = styled.div`
@@ -126,6 +98,8 @@ export const ProgressContainer = styled.div`
   position: relative;
   width: 100%;
   margin-top: 30px;
+  display: flex;
+  align-items: center;
 `;
 
 export const RunnerContainer = styled.div<{ leftPosition: number }>`
@@ -153,15 +127,15 @@ export const ProgressImage = styled.img`
 export const GoalLeftDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: start;
+  height: 100%;
 `;
 
 export const GoalHeader = styled.div`
   font-family: "Noto Sans KR";
   font-style: normal;
   font-weight: 800;
-  font-size: 45px;
+  font-size: 42px;
   line-height: 70px;
   display: flex;
   align-items: center;
@@ -175,7 +149,7 @@ export const GoalDescription = styled.div`
   font-weight: 500;
   font-size: 20px;
   color: #404040;
-  margin-top: 20px;
+  margin-top: 5px;
 
   > p {
     margin: 0;
@@ -185,12 +159,12 @@ export const GoalDescription = styled.div`
 export const GoalButton = styled.button`
   box-sizing: border-box;
   width: 200px;
-  height: 65px;
+  height: 60px;
 
   background: #98c5ff;
   border-radius: 50px;
   border: none;
-  margin-top: 20px;
+  margin-top: 10px;
   cursor: pointer;
 
   &:hover {
@@ -201,13 +175,13 @@ export const GoalButton = styled.button`
     font-family: "Noto Sans KR";
     font-style: normal;
     font-weight: 800;
-    font-size: 22px;
+    font-size: 18px;
     color: #404040;
   }
 `;
 
 export const GoalRightDiv = styled.img`
   width: 300px;
-  height: auto;
-  margin-left: 300px;
+  height: 220px;
+  margin-left: 400px;
 `;

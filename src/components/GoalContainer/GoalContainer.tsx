@@ -8,6 +8,7 @@ import {
   GoalDate,
   GoalIcon,
   ProgressBar,
+  MoneyProgress,
   Progress,
   ProgressContainer,
   ProgressPercentage,
@@ -18,19 +19,33 @@ import {
   GoalRightDiv,
   GoalHeader,
   RunnerContainer,
+  StyledSetGoalContainer,
 } from "./styles";
 import travel from "../../images/travel.svg";
 import goals from "../../images/goals.png";
 
 interface GoalContainerProps {
   goal: string | null;
-  startdate: string | null;
-  enddate: string | null;
-  progress: number | 0;
+  goalPeriod: string | null;
+  userName: string | null;
+  iconImage: string | undefined;
+  customImage: string | undefined;
+  currentMoney: number | 0;
+  totalMoney: number | 0;
+  percentage: number | 0;
 }
 
 const GoalProgressContainer = (props: GoalContainerProps) => {
-  const { goal, startdate, enddate, progress } = props;
+  const {
+    goal,
+    goalPeriod,
+    percentage,
+    totalMoney,
+    currentMoney,
+    userName,
+    iconImage,
+    customImage,
+  } = props;
 
   const [currentProgress, setCurrentProgress] = useState(0);
   const [displayedProgress, setDisplayedProgress] = useState(0);
@@ -42,12 +57,12 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
 
     // 약간의 지연 후 애니메이션 시작
     const startDelay = setTimeout(() => {
-      setCurrentProgress(progress);
+      setCurrentProgress(percentage);
 
       // 숫자 카운트 업 애니메이션
       const duration = 1500; // 1.5초
       const steps = 60; // 60프레임
-      const increment = progress / steps;
+      const increment = percentage / steps;
       const stepDuration = duration / steps;
 
       let currentStep = 0;
@@ -57,7 +72,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
         if (currentStep <= steps) {
           setDisplayedProgress((prev) => {
             const next = Math.min(
-              progress,
+              percentage,
               Math.round(increment * currentStep),
             );
             return next;
@@ -73,35 +88,17 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
     }, 100);
 
     return () => clearTimeout(startDelay);
-  }, [progress]);
+  }, [percentage]);
+
+  // customImage 또는 iconImage 중 유효한 이미지를 선택
+  const imageToDisplay = customImage || iconImage || travel; // 기본값으로 travel 이미지를 설정
 
   return (
     <StyledGoalContainer>
       <GoalContainerDiv>
-        <GoalContainerHeader>짭짤하나 님의 현재 목표</GoalContainerHeader>
+        <GoalContainerHeader>{userName} 님의 현재 목표</GoalContainerHeader>
         <GoalTitle>{goal}</GoalTitle>
-        <GoalDate>
-          {startdate} ~ {enddate}
-        </GoalDate>
-
-        {/* <ProgressContainer>
-					<ProgressBar>
-						<Progress style={{ width: `${currentProgress}%` }} />
-						<ProgressPercentage
-							style={{
-								right: `${100 - currentProgress}%`,
-								bottom: "50px",
-							}}
-						>
-							{`${displayedProgress}%`}
-						</ProgressPercentage>
-						<ProgressImage
-							src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Running.png"
-							alt="Man Running"
-							leftPosition={currentProgress}
-						/>
-					</ProgressBar>
-				</ProgressContainer> */}
+        <GoalDate>{goalPeriod}</GoalDate>
         <ProgressContainer>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />
@@ -113,16 +110,22 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
               <ProgressPercentage>{`${displayedProgress}%`}</ProgressPercentage>
             </RunnerContainer>
           </ProgressBar>
+          <MoneyProgress>
+            <span>
+              {currentMoney}원&nbsp;/&nbsp;
+              {totalMoney}원
+            </span>
+          </MoneyProgress>
         </ProgressContainer>
       </GoalContainerDiv>
-      <GoalIcon src={travel} />
+      <GoalIcon src={imageToDisplay} />
     </StyledGoalContainer>
   );
 };
 
 const GoalSetContainer = () => {
   return (
-    <StyledGoalContainer>
+    <StyledSetGoalContainer>
       <GoalLeftDiv>
         <GoalHeader>
           <span>목표 설정</span>
@@ -145,21 +148,34 @@ const GoalSetContainer = () => {
         </Link>
       </GoalLeftDiv>
       <GoalRightDiv src={goals} />
-    </StyledGoalContainer>
+    </StyledSetGoalContainer>
   );
 };
 
 export default function GoalContainer(props: GoalContainerProps) {
-  const { goal, startdate, enddate, progress } = props;
+  const {
+    goal,
+    goalPeriod,
+    percentage,
+    totalMoney,
+    currentMoney,
+    userName,
+    iconImage,
+    customImage,
+  } = props;
 
   return goal == null ? (
     <GoalSetContainer />
   ) : (
     <GoalProgressContainer
       goal={goal}
-      startdate={startdate}
-      enddate={enddate}
-      progress={progress}
+      goalPeriod={goalPeriod}
+      percentage={percentage}
+      totalMoney={totalMoney}
+      currentMoney={currentMoney}
+      userName={userName}
+      iconImage={iconImage}
+      customImage={customImage}
     />
   );
 }

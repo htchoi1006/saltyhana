@@ -145,16 +145,20 @@ export const ScrollButton = styled.button`
 `;
 
 // 시간 버튼
-export const TimeButton = styled.button<{ isSelected: boolean }>`
+export const TimeButton = styled.button<{
+  isSelected: boolean;
+  disabled?: boolean;
+}>`
   background: ${({ isSelected }) =>
     isSelected ? "#a9a9a9" : "#f0f0f0"}; /* 선택 시 진한 회색 */
   border: none;
   border-radius: 16px;
   padding: 12px;
   margin: 5px;
-
   font-size: 14px;
-  cursor: pointer;
+
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  color: ${({ disabled }) => (disabled ? "gray" : "black")};
 `;
 
 //예약, 닫기 버튼 레이아웃

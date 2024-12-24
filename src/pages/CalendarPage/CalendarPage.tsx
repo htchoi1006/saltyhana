@@ -1,10 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { CalendarContainer, Container } from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
 import travel from "../../images/goal_icon_travel.png";
 import beer from "../../images/goal_icon_beer.png";
+import phone from "../../images/goal_icon_phone.webp";
 import MonthCalendar from "../../components/MonthCalendar/MonthCalendar";
 import GoalList from "../../components/GoalList/GoalList";
-import { CalendarContainer, Container } from "./styles";
+
+interface APIGoal {
+  id: number;
+  userName: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  iconImage: string | null; // icon 테이블의 icon_image
+  iconColor: string | null; // icon 테이블의 color
+  customImage: string | null;
+  connected_account: string | null;
+  amount: number;
+  percentage: number;
+}
 export interface Goal {
   id: number;
   title: string;
@@ -15,32 +31,65 @@ export interface Goal {
   icon: string;
 }
 
+const transformAPIGoals = (apiGoals: APIGoal[]): Goal[] => {
+  return apiGoals.map((apiGoal) => ({
+    id: apiGoal.id,
+    title: apiGoal.title,
+    startDate: apiGoal.startAt.split("T")[0],
+    endDate: apiGoal.endAt.split("T")[0],
+    color: apiGoal.iconColor || "#718ebf",
+    progress: apiGoal.percentage,
+    icon: apiGoal.iconImage || apiGoal.customImage || travel,
+  }));
+};
+
 export default function Calendar() {
+  const navigate = useNavigate();
   const apiKey: string | undefined = process.env.REACT_APP_CAL_API_KEY;
-  const goals: Goal[] = [
-    {
-      id: 1,
-      title: "프로젝트 완성",
-      startDate: "2024-11-01",
-      endDate: "2024-11-15",
-      color: "#eab308",
-      progress: 20,
-      icon: beer,
-    },
-    {
-      id: 2,
-      title: "여행",
-      startDate: "2024-11-05",
-      endDate: "2024-11-10",
-      color: "#3b82f6",
-      progress: 10,
-      icon: travel,
-    },
-  ];
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
+  const [calendarKey, setCalendarKey] = useState(0);
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:9090/api/goals?activeOnly=false",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch goals");
+        }
+
+        console.log(response);
+
+        const apiGoals: APIGoal[] = await response.json();
+        const transformedGoals = transformAPIGoals(apiGoals);
+        setGoals(transformedGoals);
+
+        // Set first goal as selected if available
+        if (transformedGoals.length > 0 && !selectedGoal) {
+          setSelectedGoal(transformedGoals[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching goals:", error);
+      }
+    };
+
+    fetchGoals();
+  }, []);
 
   // 첫 번째 목표를 기본으로 선택
-  const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(goals[0]);
-  const [calendarKey, setCalendarKey] = useState(0); // 캘린더 강제 재렌더링 상태
+  // const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(
+  // 	goals[0]
+  // );
+  // const [calendarKey, setCalendarKey] = useState(0); // 캘린더 강제 재렌더링 상태
 
   const handleGoalClick = (goal: Goal) => {
     setSelectedGoal(goal);
@@ -83,38 +132,42 @@ export default function Calendar() {
             );
           }
         }
-      }
-    }
 
-    goals.forEach((goal) => {
-      if (formattedDate === goal.startDate || formattedDate === goal.endDate) {
-        const icon = goal.id === 1 ? beer : goal.id === 2 ? travel : "";
-        const img = document.createElement("img");
+        if (
+          formattedDate === selectedGoal.startDate ||
+          formattedDate === selectedGoal.endDate
+        ) {
+          const img = document.createElement("img");
 
-        img.src = icon;
-        img.alt = "Goal Icon";
-        img.style.width = "90px";
-        img.style.position = "relative";
-        img.style.bottom = "5px";
-        img.style.left = "50%";
-        img.style.transform = "translateX(-50%)";
+          img.src = selectedGoal.icon;
+          img.alt = "Goal Icon";
+          img.style.width = "90px";
+          img.style.position = "relative";
+          img.style.bottom = "5px";
+          img.style.left = "50%";
+          img.style.transform = "translateX(-50%)";
 
-        const dayFrame = Array.from(
-          arg.el.getElementsByClassName(
-            "fc-daygrid-day-frame fc-scrollgrid-sync-inner",
-          ),
-        );
+          const dayFrame = Array.from(
+            arg.el.getElementsByClassName(
+              "fc-daygrid-day-frame fc-scrollgrid-sync-inner",
+            ),
+          );
 
-        if (dayFrame.length > 0) {
-          dayFrame.forEach((frame) => frame.append(img.cloneNode(true)));
+          if (dayFrame.length > 0) {
+            dayFrame.forEach((frame) => frame.append(img.cloneNode(true)));
+          }
         }
       }
-    });
+    }
   };
 
   const handleDayCellContent = (args: DayCellContentArg): JSX.Element => {
     const dayNumber = args.dayNumberText.replace("일", "");
     return <div>{dayNumber}</div>;
+  };
+
+  const handleDateSelect = (date: string) => {
+    navigate("/goal", { state: { selectedDate: date } }); // 날짜를 목표 정하기 페이지 state로 전달
   };
 
   return (
@@ -125,9 +178,14 @@ export default function Calendar() {
           apiKey={apiKey}
           handleDayCellDidMount={handleDayCellDidMount}
           handleDayCellContent={handleDayCellContent}
+          onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달
         />
       </CalendarContainer>
-      <GoalList goals={goals} onGoalClick={handleGoalClick} />
+      <GoalList
+        goals={goals}
+        onGoalClick={handleGoalClick}
+        setGoals={setGoals}
+      />
     </Container>
   );
 }
