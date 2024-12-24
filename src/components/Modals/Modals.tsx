@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import ModalsOk from "./ModalsOk";
 import ModalsBackground from "./ModalsBackground";
 import DateSelector from "./DateSelector";
@@ -21,7 +22,9 @@ interface ModalsProps {
   onClose: () => void;
 }
 
-const Modals: React.FC<ModalsProps> = ({ onClose }) => {
+export default function Modals(props: ModalsProps) {
+  const { onClose } = props;
+
   const [startIndex, setStartIndex] = useState(0);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
@@ -29,6 +32,7 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
   const [searchBanks, setSearchBanks] = useState<Bank[]>([]);
   const [isReservationConfirmed, setIsReservationConfirmed] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
+  const [responseStatus, setResponseStatus] = useState<number | null>(null);
 
   // 기본 날짜 세팅
   const today = new Date();
@@ -36,7 +40,7 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
   const [selectedDay, setSelectedDay] = useState(today.getDate());
 
-  const handleReserve = () => {
+  const handleReserve = async () => {
     if (!selectedBank) {
       alert("예약하려는 지점을 선택해주세요.");
       return;
@@ -45,6 +49,40 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
       return;
     }
     setIsReservationConfirmed(true);
+
+    const reservationData = {
+      bankName: selectedBank.name,
+      year: selectedYear,
+      month: selectedMonth,
+      day: selectedDay,
+      time: selectedTime,
+    };
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/google-calendar/insert`,
+        reservationData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      setResponseStatus(response.status);
+
+      if (response.status === 200) {
+        console.log("예약 성공:", response.data);
+        setIsReservationConfirmed(true); // 성공 시 OK 모달로 이동
+      } else {
+        alert("예약 처리 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("예약 실패:", error);
+      alert("Google 연동을 먼저 진행해주세요.");
+    }
   };
 
   const handleTimeSelect = (time: string) => {
@@ -122,8 +160,10 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
         <ModalsOk
           onClose={() => {
             setIsReservationConfirmed(false);
+            setResponseStatus(null);
             onClose();
           }}
+          statusCode={responseStatus}
           selectedBank={selectedBank ? selectedBank.name : null}
           selectedDate={`${selectedYear}-${selectedMonth}-${selectedDay}`}
           selectedTime={selectedTime}
@@ -131,6 +171,4 @@ const Modals: React.FC<ModalsProps> = ({ onClose }) => {
       )}
     </>
   );
-};
-
-export default Modals;
+}

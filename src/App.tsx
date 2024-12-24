@@ -19,6 +19,28 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyPage from "./pages/MyPage/MyPage";
 import AccountConnectionPage from "./pages/AccountConnectionPage/AccountConnectionPage";
 
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTokenRefresh } from "../src/hooks/useTokenRefresh";
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const navigate = useNavigate();
+  useTokenRefresh(); // 토큰 자동 갱신 훅 사용
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  return <>{children}</>;
+};
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -30,14 +52,26 @@ const router = createBrowserRouter([
   },
   {
     path: "/connecting-account",
-    element: <ConnectingAccountPage />,
+    element: (
+      <ProtectedRoute>
+        <ConnectingAccountPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/connecting-account-finish",
-    element: <AccountConnectionPage />,
+    element: (
+      <ProtectedRoute>
+        <AccountConnectionPage />
+      </ProtectedRoute>
+    ),
   },
   {
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -67,7 +101,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",
