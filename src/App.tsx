@@ -52,19 +52,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/connecting-account",
-    element: (
-      <ProtectedRoute>
-        <ConnectingAccountPage />
-      </ProtectedRoute>
-    ),
+    element: <ConnectingAccountPage />,
   },
   {
     path: "/connecting-account-finish",
-    element: (
-      <ProtectedRoute>
-        <AccountConnectionPage />
-      </ProtectedRoute>
-    ),
+    element: <AccountConnectionPage />,
   },
   {
     element: (
