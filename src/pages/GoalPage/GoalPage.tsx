@@ -318,8 +318,6 @@ export default function GoalPage() {
           connectedAccount: parseInt(values.accountId),
         };
 
-        console.log("Request body:", goalRequest);
-
         const method = isEdit ? "PUT" : "POST";
         const url = isEdit
           ? `http://localhost:9090/api/goals/${goalId}`
@@ -335,9 +333,7 @@ export default function GoalPage() {
           body: JSON.stringify(goalRequest),
         });
 
-        console.log("Response status:", response.status);
         const responseData = await response.json();
-        console.log("Response data:", responseData);
 
         if (!response.ok) {
           throw new Error(`Failed to ${isEdit ? "update" : "register"} goal`);

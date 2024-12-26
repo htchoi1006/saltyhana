@@ -74,7 +74,6 @@ export default function Modals(props: ModalsProps) {
       setResponseStatus(response.status);
 
       if (response.status === 200) {
-        console.log("예약 성공:", response.data);
         setIsReservationConfirmed(true); // 성공 시 OK 모달로 이동
       } else {
         alert("예약 처리 중 오류가 발생했습니다.");
@@ -87,7 +86,6 @@ export default function Modals(props: ModalsProps) {
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    console.log("선택된 시간:", time);
   };
 
   return (
