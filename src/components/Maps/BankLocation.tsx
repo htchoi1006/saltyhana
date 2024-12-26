@@ -116,7 +116,7 @@ const BankLocation: React.FC<BankLocationProps> = ({
             setNearbyBanks([]); // 주변 검색 결과 초기화
             setNearbyBanksState([]); // 상태 초기화
             onSearchResults([]); // 부모에게 빈 리스트 전달
-            console.log("주변 은행 검색 결과가 없습니다.");
+            console.error("주변 은행 검색 결과가 없습니다.");
           }
         } else {
           console.error("주변 검색 실패:", status);
@@ -133,8 +133,6 @@ const BankLocation: React.FC<BankLocationProps> = ({
   const searchQueryBanks = (query: string, lat: number, lng: number) => {
     const places = new window.kakao.maps.services.Places();
     places.keywordSearch(`하나은행 ${query}`, (data, status) => {
-      console.log(data); // 검색 결과 출력
-      console.log(status); // 상태 출력
       if (status === window.kakao.maps.services.Status.OK) {
         const results: Bank[] = data
           .filter(

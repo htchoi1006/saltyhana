@@ -62,7 +62,6 @@ export default function HomePage() {
 
         const data: DashBoardResponseDTO[] = await response.json();
         setDashBoardData(data);
-        console.log(data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }

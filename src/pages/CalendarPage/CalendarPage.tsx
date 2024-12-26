@@ -67,8 +67,6 @@ export default function Calendar() {
           throw new Error("Failed to fetch goals");
         }
 
-        console.log(response);
-
         const apiGoals: APIGoal[] = await response.json();
         const transformedGoals = transformAPIGoals(apiGoals);
         setGoals(transformedGoals);
@@ -191,8 +189,6 @@ export default function Calendar() {
       if (!authUrl) {
         throw new Error("No authentication URL received");
       }
-
-      console.log("Authentication URL received:", authUrl);
 
       // 브라우저를 Google 인증 URL로 이동
       window.location.href = authUrl;

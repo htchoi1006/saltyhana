@@ -96,7 +96,7 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
   return (
     <StyledGoalContainer>
       <GoalContainerDiv>
-        <GoalContainerHeader>{userName} 님의 현재 목표</GoalContainerHeader>
+        <GoalContainerHeader>{userName}님의 현재 목표</GoalContainerHeader>
         <GoalTitle>{goal}</GoalTitle>
         <GoalDate>{goalPeriod}</GoalDate>
         <ProgressContainer>

@@ -69,13 +69,19 @@ export default function Header() {
           ...prev,
           profileImage: data.profileImg || "",
         }));
+
+        localStorage.setItem("name", data.name);
       } catch (err) {
         console.error("Error fetching user data:", err);
       }
     };
 
-    fetchUserData();
-  }, [setUser]);
+    if (!localStorage.getItem("name")) {
+      fetchUserData();
+    }
+
+    setUserName(localStorage.getItem("name") || "");
+  }, []);
 
   const pathName = location.pathname;
 

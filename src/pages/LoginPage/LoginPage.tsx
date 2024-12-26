@@ -9,7 +9,6 @@ import {
   InputsWrapper,
   StyledButton,
 } from "../SignupPage/styles";
-import { StyledLink } from "./styles";
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
@@ -22,6 +21,36 @@ export default function LoginPage() {
   const emailInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isResetMode, setIsResetMode] = useState(false);
+
+  const getUserNameApi = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await fetch(
+        "http://localhost:9090/api/users/me/simple",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("사용자 정보를 가져오는 중 문제가 발생하였습니다.");
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+    }
+  };
 
   const handleLoginApi = async (loginData: {
     identifier: string;
@@ -121,7 +150,7 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      const response = await handleLoginApi({
+      const loginResponse = await handleLoginApi({
         identifier,
         password,
       });
@@ -129,13 +158,19 @@ export default function LoginPage() {
       const userInfo = {
         identifier,
         isLoggedIn: true,
-        accessToken: response.accessToken,
-        refreshToken: response.refreshToken,
+        accessToken: loginResponse.accessToken,
+        refreshToken: loginResponse.refreshToken,
       };
 
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      localStorage.setItem("accessToken", response.accessToken);
-      localStorage.setItem("refreshToken", response.refreshToken);
+      localStorage.setItem("accessToken", loginResponse.accessToken);
+      localStorage.setItem("refreshToken", loginResponse.refreshToken);
+
+      const response = await getUserNameApi();
+
+      if (response.name) {
+        localStorage.setItem("name", response.name);
+      }
 
       navigate("/home");
     } catch (error) {
