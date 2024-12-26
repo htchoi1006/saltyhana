@@ -45,10 +45,11 @@ const transformAPIGoals = (apiGoals: APIGoal[]): Goal[] => {
 
 export default function Calendar() {
   const navigate = useNavigate();
-  const apiKey: string | undefined = process.env.REACT_APP_CAL_API_KEY;
   const [goals, setGoals] = useState<Goal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
   const [calendarKey, setCalendarKey] = useState(0);
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -66,6 +67,8 @@ export default function Calendar() {
         if (!response.ok) {
           throw new Error("Failed to fetch goals");
         }
+
+        console.log(response);
 
         const apiGoals: APIGoal[] = await response.json();
         const transformedGoals = transformAPIGoals(apiGoals);
@@ -168,12 +171,69 @@ export default function Calendar() {
     navigate("/goal", { state: { selectedDate: date } }); // 날짜를 목표 정하기 페이지 state로 전달
   };
 
-  const handleLoadCalendar = async () => {
+  const fetchCalendarEvents = async () => {
     try {
-      const response = await fetch(
+      const eventsResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "application/json",
+          },
+        },
+      );
+
+      if (eventsResponse.ok) {
+        const events = await eventsResponse.json();
+        const formattedEvents = events.map((event: any) => ({
+          id: event.id,
+          title: event.summary,
+          start: event.start,
+          url: event.htmlLink,
+        }));
+        setCalendarEvents(formattedEvents);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      console.error("Error fetching calendar events:", error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  // 인증이 필요한 경우에만 구글 Oauth 팝업을 띄움
+  const authenticateAndFetchEvents = async () => {
+    try {
+      // 먼저 이벤트를 직접 가져오기 시도
+      const eventsResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "application/json",
+          },
+        },
+      );
+
+      // 이벤트를 가져오는 데 성공하면 인증 과정 스킵
+      if (eventsResponse.ok) {
+        const events = await eventsResponse.json();
+        const formattedEvents = events.map((event: any) => ({
+          id: event.id,
+          title: event.summary,
+          start: event.start,
+          url: event.htmlLink,
+        }));
+        setCalendarEvents(formattedEvents);
+        setIsAuthenticated(true);
+        return;
+      }
+
+      // 인증이 필요한 경우에만 팝업으로 권한 받기
+      const authResponse = await fetch(
         `${process.env.REACT_APP_API_URL}/google-calendar/auth`,
         {
-          method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             accept: "*/*",
@@ -181,19 +241,53 @@ export default function Calendar() {
         },
       );
 
-      if (!response.ok) {
+      if (!authResponse.ok) {
         throw new Error("Failed to authenticate");
       }
 
-      const authUrl = await response.text();
+      const authUrl = await authResponse.text();
       if (!authUrl) {
         throw new Error("No authentication URL received");
       }
 
-      // 브라우저를 Google 인증 URL로 이동
-      window.location.href = authUrl;
+      const popup = window.open(
+        authUrl,
+        "googleAuth",
+        "width=600,height=600,left=100,top=100",
+      );
+
+      await new Promise<void>((resolve, reject) => {
+        const checkPopup = setInterval(() => {
+          if (!popup || popup.closed) {
+            clearInterval(checkPopup);
+            resolve();
+          }
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(checkPopup);
+          reject(new Error("Authentication timeout"));
+        }, 60000);
+      });
+
+      // 팝업이 닫힌 후 이벤트 가져오기
+      await fetchCalendarEvents();
     } catch (error) {
       console.error("Error during authentication:", error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  // 페이지 로드 시 자동으로 이벤트 가져오기
+  useEffect(() => {
+    fetchCalendarEvents();
+  }, []);
+
+  const handleLoadCalendar = async () => {
+    try {
+      await authenticateAndFetchEvents();
+    } catch (error) {
+      console.error("Error handling calendar load:", error);
     }
   };
 
@@ -203,7 +297,7 @@ export default function Calendar() {
         <CloseButton onClick={handleLoadCalendar}>구글 연동</CloseButton>
         <MonthCalendar
           calendarKey={calendarKey}
-          apiKey={apiKey}
+          events={calendarEvents}
           handleDayCellDidMount={handleDayCellDidMount}
           handleDayCellContent={handleDayCellContent}
           onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달

@@ -8,7 +8,12 @@ import { FullCalendarWrapper } from "./styles";
 
 interface CustomCalendarProps {
   calendarKey: number;
-  apiKey?: string;
+  events?: Array<{
+    id: string;
+    title: string; // summary
+    start: string; // startDate
+    url?: string; // htmlLink
+  }>;
   handleDayCellDidMount: (arg: DayCellMountArg) => void;
   handleDayCellContent: (args: DayCellContentArg) => JSX.Element;
   onDateClick: (date: string) => void;
@@ -17,7 +22,7 @@ interface CustomCalendarProps {
 export default function MonthCalendar(props: CustomCalendarProps) {
   const {
     calendarKey,
-    apiKey,
+    events = [],
     handleDayCellDidMount,
     handleDayCellContent,
     onDateClick,
@@ -32,11 +37,7 @@ export default function MonthCalendar(props: CustomCalendarProps) {
         height={800}
         showNonCurrentDates={false}
         fixedWeekCount={false}
-        googleCalendarApiKey={apiKey}
-        events={{
-          googleCalendarId: "hyuktae.choi@gmail.com",
-          className: "gcal-event",
-        }}
+        events={events}
         headerToolbar={{
           left: "prev",
           center: "title",
@@ -66,6 +67,12 @@ export default function MonthCalendar(props: CustomCalendarProps) {
         dayCellContent={handleDayCellContent}
         dateClick={(info) => {
           onDateClick(info.dateStr); // 날짜 클릭 시 부모 컴포넌트로 날짜 전달
+        }}
+        eventClick={(info) => {
+          if (info.event.url) {
+            window.open(info.event.url);
+            info.jsEvent.preventDefault(); // 새 탭에서 열기
+          }
         }}
       />
     </FullCalendarWrapper>
