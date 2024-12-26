@@ -29,12 +29,12 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const navigate = useNavigate();
-  useTokenRefresh(); // 토큰 자동 갱신 훅 사용
+  useTokenRefresh();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      navigate("/login");
+      navigate("/");
     }
   }, [navigate]);
 
