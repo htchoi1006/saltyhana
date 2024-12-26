@@ -15,7 +15,7 @@ import {
 } from "./styles";
 import dayjs from "dayjs";
 interface WeekdayCalendarProps {
-  dates: WeekDayType[]; // 외부에서 전달받은 dates 데이터
+  dates: WeekDayType[];
 }
 
 export default function WeekdayCalendar({ dates }: WeekdayCalendarProps) {
@@ -25,6 +25,10 @@ export default function WeekdayCalendar({ dates }: WeekdayCalendarProps) {
   // 현재 날짜 이전 날짜 중 Achieve가 70% 이상 : smile, 50% ~ 60% : neutral, 그 이하 : sad
   const stateImg = useMemo(() => {
     const today = new Date();
+    if (!dates || dates.length === 0 || dates[0] === null) {
+      return smile2;
+    }
+
     const todayIndex = dates.findIndex(({ date }) => {
       return (
         date.getFullYear() === today.getFullYear() &&
