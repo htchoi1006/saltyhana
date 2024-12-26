@@ -69,7 +69,7 @@ export const Info = styled.p`
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
-  white-space: pre-line;
+  white-space: pre-line !important;
   line-height: 1.5;
   bottom: 20px;
   left: 18px;
