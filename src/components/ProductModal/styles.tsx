@@ -49,3 +49,21 @@ export const CloseButton = styled.button`
   color: #555;
   font-size: 28px;
 `;
+
+export const SearchIcon = styled.button`
+  position: absolute;
+  top: 5.3%;
+  right: 11%;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 35px;
+    height: 35px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;

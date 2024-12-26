@@ -71,9 +71,9 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
     ],
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (productLink: string) => {
     if (modalManagerRef.current) {
-      modalManagerRef.current.openModal("상담선택"); // 상담 선택 모달 열기
+      modalManagerRef.current.openModal("상담선택", productLink); // 링크 전달
     }
   };
 
@@ -82,7 +82,11 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
       <ModalManager ref={modalManagerRef} />
       <StyledSlider {...settings}>
         {products.map((product, index) => (
-          <div key={index} onClick={handleCardClick}>
+          // <div key={index} onClick={handleCardClick}>
+          <div
+            key={index}
+            onClick={() => handleCardClick(product.productLink || "")}
+          >
             <ProductCard
               product={product}
               color={fixedStyles[index]?.color}

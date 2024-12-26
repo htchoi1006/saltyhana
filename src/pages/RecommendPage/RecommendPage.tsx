@@ -30,6 +30,7 @@ interface ProductData {
   description: string;
   name: string;
   tendency: string | null;
+  productList: string | null;
 }
 
 const fetchRecommendedProducts = async () => {
@@ -89,6 +90,7 @@ export default function RecommendPage() {
     title: product.title,
     subtitle: product.subTitle,
     description: product.description,
+    productLink: product.productList,
   }));
 
   return (
