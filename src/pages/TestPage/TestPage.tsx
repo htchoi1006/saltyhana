@@ -149,11 +149,7 @@ const TestPage: React.FC = () => {
     if (currentQuestionIndex === 9) {
       await sendTestResult();
       const consumptionType = await fetchTestResult();
-      if (consumptionType != null) {
-        await fetchRecommendedProducts();
-
-        navigate(`/result/consumption`, { state: { type: consumptionType } });
-      }
+      navigate(`/ad`, { state: { type: consumptionType } });
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
