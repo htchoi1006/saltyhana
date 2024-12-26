@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductList from "./ProductList";
-
 import ConsumeTestImage from "../../images/ConsumeTestImage.png";
 import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 import {
   BodyWrapper,
@@ -32,68 +32,57 @@ interface ProductData {
   tendency: string | null;
 }
 
+const fetchRecommendedProducts = async () => {
+  try {
+    const response = await fetch(
+      `http://localhost:9090/api/products/recommend`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          accept: "*/*",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("추천 상품을 불러오는데 문제가 발생하였습니다.");
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("추천 상품을 불러오는데 문제가 발생하였습니다.");
+  }
+};
+
 export default function RecommendPage() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  //임시 생성
-  // const productList = [
-  // 	{
-  // 		title: "369 정기예금",
-  // 		subtitle: "3개월마다 중도해지 혜택",
-  // 		color: "#E6F8E0",
-  // 		image: ConsumeTestImage, // 이미지 경로를 실제 이미지로 변경하세요.
-  // 		description: "연(세전, 1년)\n연 4.50% ~ 6.00%",
-  // 	},
-  // 	{
-  // 		title: "트래블로그 여행 적금",
-  // 		subtitle: "여행 준비의 시작",
-  // 		color: "#f2f2f2",
-  // 		image: ConsumeTestImage, // 이미지 경로를 실제 이미지로 변경하세요.
-  // 		description: "연(세전, 1년)\n연 2.40% ~ 4.40%",
-  // 	},
-  // ];
+
   useEffect(() => {
-    const fetchProducts = async () => {
+    const loadProducts = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        const recommendedProducts = await fetchRecommendedProducts();
 
-        if (!accessToken) {
-          throw new Error("No access token found");
+        if (recommendedProducts) {
+          setProducts(recommendedProducts);
+          setIsLoading(false);
         }
-
-        const response = await fetch(
-          "http://localhost:9090/api/products/recommend",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              accept: "*/*",
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new Error(error.message);
         }
-
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setIsLoading(false);
       }
     };
 
-    fetchProducts();
+    loadProducts();
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
+    return <LoadingSpinner />;
   }
 
   const formattedProducts = products.map((product) => ({

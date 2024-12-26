@@ -19,7 +19,6 @@ interface QuestionContent {
 const TestPage: React.FC = () => {
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // 현재 질문 번호
-  const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState<number[]>(Array(10).fill(null)); // 질문별 점수 상태
   const [questions, setQuestions] = useState<Question | null>(null);
 
@@ -115,6 +114,30 @@ const TestPage: React.FC = () => {
     }
   };
 
+  const fetchRecommendedProducts = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:9090/api/products/recommend`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("추천 상품을 불러오는데 문제가 발생하였습니다.");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("추천 상품을 불러오는데 문제가 발생하였습니다.");
+    }
+  };
+
   // 선택지 클릭 시 점수 처리 함수
   const handleSelectionClick = async (points: number) => {
     const updatedAnswers = [...answers];
@@ -126,7 +149,11 @@ const TestPage: React.FC = () => {
     if (currentQuestionIndex === 9) {
       await sendTestResult();
       const consumptionType = await fetchTestResult();
-      navigate(`/result/consumption`, { state: { type: consumptionType } });
+      if (consumptionType != null) {
+        await fetchRecommendedProducts();
+
+        navigate(`/result/consumption`, { state: { type: consumptionType } });
+      }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
