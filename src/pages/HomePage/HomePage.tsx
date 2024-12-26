@@ -22,21 +22,23 @@ interface DashBoardResponseDTO {
     currentMoney: number;
     totalMoney: number;
     percentage: number;
-  };
+  } | null;
   weekdayCalendar: {
     weekday: {
       date: string;
       isAchieve: boolean;
     }[];
-  };
-  bestProductList: {
-    id: number;
-    title: string;
-    type: string;
-    subtitle: string;
-    imageUrl: string;
-    description: string;
-  }[];
+  } | null;
+  bestProductList:
+    | {
+        id: number;
+        title: string;
+        type: string;
+        subtitle: string;
+        imageUrl: string;
+        description: string;
+      }[]
+    | null;
 }
 
 export default function HomePage() {
@@ -74,23 +76,20 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
 
-  const weekDays: WeekDayType[] = dashBoardData[
-    currentIndex
-  ].weekdayCalendar.weekday.map((day) => ({
-    date: new Date(day.date),
-    isAchieve: day.isAchieve,
-  }));
+  const weekDays: WeekDayType[] =
+    dashBoardData[currentIndex]?.weekdayCalendar?.weekday?.map((day) => ({
+      date: new Date(day.date),
+      isAchieve: day.isAchieve,
+    })) || [];
 
-  const products: ProductType[] = dashBoardData[
-    currentIndex
-  ].bestProductList.map((product) => ({
-    title: product.title,
-    subtitle: product.subtitle,
-    image: product.imageUrl,
-    description: product.description,
-    color: "#FFFFFF",
-  }));
-
+  const products: ProductType[] =
+    dashBoardData[currentIndex]?.bestProductList?.map((product) => ({
+      title: product.title,
+      subtitle: product.subtitle,
+      image: product.imageUrl,
+      description: product.description,
+      color: "#FFFFFF",
+    })) || [];
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
     const scrollPosition = container.scrollLeft;
@@ -104,16 +103,16 @@ export default function HomePage() {
       <CarouselContainer>
         <CarouselWrapper className="carousel-container" onScroll={handleScroll}>
           {dashBoardData.map((data, index) => (
-            <div className="carousel-item" key={data.goal.id}>
+            <div className="carousel-item" key={data?.goal?.id || index}>
               <GoalContainer
-                goal={data.goal.title}
-                goalPeriod={data.goal.goalPeriod}
-                iconImage={data.goal.iconImage}
-                customImage={data.goal.customImage}
-                percentage={data.goal.percentage}
-                totalMoney={data.goal.totalMoney}
-                currentMoney={data.goal.currentMoney}
-                userName={data.goal.userName}
+                goal={data?.goal?.title || null}
+                goalPeriod={data?.goal?.goalPeriod || null}
+                iconImage={data?.goal?.iconImage || undefined}
+                customImage={data?.goal?.customImage || undefined}
+                percentage={data?.goal?.percentage || 0}
+                totalMoney={data?.goal?.totalMoney || 0}
+                currentMoney={data?.goal?.currentMoney || 0}
+                userName={data?.goal?.userName || null}
               />
             </div>
           ))}
@@ -137,7 +136,7 @@ export default function HomePage() {
           ))}
         </NavigationDots>
       </CarouselContainer>
-      <WeekdayCalendar dates={weekDays} />
+      {weekDays && weekDays.length > 0 && <WeekdayCalendar dates={weekDays} />}
       <ProductList products={products} />
     </PageContainer>
   );
