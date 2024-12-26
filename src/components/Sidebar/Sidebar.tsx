@@ -41,6 +41,9 @@ export default function Sidebar() {
     }
 
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("name");
 
     // 루트 페이지로 이동
     navigate("/");

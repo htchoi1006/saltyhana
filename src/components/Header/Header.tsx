@@ -89,7 +89,7 @@ export default function Header() {
     <FixedHeader>
       <HeaderBox>
         <div style={{ display: "flex", flex: 1 }}>
-          <HeaderLink to="/">
+          <HeaderLink to="/home">
             <HanaLogo src={pig} />
             <HanaLogoDiv>하나 리치</HanaLogoDiv>
           </HeaderLink>
