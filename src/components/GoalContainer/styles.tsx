@@ -102,6 +102,17 @@ export const ProgressContainer = styled.div`
   align-items: center;
 `;
 
+// export const RunnerContainer = styled.div<{ leftPosition: number }>`
+//   position: absolute;
+//   display: flex;
+//   align-items: center;
+//   gap: 1px;
+//   bottom: 100%;
+//   left: ${({ leftPosition }) => `calc(${leftPosition}% - 20px)`};
+//   transition: left 1.5s ease-in-out;
+//   margin-bottom: 10px;
+// `;
+
 export const RunnerContainer = styled.div<{ leftPosition: number }>`
   position: absolute;
   display: flex;
@@ -111,6 +122,19 @@ export const RunnerContainer = styled.div<{ leftPosition: number }>`
   left: ${({ leftPosition }) => `calc(${leftPosition}% - 20px)`};
   transition: left 1.5s ease-in-out;
   margin-bottom: 10px;
+  animation: float 2.5s ease-in-out infinite;
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
 `;
 
 export const ProgressPercentage = styled.div`
