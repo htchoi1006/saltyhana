@@ -90,6 +90,23 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
     return () => clearTimeout(startDelay);
   }, [percentage]);
 
+  let dailyTarget = 0;
+  if (goalPeriod) {
+    const [startDate, endDate] = goalPeriod
+      .split("~")
+      .map((date) => date.trim());
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // 두 날짜 사이의 일수 계산
+    const timeDiff = end.getTime() - start.getTime();
+    const periodDays = timeDiff / (1000 * 3600 * 24);
+
+    if (periodDays > 0) {
+      dailyTarget = Math.round(totalMoney / periodDays); // 하루에 모아야 할 금액
+    }
+  }
+
   // customImage 또는 iconImage 중 유효한 이미지를 선택
   const imageToDisplay = customImage || iconImage || travel; // 기본값으로 travel 이미지를 설정
 
@@ -98,7 +115,9 @@ const GoalProgressContainer = (props: GoalContainerProps) => {
       <GoalContainerDiv>
         <GoalContainerHeader>{userName}님의 현재 목표</GoalContainerHeader>
         <GoalTitle>{goal}</GoalTitle>
-        <GoalDate>{goalPeriod}</GoalDate>
+        <GoalDate>
+          {goalPeriod} (매일 {dailyTarget.toLocaleString()}원)
+        </GoalDate>
         <ProgressContainer>
           <ProgressBar>
             <Progress style={{ width: `${currentProgress}%` }} />

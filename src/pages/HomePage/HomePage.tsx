@@ -28,7 +28,7 @@ interface DashBoardResponseDTO {
       date: string;
       isAchieve: boolean;
     }[];
-  } | null;
+  };
   bestProductList:
     | {
         id: number;
@@ -76,11 +76,23 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
 
-  const weekDays: WeekDayType[] =
-    dashBoardData[currentIndex]?.weekdayCalendar?.weekday?.map((day) => ({
-      date: new Date(day.date),
-      isAchieve: day.isAchieve,
-    })) || [];
+  const weekDays: WeekDayType[] = dashBoardData[currentIndex]?.weekdayCalendar
+    ?.weekday
+    ? dashBoardData[currentIndex]?.weekdayCalendar?.weekday.map((day) => ({
+        date: new Date(day.date),
+        isAchieve: day.isAchieve,
+      }))
+    : Array(11)
+        .fill(null)
+        .map((_, index) => {
+          const date = new Date();
+          date.setDate(date.getDate() - (10 - index));
+
+          return {
+            date,
+            isAchieve: false,
+          };
+        });
 
   const products: ProductType[] =
     dashBoardData[currentIndex]?.bestProductList?.map((product) => ({
@@ -136,7 +148,7 @@ export default function HomePage() {
           ))}
         </NavigationDots>
       </CarouselContainer>
-      {weekDays && weekDays.length > 0 && <WeekdayCalendar dates={weekDays} />}
+      <WeekdayCalendar dates={weekDays} />
       <ProductList products={products} />
     </PageContainer>
   );
