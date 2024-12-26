@@ -37,6 +37,7 @@ interface DashBoardResponseDTO {
         subtitle: string;
         imageUrl: string;
         description: string;
+        productLink: string;
       }[]
     | null;
 }
@@ -100,6 +101,7 @@ export default function HomePage() {
       subtitle: product.subtitle,
       image: product.imageUrl,
       description: product.description,
+      productLink: product.productLink,
       color: "#FFFFFF",
     })) || [];
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {

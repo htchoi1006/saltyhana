@@ -5,6 +5,7 @@ export type ProductType = {
   color?: string;
   opacity?: number; // opacity를 선택적 속성으로 추가
   description: string;
+  productLink: string | null;
 };
 
 export type WeekDayType = {

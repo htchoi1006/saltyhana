@@ -4,18 +4,23 @@ import {
   Icon,
   Title,
   CloseButton,
+  SearchIcon,
 } from "./styles";
 import ftof from "../../images/modal_reserve_facetoface.png";
 import chat from "../../images/modal_reserve_chat.png";
 import ModalsBackground from "../Modals/ModalsBackground";
-
+import document from "../../images/document.png";
 interface ModalsProps {
   openModal: (modalName: string) => void;
   onClose: () => void;
 }
 
-export default function ChoiceCounsel(props: ModalsProps) {
-  const { onClose, openModal } = props;
+// export default function ChoiceCounsel(props: ModalsProps) {
+//   const { onClose, openModal } = props;
+export default function ChoiceCounsel(
+  props: ModalsProps & { productLink?: string | null },
+) {
+  const { onClose, openModal, productLink } = props;
 
   const handleFaceToFaceClick = () => {
     onClose(); // 현재 모달 먼저 닫고
@@ -27,9 +32,20 @@ export default function ChoiceCounsel(props: ModalsProps) {
     openModal("채팅모달");
   };
 
+  const handleUrlClick = () => {
+    if (productLink) {
+      window.open(productLink, "_blank"); // Open product link in a new tab
+    } else {
+      console.error("Product link is not provided.");
+    }
+  };
+
   return (
     <ModalsBackground onClose={onClose}>
       <ChoiceContainer>
+        <SearchIcon onClick={handleUrlClick} title="검색">
+          <img src={document} alt="상품조회" />
+        </SearchIcon>
         <CloseButton onClick={onClose} title="닫기">
           ✖
         </CloseButton>
