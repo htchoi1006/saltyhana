@@ -33,7 +33,7 @@ const fadeIn = keyframes`
   }
   to {
     opacity: 1;
-    transform: translateY(0);MNL
+    transform: translateY(0);
   }
 `;
 
@@ -110,7 +110,7 @@ export const InputContainer = styled.div`
   align-items: center;
   gap: 8px;
   width: 300px; // 기존 380px에서 변경
-  height: 47px
+  height: 47px;
   font-family: "Noto Sans KR";
   border: 1px solid lightgray;
 
