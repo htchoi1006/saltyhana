@@ -117,6 +117,7 @@ export default function GoalPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isEdit, goalId, goalData } = location.state || {};
+  console.log(goalId);
 
   const determineCategory = (goalType: number | undefined) => {
     if (!goalType) return "";
