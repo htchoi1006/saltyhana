@@ -1,5 +1,16 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import googleLogo from "../../images/google_logo.png";
+
+const slideUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -19,9 +30,8 @@ export const CalendarContainer = styled.div`
 
 export const AuthMessage = styled.div`
   position: fixed;
-  top: 4%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0.8em;
+  left: 30%;
   width: 40%;
   background-color: rgba(0, 132, 133, 0.8);
   border-radius: 20px;
@@ -31,6 +41,18 @@ export const AuthMessage = styled.div`
   z-index: 1000;
   font-weight: bold;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  animation: ${slideUp} 0.5s ease-out;
+`;
+
+export const WarningIcon = styled.span`
+  margin: 0 7px;
+  user-select: none;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 export const ButtonConnect = styled.button`
