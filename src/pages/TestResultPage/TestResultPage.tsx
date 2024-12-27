@@ -67,7 +67,7 @@ function TestResult(props: Props) {
           marginBottom: "40px",
         }}
       >
-        <StyledLink to="/home">
+        <StyledLink to="/recommend">
           <span>메인으로</span>
         </StyledLink>
       </div>
