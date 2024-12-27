@@ -339,14 +339,16 @@ export default function GoalPage() {
 
         // 모달 열기를 try 블록 안에서 실행
         if (modalManagerRef.current) {
-          modalManagerRef.current.openModal(isEdit ? "목표수정" : "목표등록");
+          modalManagerRef.current.openModal("목표수정등록");
         }
       } catch (error) {
         console.error(
           `Failed to ${isEdit ? "update" : "register"} goal:`,
           error,
         );
-        alert(`목표 ${isEdit ? "수정" : "등록"}에 실패했습니다.`);
+        if (modalManagerRef.current) {
+          modalManagerRef.current.openModal("목표관리실패");
+        }
       }
     } else {
       alert(
@@ -664,7 +666,11 @@ export default function GoalPage() {
         <styled.RegisterButton onClick={handleRegister}>
           {isEdit ? "수정하기" : "등록하기"}
         </styled.RegisterButton>
-        <ModalManager ref={modalManagerRef} />
+        <ModalManager
+          ref={modalManagerRef}
+          isGoalEdit={isEdit}
+          state={isEdit ? "수정" : "등록"}
+        />
       </styled.Container>
     </>
   );

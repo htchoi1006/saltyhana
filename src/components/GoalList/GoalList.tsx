@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   GoalListContainer,
@@ -19,6 +19,7 @@ import { Goal } from "../../pages/CalendarPage/CalendarPage";
 import { Link } from "react-router-dom";
 import editIcon from "../../images/edit.png";
 import deleteIcon from "../../images/delete.png";
+import ModalManager, { ModalManagerType } from "../Modals/ModalManager";
 
 interface GoalListProps {
   goals: Goal[];
@@ -29,6 +30,8 @@ interface GoalListProps {
 export default function GoalList(props: GoalListProps) {
   const navigate = useNavigate();
   const { goals, onGoalClick, setGoals } = props;
+  const [selectedGoalId, setSelectedGoalId] = useState<number | null>(null);
+  const modalManagerRef = useRef<ModalManagerType>(null);
 
   // 목표들을 정렬하는 함수
   const sortGoals = (goalsToSort: Goal[]) => {
@@ -65,12 +68,10 @@ export default function GoalList(props: GoalListProps) {
     onGoalClick(goal);
   };
 
-  const handleDelete = async (goalId: number, event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent triggering the goal click event
-
+  const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/calendar/goals/${goalId}`,
+        `http://localhost:9090/api/calendar/goals/${selectedGoalId}`,
         {
           method: "DELETE",
           headers: {
@@ -85,11 +86,11 @@ export default function GoalList(props: GoalListProps) {
       }
 
       // Update local state
-      const updatedGoals = goals.filter((goal) => goal.id !== goalId);
+      const updatedGoals = goals.filter((goal) => goal.id !== selectedGoalId);
       setGoals(updatedGoals);
 
       // If the deleted goal was active, select the first remaining goal
-      if (String(goalId) === activeGoalId) {
+      if (String(selectedGoalId) === activeGoalId) {
         const { activeGoals } = sortGoals(updatedGoals);
         if (activeGoals.length > 0) {
           setActiveGoalId(String(activeGoals[0].id));
@@ -98,9 +99,12 @@ export default function GoalList(props: GoalListProps) {
           setActiveGoalId(null);
         }
       }
+      modalManagerRef.current?.closeModal();
     } catch (error) {
       console.error("Error deleting goal:", error);
-      alert("목표 삭제에 실패했습니다. 다시 시도해주세요.");
+      if (modalManagerRef.current) {
+        modalManagerRef.current.openModal("목표관리실패");
+      }
     }
   };
 
@@ -180,8 +184,15 @@ export default function GoalList(props: GoalListProps) {
       });
     } catch (error) {
       console.error("Error fetching goal details:", error);
-      alert("목표 정보를 불러오는데 실패했습니다.");
+      if (modalManagerRef.current) {
+        modalManagerRef.current.openModal("목표관리실패");
+      }
     }
+  };
+
+  const handleCancel = () => {
+    setSelectedGoalId(null);
+    modalManagerRef.current?.closeModal();
   };
 
   const renderGoalItem = (goal: Goal) => (
@@ -218,7 +229,11 @@ export default function GoalList(props: GoalListProps) {
       </ProgressBar>
       <DeleteButton
         src={deleteIcon}
-        onClick={(e) => handleDelete(goal.id, e)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedGoalId(goal.id);
+          modalManagerRef.current?.openModal("목표삭제확인"); // 모달 열기
+        }}
       />
     </GoalItem>
   );
@@ -247,6 +262,12 @@ export default function GoalList(props: GoalListProps) {
             <span>목표설정</span>
           </GoalRegisterButton>
         </Link>
+        <ModalManager
+          ref={modalManagerRef}
+          onConfirm={handleDelete}
+          onCancel={handleCancel}
+          state={"삭제"}
+        />
       </div>
     </GoalListContainer>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PageContainer } from "./styles";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
 import GoalContainer from "../../components/GoalContainer/GoalContainer";
 import ProductList from "../RecommendPage/ProductList";
@@ -74,7 +75,7 @@ export default function HomePage() {
   }, []);
 
   if (dashBoardData.length === 0) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   const weekDays: WeekDayType[] = dashBoardData[currentIndex]?.weekdayCalendar

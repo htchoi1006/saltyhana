@@ -188,6 +188,20 @@ export const CloseButton = styled.button`
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: #757575;
+  }
+`;
+
+export const ExtendGoalButton = styled.button`
+  background: #9e9e9e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
   cursor: pointer;
 
   &:hover {
