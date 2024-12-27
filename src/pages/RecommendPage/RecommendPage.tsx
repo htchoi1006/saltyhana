@@ -34,6 +34,7 @@ interface ProductData {
   description: string;
   name: string;
   tendency: string | null;
+  link: string | null;
   productList: string | null;
 }
 
@@ -97,7 +98,7 @@ export default function RecommendPage() {
     title: product.title,
     subtitle: product.subTitle,
     description: product.description,
-    productLink: product.productList,
+    productLink: product.link,
   }));
 
   return (
