@@ -65,38 +65,6 @@ export const InfoIconWrapper = styled.div`
   margin-left: 10px;
 `;
 
-// export const InfoTooltip = styled.div`
-// 	font-family: "Noto Sans KR";
-// 	position: absolute;
-// 	z-index: 50;
-// 	width: 300px;
-// 	padding: 12px;
-// 	background-color: rgba(52, 52, 52, 0.8);
-// 	border-radius: 8px;
-// 	top: calc(50% + 20px);
-// 	left: calc(100%); // InformationIcon 오른쪽으로 10px 띄움
-// 	transform: translateY(-50%); // 세로 중앙 정렬
-
-// 	&:after {
-// 		content: "";
-// 		position: absolute;
-// 		left: -6px; // 왼쪽으로 화살표 이동
-// 		top: 40%;
-// 		width: 12px;
-// 		height: 12px;
-// 		background-color: rgba(52, 52, 52, 0.8);
-// 		transform: translateY(-50%) rotate(45deg); // 화살표 왼쪽 방향으로 변경
-// 	}
-
-// 	p {
-// 		margin: 0;
-// 		font-size: 13px;
-// 		line-height: 1.5;
-// 		color: white;
-// 		word-break: keep-all;
-// 	}
-// `;
-
 export const InfoTooltip = styled.div`
   position: absolute;
   z-index: 50;

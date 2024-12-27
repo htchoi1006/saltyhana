@@ -114,7 +114,10 @@ export default function RecommendPage() {
               />
               {showTooltip && (
                 <InfoTooltip>
-                  <p>{recommendReason}</p>
+                  <p>
+                    {recommendReason ||
+                      "하나은행 인기 금융 상품을 누르고 상담을 받아보세요"}
+                  </p>
                 </InfoTooltip>
               )}
             </InfoIconWrapper>
