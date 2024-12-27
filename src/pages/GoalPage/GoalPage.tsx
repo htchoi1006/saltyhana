@@ -285,7 +285,6 @@ export default function GoalPage() {
   };
 
   const handleRegister = async () => {
-    // 필수 필드만 체크
     const requiredFields = {
       name: values.name,
       amount: values.amount,
@@ -307,13 +306,11 @@ export default function GoalPage() {
           startDate: values.startDate || selectedDate,
           endDate: values.endDate,
           goalType: categoryToNumber[values.category],
-          // 사용자 정의 이미지가 있으면 iconId는 null로, 없으면 선택된 아이콘의 ID
           iconId: values.image
             ? null
             : selectedIcon
               ? iconToNumber[selectedIcon]
               : null,
-          // 사용자 정의 이미지가 있으면 해당 이미지를, 없으면 null
           goalImg: values.image || null,
           connectedAccount: parseInt(values.accountId),
         };
@@ -333,14 +330,17 @@ export default function GoalPage() {
           body: JSON.stringify(goalRequest),
         });
 
-        const responseData = await response.json();
-
         if (!response.ok) {
           throw new Error(`Failed to ${isEdit ? "update" : "register"} goal`);
         }
 
-        modalManagerRef.current?.openModal(isEdit ? "목표수정" : "목표등록");
-        navigate("/calendar");
+        // 응답을 기다린 후 모달을 열고 네비게이트
+        await response.json();
+
+        // 모달 열기를 try 블록 안에서 실행
+        if (modalManagerRef.current) {
+          modalManagerRef.current.openModal(isEdit ? "목표수정" : "목표등록");
+        }
       } catch (error) {
         console.error(
           `Failed to ${isEdit ? "update" : "register"} goal:`,
