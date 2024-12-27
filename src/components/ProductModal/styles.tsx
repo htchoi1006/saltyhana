@@ -50,20 +50,47 @@ export const CloseButton = styled.button`
   font-size: 28px;
 `;
 
-export const SearchIcon = styled.button`
+export const SearchButton = styled.div`
   position: absolute;
-  top: 5.3%;
-  right: 11%;
+  /* width: 21%;
+  height: 8%;
+  top: 4.45%;
+  right: 13%; */
+  width: 18%; /* 기존 21%에서 15%로 축소 */
+  height: 7%; /* 기존 8%에서 6%로 축소 */
+  top: 5.2%; /* 위치를 약간 조정 */
+  right: 13%; /* 위치를 약간 조정 */
+  background: #efefef;
+  border-radius: 16px;
+  box-shadow: 1.5px 2px 2px 2px rgba(0, 0, 0, 0.2);
+  display: flex; /* Flexbox 활성화 */
+  align-items: center; /* 세로 정렬 */
+  padding: 0 8px; /* 버튼 내부 여백 */
+  transition: transform 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+export const SearchIcon = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   img {
     width: 35px;
     height: 35px;
   }
+`;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+export const SearchButtonTitle = styled.div`
+  font-family: "Noto Sans KR", sans-serif;
+  /* font-weight: 400; */
+  font-size: 17px;
+  color: #404040;
+  all: unset;
 `;
