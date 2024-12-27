@@ -2,6 +2,19 @@ import styled, { keyframes } from "styled-components";
 
 // fade-in 애니메이션 정의
 const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);MNL
+  }
+`;
+
+/*
+// fade-in 애니메이션 정의
+const fadeIn = keyframes`
   0% {
     opacity: 0;
   }
@@ -9,6 +22,8 @@ const fadeIn = keyframes`
     opacity: 1;
   }
 `;
+
+*/
 
 interface AccountProps {
   accountNumber: string;
