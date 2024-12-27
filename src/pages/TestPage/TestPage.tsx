@@ -149,7 +149,7 @@ const TestPage: React.FC = () => {
         await sendTestResult();
 
         // 추가 API 호출 (추천 상품)
-        const recommendedProducts = await fetchRecommendedProducts();
+        fetchRecommendedProducts();
 
         // 결과 타입 가져오기
         const consumptionType = await fetchTestResult();
@@ -158,7 +158,6 @@ const TestPage: React.FC = () => {
         navigate(`/ad`, {
           state: {
             type: consumptionType,
-            recommendedProducts,
           },
         });
       } catch (error) {
