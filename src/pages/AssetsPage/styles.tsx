@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+// fade-in 애니메이션 정의
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 interface AccountProps {
   accountNumber: string;
   accountName: string;
@@ -49,6 +60,9 @@ const AccountDiv = styled.div`
   height: 150px;
   display: flex;
   flex-direction: column;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 // 계좌명
@@ -93,4 +107,7 @@ export const ChartsContainer = styled.div`
   border-radius: 35px;
   height: 380px;
   box-shadow: 4px 4px 14px 1px rgba(0, 0, 0, 0.1);
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
