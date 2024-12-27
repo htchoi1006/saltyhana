@@ -1,48 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BackGround, Container, StyledParagraph, StyledLink } from "./styles";
 
 const TestWaitingAdPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [videoEnded, setVideoEnded] = useState(false);
+  const { type: consumptionType } = location.state || {};
 
-  // 결과 확인 버튼 클릭 시 navigate 함수 호출
-  const fetchTestResult = async () => {
-    try {
-      const response = await fetch(`http://localhost:9090/api/test/result`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message || "데이터 전송 중 문제가 발생하였습니다.";
-        throw new Error(errorMessage);
-      }
-
-      const consumptionType = await response.json();
-      console.log("서버 응답 데이터:", consumptionType); // 디버깅용
-
+  // 결과 확인
+  const handleResultButtonClick = () => {
+    // 상태 값이 있다면 바로 결과 페이지로 이동
+    if (consumptionType) {
       navigate(`/result/consumption`, { state: { type: consumptionType } });
-    } catch (error) {
-      console.error("오류 발생:", error);
     }
+    console.log(consumptionType);
   };
 
-  /*
-  const handleResultButtonClick = async () => {
-    try {
-      const result = await fetchTestResult();
-      navigate(`/result/consumption`, {state:{type: result}});
-    } catch (error) {
-      console.error(error);
-    }
-  };
-*/
   useEffect(() => {
     const checkVideoEnd = () => {
       const iframe = document.getElementById("youtube-player");
@@ -92,7 +66,7 @@ const TestWaitingAdPage: React.FC = () => {
         {videoEnded && (
           <StyledLink
             as="button"
-            onClick={fetchTestResult}
+            onClick={handleResultButtonClick}
             to="#"
             type="button"
           >
