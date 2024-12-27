@@ -91,6 +91,7 @@ export const StyledButton = styled.button`
   border-radius: 128px;
   letter-spacing: 0.2px;
   font-style: normal;
+  font-family: "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 18px;
   line-height: 140%;

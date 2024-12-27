@@ -6,6 +6,7 @@ import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import SmartphoneIcon from "../../icons/smart-phone-01-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
+
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
@@ -60,7 +61,7 @@ export default function SignupPage() {
   const minDate = new Date(
     today.getFullYear() - 100,
     today.getMonth(),
-    today.getDate(),
+    today.getDate()
   )
     .toISOString()
     .split("T")[0];
@@ -108,7 +109,7 @@ export default function SignupPage() {
           headers: {
             accept: "*/*",
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -143,7 +144,7 @@ export default function SignupPage() {
             "Content-Type": "application/json",
           },
           body: null, // 빈 body가 백엔드와 동일한 요청 형식을 유지함
-        },
+        }
       );
 
       if (!response.ok) {
@@ -181,7 +182,7 @@ export default function SignupPage() {
             "Content-Type": "application/json",
           },
           body: null, // Swagger와 동일하게 빈 body 설정
-        },
+        }
       );
 
       if (!response.ok) {
