@@ -18,6 +18,7 @@ import TestResultPage from "./pages/TestResultPage/TestResultPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyPage from "./pages/MyPage/MyPage";
 import AccountConnectionPage from "./pages/AccountConnectionPage/AccountConnectionPage";
+import TestWaitingAdPage from "./pages/TestWaitingAdPage/TestWaitingAdPage";
 
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: "/test/consumption",
         element: <TestPage />,
+      },
+      {
+        path: "/ad",
+        element: <TestWaitingAdPage />,
       },
       {
         path: "/result/consumption",

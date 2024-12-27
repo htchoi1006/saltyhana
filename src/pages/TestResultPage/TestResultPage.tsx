@@ -68,7 +68,7 @@ function TestResult(props: Props) {
         }}
       >
         <StyledLink to="/recommend">
-          <span>내 맞춤 금융상품 보러가기</span>
+          <span>메인으로</span>
         </StyledLink>
       </div>
     </Container>
