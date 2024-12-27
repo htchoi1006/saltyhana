@@ -1,8 +1,8 @@
-import { CloseButton } from "./styles";
+import ModalsSmallBackground from "./ModalsSmallBackground";
+import { CloseButton } from "../AgreeModal/AgreeModalStyles";
 import register_icon from "../../images/modal_goal_register.png";
 import nochange_icon from "../../images/modal_no_change.png";
 import forbidden_icon from "../../images/modal_forbidden.png";
-import ModalsBackground from "./ModalsBackground";
 import { useNavigate } from "react-router-dom";
 
 interface MyPageModifyProps {
@@ -14,15 +14,16 @@ export default function MyPageModify(props: MyPageModifyProps) {
   const { isInfoEdit, onClose } = props;
   const navigate = useNavigate();
 
-  console.log("isInfoEdit :" + isInfoEdit);
-
   const handleClose = () => {
     onClose();
     navigate("/mypage");
   };
 
   return (
-    <ModalsBackground onClose={handleClose}>
+    <ModalsSmallBackground onClose={handleClose}>
+      <CloseButton onClick={handleClose} title="닫기">
+        ✖
+      </CloseButton>
       <img
         src={
           isInfoEdit == 0
@@ -42,8 +43,6 @@ export default function MyPageModify(props: MyPageModifyProps) {
             ? "정보가 성공적으로 업데이트되었습니다"
             : "변경된 정보가 없습니다"}
       </h2>
-
-      <CloseButton onClick={handleClose}>닫기</CloseButton>
-    </ModalsBackground>
+    </ModalsSmallBackground>
   );
 }

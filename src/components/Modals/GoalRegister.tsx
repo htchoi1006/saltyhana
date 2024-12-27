@@ -1,6 +1,6 @@
-import { CloseButton } from "./styles";
+import { CloseButton } from "../AgreeModal/AgreeModalStyles";
 import register_icon from "../../images/modal_goal_register.png";
-import ModalsBackground from "./ModalsBackground";
+import ModalsSmallBackground from "./ModalsSmallBackground";
 import { useNavigate } from "react-router-dom";
 
 interface GoalRegisterProps {
@@ -18,7 +18,10 @@ export default function GoalRegister(props: GoalRegisterProps) {
   };
 
   return (
-    <ModalsBackground onClose={handleClose}>
+    <ModalsSmallBackground onClose={handleClose}>
+      <CloseButton onClick={handleClose} title="닫기">
+        ✖
+      </CloseButton>
       <img
         src={register_icon}
         alt="Goal Registeration Confirmation"
@@ -30,7 +33,6 @@ export default function GoalRegister(props: GoalRegisterProps) {
           ? "목표 수정이 완료되었습니다"
           : "목표 등록이 완료되었습니다"}
       </h2>
-      <CloseButton onClick={handleClose}>닫기</CloseButton>
-    </ModalsBackground>
+    </ModalsSmallBackground>
   );
 }

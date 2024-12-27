@@ -1,6 +1,6 @@
-import { CloseButton } from "./styles";
+import { CloseButton, DeleteButton } from "../AgreeModal/AgreeModalStyles";
 import register_icon from "../../images/modal_trashcan.png";
-import ModalsBackground from "./ModalsBackground";
+import ModalsSmallBackground from "./ModalsSmallBackground";
 
 interface GoalDeleteCheckProps {
   onConfirm?: () => void;
@@ -19,17 +19,17 @@ export default function GoalDeleteCheck(props: GoalDeleteCheckProps) {
   };
 
   return (
-    <ModalsBackground onClose={handleCancel}>
+    <ModalsSmallBackground onClose={handleCancel}>
+      <CloseButton onClick={handleCancel} title="닫기">
+        ✖
+      </CloseButton>
       <img
         src={register_icon}
         alt="Goal Deletion Confirmation"
         style={{ width: "35%" }}
       />
       <h2>목표를 삭제하시겠습니까?</h2>
-      <div style={{ display: "flex" }}>
-        <CloseButton onClick={handleCancel}>취소</CloseButton>
-        <CloseButton onClick={handleConfirm}>삭제</CloseButton>
-      </div>
-    </ModalsBackground>
+      <DeleteButton onClick={handleConfirm}>삭제</DeleteButton>
+    </ModalsSmallBackground>
   );
 }

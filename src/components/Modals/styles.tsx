@@ -30,6 +30,21 @@ export const ModalContainer = styled.div`
   padding: 30px;
 `;
 
+//모달 레이아웃
+export const ModalSmallContainer = styled.div`
+  width: 400px;
+  height: 400px;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 30px;
+  padding: 30px;
+`;
+
 // 카카오맵 레이아웃
 export const MapContainer = styled.div`
   width: 90%;
@@ -188,7 +203,6 @@ export const CloseButton = styled.button`
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
-  margin: 10px;
   cursor: pointer;
 
   &:hover {
