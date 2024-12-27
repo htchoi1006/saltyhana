@@ -138,18 +138,33 @@ const TestPage: React.FC = () => {
     }
   };
 
-  // 선택지 클릭 시 점수 처리 함수
   const handleSelectionClick = async (points: number) => {
     const updatedAnswers = [...answers];
-
     updatedAnswers[currentQuestionIndex] = points;
     setAnswers(updatedAnswers);
 
-    // 마지막 질문이면 결과 페이지로 이동
     if (currentQuestionIndex === 9) {
-      await sendTestResult();
-      const consumptionType = await fetchTestResult();
-      navigate(`/ad`, { state: { type: consumptionType } });
+      try {
+        // 테스트 결과 전송
+        await sendTestResult();
+
+        // 추가 API 호출 (추천 상품)
+        const recommendedProducts = await fetchRecommendedProducts();
+
+        // 결과 타입 가져오기
+        const consumptionType = await fetchTestResult();
+
+        // /ad로 이동하면서 추천 상품 데이터와 소비성향 데이터를 상태로 전달
+        navigate(`/ad`, {
+          state: {
+            type: consumptionType,
+            recommendedProducts,
+          },
+        });
+      } catch (error) {
+        console.error("데이터 처리 중 오류 발생:", error);
+        alert("테스트 결과를 처리하는 중 문제가 발생했습니다.");
+      }
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
