@@ -223,6 +223,7 @@ export default function LoginPage() {
               <StyledButton
                 type="submit"
                 style={{
+                  fontFamily: "Noto Sans KR",
                   marginTop: "45px",
                   cursor: isLoading ? "not-allowed" : "pointer",
                   opacity: isLoading ? 0.7 : 1,
@@ -238,6 +239,7 @@ export default function LoginPage() {
                   setIsResetMode(false);
                 }}
                 style={{
+                  fontFamily: "Noto Sans KR",
                   marginTop: "10px",
                   backgroundColor: "#ffffff",
                   color: "#00857E",
@@ -292,6 +294,7 @@ export default function LoginPage() {
                     fontSize: "14px",
                     lineHeight: "140%",
                     cursor: "pointer",
+                    fontFamily: "Noto Sans KR",
                   }}
                 >
                   비밀번호를 잊어버리셨나요?
