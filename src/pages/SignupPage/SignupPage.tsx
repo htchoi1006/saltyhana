@@ -6,7 +6,6 @@ import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import SmartphoneIcon from "../../icons/smart-phone-01-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
-import CalendarIcon from "../../images/signup_calendar.png";
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
