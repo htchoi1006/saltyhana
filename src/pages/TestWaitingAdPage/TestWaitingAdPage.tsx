@@ -1,31 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BackGround, Container, StyledParagraph, StyledLink } from "./styles";
+import {
+  Wrapper,
+  LeftSection,
+  Title,
+  Description,
+  ResultButton,
+  RightSection,
+  VideoWrapper,
+} from "./styles";
 
 const TestWaitingAdPage: React.FC = () => {
+  const [videoEnded, setVideoEnded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [videoEnded, setVideoEnded] = useState(false);
   const { type: consumptionType } = location.state || {};
 
-  // 결과 확인
   const handleResultButtonClick = () => {
-    // 상태 값이 있다면 바로 결과 페이지로 이동
     if (consumptionType) {
       navigate(`/result/consumption`, { state: { type: consumptionType } });
     }
-    console.log(consumptionType);
   };
 
   useEffect(() => {
-    const checkVideoEnd = () => {
+    const initializeYouTubePlayer = () => {
       const iframe = document.getElementById("youtube-player");
       if (iframe) {
         const player = new (window as any).YT.Player(iframe, {
           events: {
+            onReady: (event: any) => {
+              // 동영상 자동 재생
+              event.target.mute(); // 무음으로 설정
+              event.target.playVideo(); // 자동 재생
+            },
             onStateChange: (event: any) => {
               if (event.data === (window as any).YT.PlayerState.ENDED) {
-                setVideoEnded(true);
+                setVideoEnded(true); // 동영상이 끝날 때 버튼 표시
               }
             },
           },
@@ -34,9 +44,10 @@ const TestWaitingAdPage: React.FC = () => {
     };
 
     const onYouTubeIframeAPIReady = () => {
-      checkVideoEnd();
+      initializeYouTubePlayer();
     };
 
+    // YouTube IFrame API 스크립트 로드
     if (!(window as any).YT || !(window as any).YT.Player) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -45,37 +56,78 @@ const TestWaitingAdPage: React.FC = () => {
       };
       document.body.appendChild(tag);
     } else {
-      checkVideoEnd();
+      initializeYouTubePlayer();
     }
   }, []);
 
   return (
-    <BackGround>
-      <Container>
-        <StyledParagraph>광고가 끝난 후 버튼을 클릭하세요.</StyledParagraph>
-        <iframe
-          id="youtube-player"
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/OGkqjiJESxI?enablejsapi=1"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        ></iframe>
-        {videoEnded && (
-          <StyledLink
-            as="button"
-            onClick={handleResultButtonClick}
-            to="#"
-            type="button"
+    <Wrapper>
+      <LeftSection>
+        <Title>
+          소비성향 분석 중
+          <span
+            style={{
+              display: "inline-block",
+              marginLeft: "10px",
+              fontSize: "30px",
+              fontWeight: "bold",
+            }}
           >
+            <LoadingDots />
+          </span>
+        </Title>
+        <Description>
+          분석 결과가 곧 표시됩니다. 잠시만 기다려 주세요!
+        </Description>
+      </LeftSection>
+      <RightSection>
+        <VideoWrapper>
+          <iframe
+            id="youtube-player"
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/OGkqjiJESxI?enablejsapi=1&autoplay=1&mute=1&controls=0"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        </VideoWrapper>
+        {videoEnded && (
+          <ResultButton onClick={handleResultButtonClick}>
             결과 확인
-          </StyledLink>
+          </ResultButton>
         )}
-      </Container>
-    </BackGround>
+      </RightSection>
+    </Wrapper>
   );
 };
+
+const LoadingDots = () => (
+  <span>
+    <span className="dot" style={{ animationDelay: "0s" }}>
+      .
+    </span>
+    <span className="dot" style={{ animationDelay: "0.2s" }}>
+      .
+    </span>
+    <span className="dot" style={{ animationDelay: "0.4s" }}>
+      .
+    </span>
+    <style>
+      {`
+      .dot {
+        font-size: 24px;
+        animation: blink 1.2s infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      `}
+    </style>
+  </span>
+);
 
 export default TestWaitingAdPage;
