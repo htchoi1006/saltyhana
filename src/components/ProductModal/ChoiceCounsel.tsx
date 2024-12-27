@@ -4,6 +4,8 @@ import {
   Icon,
   Title,
   CloseButton,
+  SearchButton,
+  SearchButtonTitle,
   SearchIcon,
 } from "./styles";
 import ftof from "../../images/modal_reserve_facetoface.png";
@@ -43,9 +45,12 @@ export default function ChoiceCounsel(
   return (
     <ModalsBackground onClose={onClose}>
       <ChoiceContainer>
-        <SearchIcon onClick={handleUrlClick} title="검색">
-          <img src={document} alt="상품조회" />
-        </SearchIcon>
+        <SearchButton onClick={handleUrlClick}>
+          <SearchIcon title="검색">
+            <img src={document} alt="상품조회" />
+          </SearchIcon>
+          <SearchButtonTitle>상품조회</SearchButtonTitle>
+        </SearchButton>
         <CloseButton onClick={onClose} title="닫기">
           ✖
         </CloseButton>
