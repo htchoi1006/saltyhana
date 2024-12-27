@@ -49,6 +49,21 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
       image:
         "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_6.png",
     },
+    {
+      color: "#FFEDFC",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_7.png",
+    },
+    {
+      color: "#F6EDFF",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_8.png",
+    },
+    {
+      color: "#FFF7ED",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_9.png",
+    },
   ];
 
   const settings = {
