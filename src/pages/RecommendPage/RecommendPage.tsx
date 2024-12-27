@@ -4,6 +4,7 @@ import ProductList from "./ProductList";
 import ConsumeTestImage from "../../images/ConsumeTestImage.png";
 import ConsumeTestIcon from "../../images/ConsumeTestIcon.png";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Information from "../../images/information.png";
 
 import {
   BodyWrapper,
@@ -20,6 +21,9 @@ import {
   TestCardWrapper,
   TestCardImage,
   TextWrapper,
+  InformationIcon,
+  InfoIconWrapper,
+  InfoTooltip,
 } from "./styles";
 
 interface ProductData {
@@ -62,6 +66,8 @@ const fetchRecommendedProducts = async () => {
 export default function RecommendPage() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [recommendReason, setRecommendReason] = useState("");
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -70,6 +76,7 @@ export default function RecommendPage() {
 
         if (recommendedProducts) {
           setProducts(recommendedProducts);
+          setRecommendReason(recommendedProducts[0].reason);
           setIsLoading(false);
         }
       } catch (error) {
@@ -99,6 +106,18 @@ export default function RecommendPage() {
         <TextWrapper>
           <PageTitle>
             <span>맞춤형 상품 추천</span>
+            <InfoIconWrapper>
+              <InformationIcon
+                src={Information}
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <InfoTooltip>
+                  <p>{recommendReason}</p>
+                </InfoTooltip>
+              )}
+            </InfoIconWrapper>
           </PageTitle>
           <PageDescription>
             <span>목표와 소비성향에 따른 맞춤 상품을 추천 받아보세요.</span>
