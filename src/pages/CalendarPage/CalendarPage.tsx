@@ -5,6 +5,8 @@ import {
   Container,
   AuthMessage,
   ButtonConnect,
+  WarningIcon,
+  ButtonWrapper,
 } from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
 import travel from "../../images/goal_icon_travel.png";
@@ -61,7 +63,7 @@ export default function Calendar() {
     const fetchGoals = async () => {
       try {
         const response = await fetch(
-          "http://localhost:9090/api/goals?activeOnly=false",
+          `${process.env.REACT_APP_API_URL}/goals?activeOnly=false`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -307,13 +309,22 @@ export default function Calendar() {
   return (
     <>
       {showAuthMessage && (
-        <AuthMessage>구글 캘린더 연동이 필요합니다</AuthMessage>
+        <div>
+          <AuthMessage>
+            {" "}
+            <WarningIcon>⚠️</WarningIcon>
+            <span>구글 캘린더 연동이 필요합니다</span>
+            <WarningIcon>⚠️</WarningIcon>{" "}
+          </AuthMessage>
+        </div>
       )}
       <Container>
         <CalendarContainer>
-          <ButtonConnect onClick={handleLoadCalendar}>
-            구글 캘린더 불러오기
-          </ButtonConnect>
+          <ButtonWrapper>
+            <ButtonConnect onClick={handleLoadCalendar}>
+              구글 캘린더 불러오기
+            </ButtonConnect>
+          </ButtonWrapper>
           <MonthCalendar
             calendarKey={calendarKey}
             events={calendarEvents}
