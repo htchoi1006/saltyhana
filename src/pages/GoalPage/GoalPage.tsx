@@ -67,26 +67,6 @@ const categoryToNumber: Record<string, number> = {
 
 const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
 
-const iconToNumber: Record<string, number> = {
-  travel: 23,
-  anniversary: 8,
-  shopping: 21,
-  money: 17,
-  beer: 10,
-  coffee: 14,
-  car: 12,
-  ticket: 22,
-  cake: 11,
-  lobstar: 16,
-  beach: 9,
-  pet: 19,
-  party: 18,
-  cruise: 15,
-  amusementpark: 7,
-  christmas: 13,
-  phone: 20,
-};
-
 const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   image,
   onImageClick,
@@ -117,7 +97,6 @@ export default function GoalPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isEdit, goalId, goalData } = location.state || {};
-  console.log(goalId);
 
   const determineCategory = (goalType: number | undefined) => {
     if (!goalType) return "";
@@ -146,7 +125,6 @@ export default function GoalPage() {
   });
 
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [selectedIcon, setSelectedIcon] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
   const modalManagerRef = useRef<ModalManagerType>(null);
@@ -154,7 +132,9 @@ export default function GoalPage() {
     location.state?.selectedDate || "",
   );
   const [icons, setIcons] = useState<Icon[]>([]);
-  const [selectedIconId, setSelectedIconId] = useState<number | null>(null);
+  const [selectedIconId, setSelectedIconId] = useState<number | null>(
+    goalData?.iconId,
+  );
 
   useEffect(() => {
     const fetchIcons = async () => {
@@ -182,13 +162,7 @@ export default function GoalPage() {
 
   useEffect(() => {
     if (goalData?.iconId) {
-      const iconEntries = Object.entries(iconToNumber);
-      const iconName = iconEntries.find(
-        ([_, value]) => value === goalData.iconId,
-      )?.[0];
-      if (iconName) {
-        setSelectedIcon(iconName);
-      }
+      setSelectedIconId(goalData.iconId);
     }
   }, [goalData]);
 
@@ -219,10 +193,6 @@ export default function GoalPage() {
 
   const handleCategoryChange = (category: string) => {
     setValues((prev) => ({ ...prev, category }));
-  };
-
-  const handleDirectCategoryChange = (category: string) => {
-    setValues((prev) => ({ ...prev, directCategory: category }));
   };
 
   const handleIconClick = (iconId: number) => {
@@ -294,7 +264,7 @@ export default function GoalPage() {
             ...prev,
             image: croppedImage,
           }));
-          setSelectedIcon("");
+          setSelectedIconId(null);
         };
         img.src = reader.result as string;
       };
@@ -304,7 +274,7 @@ export default function GoalPage() {
 
   const handleImageClick = () => {
     // 이미지 선택 시 기존 선택된 아이콘 취소
-    setSelectedIcon("");
+    setSelectedIconId(null);
     fileInputRef.current?.click();
   };
 

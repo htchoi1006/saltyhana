@@ -108,29 +108,33 @@ export default function GoalList(props: GoalListProps) {
     }
   };
 
-  const getIconIdFromImageUrl = (imageUrl: string) => {
-    // URL에서 파일 이름 추출
-    const fileName = imageUrl.split("/").pop()?.split(".")[0];
+  const getIconId = (imageUrl: string) => {
+    const fetchIcons = async (imageUrl: string) => {
+      try {
+        const response = await fetch("http://localhost:9090/api/icons/goal", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
 
-    // 아이콘 이름을 ID로 매핑
-    if (fileName?.includes("travel")) return 23;
-    if (fileName?.includes("anniversary")) return 8;
-    if (fileName?.includes("shopping")) return 21;
-    if (fileName?.includes("money")) return 17;
-    if (fileName?.includes("beer")) return 10;
-    if (fileName?.includes("coffee")) return 14;
-    if (fileName?.includes("car")) return 12;
-    if (fileName?.includes("ticket")) return 22;
-    if (fileName?.includes("cake")) return 11;
-    if (fileName?.includes("lobstar")) return 16;
-    if (fileName?.includes("beach")) return 9;
-    if (fileName?.includes("pet")) return 19;
-    if (fileName?.includes("party")) return 18;
-    if (fileName?.includes("cruise")) return 15;
-    if (fileName?.includes("amusement")) return 7;
-    if (fileName?.includes("christmas")) return 13;
-    if (fileName?.includes("phone")) return 20;
-    return 0;
+        if (!response.ok) {
+          throw new Error("Failed to fetch icons");
+        }
+
+        const data = await response.json();
+        const matchedIcon = data.find(
+          (icon: any) => icon.imageUrl === imageUrl,
+        );
+
+        return matchedIcon.id;
+      } catch (error) {
+        console.error("Error fetching icons:", error);
+      }
+    };
+
+    const goalId = fetchIcons(imageUrl);
+    return goalId;
   };
 
   const handleEdit = async (goalId: number, event: React.MouseEvent) => {
@@ -159,6 +163,11 @@ export default function GoalList(props: GoalListProps) {
         throw new Error("Goal not found");
       }
 
+      let iconId = 0;
+      if (goalToEdit.iconImage) {
+        iconId = await getIconId(goalToEdit.iconImage);
+      }
+
       // 응답 데이터를 PUT 요청 형식에 맞게 변환
       const formattedGoalData = {
         goalName: goalToEdit.title,
@@ -166,9 +175,7 @@ export default function GoalList(props: GoalListProps) {
         startDate: goalToEdit.startAt.split("T")[0],
         endDate: goalToEdit.endAt.split("T")[0],
         goalType: parseInt(goalToEdit.category),
-        iconId: goalToEdit.iconImage
-          ? getIconIdFromImageUrl(goalToEdit.iconImage)
-          : 0,
+        iconId: goalToEdit.iconImage ? iconId : 0,
         goalImg: goalToEdit.customImage,
         connectedAccount: goalToEdit.connected_account,
         category: goalToEdit.category,
@@ -195,7 +202,7 @@ export default function GoalList(props: GoalListProps) {
     modalManagerRef.current?.closeModal();
   };
 
-  const renderGoalItem = (goal: Goal) => (
+  const renderGoalItem = (goal: Goal, isActiveGoal: boolean) => (
     <GoalItem
       key={goal.id}
       color={goal.color}
@@ -206,10 +213,13 @@ export default function GoalList(props: GoalListProps) {
         <GoalInfo>
           <GoalTitle>
             {goal.title}
-            <EditButton
-              src={editIcon}
-              onClick={(e) => handleEdit(goal.id, e)}
-            />
+            {/* 활성 목표일 경우에만 EditButton 렌더링 */}
+            {isActiveGoal && (
+              <EditButton
+                src={editIcon}
+                onClick={(e) => handleEdit(goal.id, e)}
+              />
+            )}
           </GoalTitle>
           <GoalDate>
             {goal.startDate} - {goal.endDate}
@@ -227,14 +237,17 @@ export default function GoalList(props: GoalListProps) {
           }}
         />
       </ProgressBar>
-      <DeleteButton
-        src={deleteIcon}
-        onClick={(e) => {
-          e.stopPropagation();
-          setSelectedGoalId(goal.id);
-          modalManagerRef.current?.openModal("목표삭제확인"); // 모달 열기
-        }}
-      />
+      {/* 활성 목표일 경우에만 DeleteButton 렌더링 */}
+      {isActiveGoal && (
+        <DeleteButton
+          src={deleteIcon}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedGoalId(goal.id);
+            modalManagerRef.current?.openModal("목표삭제확인"); // 모달 열기
+          }}
+        />
+      )}
     </GoalItem>
   );
 
@@ -248,13 +261,13 @@ export default function GoalList(props: GoalListProps) {
         }}
       >
         {/* 활성 목표 렌더링 */}
-        {activeGoals.map(renderGoalItem)}
+        {activeGoals.map((goal) => renderGoalItem(goal, true))}
 
         {/* 비활성 목표가 있을 경우에만 구분선 표시 */}
         {inactiveGoals.length > 0 && activeGoals.length > 0 && <Divider />}
 
         {/* 비활성 목표 렌더링 */}
-        {inactiveGoals.map(renderGoalItem)}
+        {inactiveGoals.map((goal) => renderGoalItem(goal, false))}
       </div>
       <div>
         <Link to="/goal" style={{ textDecoration: "none" }}>
