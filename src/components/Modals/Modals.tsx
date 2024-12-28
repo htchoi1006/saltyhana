@@ -75,12 +75,12 @@ export default function Modals(props: ModalsProps) {
 
       if (response.status === 200) {
         setIsReservationConfirmed(true); // 성공 시 OK 모달로 이동
-      } else {
-        alert("예약 처리 중 오류가 발생했습니다.");
       }
     } catch (error) {
-      console.error("예약 실패:", error);
-      alert("Google 연동을 먼저 진행해주세요.");
+      console.error("예약 실패, 구글 연동 필요:", error);
+      setResponseStatus(500);
+      setIsReservationConfirmed(true);
+      alert("Google Calendar 연동이 필요합니다.");
     }
   };
 
