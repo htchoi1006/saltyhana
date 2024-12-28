@@ -210,16 +210,22 @@ export const CloseButton = styled.button`
   }
 `;
 
-export const ExtendGoalButton = styled.button`
-  background: #9e9e9e;
-  color: white;
+export const Button = styled.button`
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  background: #efefef;
+  color: #404040;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 10px 20px;
+  margin: 20px 30px 0px 0px;
+  width: 200px;
   cursor: pointer;
+  box-shadow: 3px 4px 10px 4px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background: #757575;
+    transform: scale(1.05);
   }
 `;
 

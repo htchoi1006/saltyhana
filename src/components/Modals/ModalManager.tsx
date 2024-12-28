@@ -1,4 +1,5 @@
 import { useState, forwardRef, useImperativeHandle, ReactNode } from "react";
+import { Goal } from "../../pages/HomePage/HomePage";
 import Modals from "./Modals";
 import AgreeModal from "../AgreeModal/AgreeModal";
 import ChoiceCounsel from "../ProductModal/ChoiceCounsel";
@@ -23,6 +24,7 @@ interface ModalManagerProps {
   state?: string;
   isGoalEdit?: boolean;
   isInfoEdit?: number;
+  goal?: Goal;
 }
 
 const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
@@ -35,6 +37,7 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
       state,
       isGoalEdit,
       isInfoEdit,
+      goal,
     },
     ref,
   ) => {
@@ -95,10 +98,7 @@ const ModalManager = forwardRef<ModalManagerType, ModalManagerProps>(
           />
         )}
         {modalType === "목표달성확인" && (
-          <GoalAchieveCheck
-            goal={{ name: "여행", achieved: true }}
-            onClose={closeModal}
-          />
+          <GoalAchieveCheck goal={goal} onClose={closeModal} />
         )}
         {modalType === "목표삭제확인" && (
           <GoalDeleteCheck onConfirm={onConfirm} onCancel={onCancel} />
