@@ -387,7 +387,7 @@ export default function SignupPage() {
               disabled={isLoading}
               style={{
                 cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.7 : 1,
+                // opacity: isLoading ? 0.7 : 1,
               }}
             >
               {isLoading ? "처리중..." : "회원가입"}

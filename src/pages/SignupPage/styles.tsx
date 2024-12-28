@@ -81,9 +81,21 @@ export const InputsWrapper = styled.div`
   gap: 12px;
 `;
 
+
+const fadeInSlideDown = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* 위로 이동 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 제자리 */
+  }
+`;
+
 export const StyledButton = styled.button`
   opacity: 0;
-  animation: ${fadeIn} 1s ease-out forwards;
+  animation: ${fadeInSlideDown} 1s ease-out forwards; /* 애니메이션 추가 */
   animation-delay: 0.9s;
   display: block;
   text-align: center;
@@ -107,6 +119,12 @@ export const StyledButton = styled.button`
     background: #029595;
   }
 `;
+
+
+
+
+
+
 
 export const FooterParagraph = styled.p`
   opacity: 0;
@@ -146,3 +164,27 @@ export const AgreementCheckWrapper = styled.div`
     }
   }
 `;
+
+
+
+
+
+// "비밀번호를 잊어버리셨나요?" 버튼에 애니메이션 추가
+export const ForgotPasswordButton = styled.button`
+  opacity: 0;
+  animation: ${fadeInSlideDown} 1s ease-out forwards; /* 애니메이션 추가 */
+  animation-delay: 0.8s; /* 딜레이 적용 */
+  margin-top: 8px;
+  color: #424242;
+  background: none;
+  border: none;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 140%;
+  cursor: pointer;
+  font-family: "Noto Sans KR";
+
+`;
+
