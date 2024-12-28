@@ -8,6 +8,7 @@ import {
   FormWrapper,
   InputsWrapper,
   StyledButton,
+  ForgotPasswordButton
 } from "../SignupPage/styles";
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
@@ -226,12 +227,14 @@ export default function LoginPage() {
                   fontFamily: "Noto Sans KR",
                   marginTop: "45px",
                   cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.7 : 1,
+                  opacity: 1, // 버튼이 항상 보이도록 설정
+                  animation: "none"
                 }}
                 disabled={isLoading}
               >
                 <span>{isLoading ? "전송 중..." : "임시 비밀번호 전송"}</span>
               </StyledButton>
+
               <StyledButton
                 type="button"
                 onClick={(e) => {
@@ -272,7 +275,8 @@ export default function LoginPage() {
                   }
                   ref={passwordInputRef}
                 />
-              </InputsWrapper>
+              </InputsWrapper>              
+              
               <div
                 style={{
                   display: "flex",
@@ -280,38 +284,26 @@ export default function LoginPage() {
                   margin: "5px 0",
                 }}
               >
-                <button
+                <ForgotPasswordButton
                   type="button"
                   onClick={() => setIsResetMode(true)}
-                  style={{
-                    marginTop: "8px",
-                    color: "#424242",
-                    background: "none",
-                    border: "none",
-                    textDecoration: "none",
-                    fontStyle: "normal",
-                    fontWeight: "700",
-                    fontSize: "14px",
-                    lineHeight: "140%",
-                    cursor: "pointer",
-                    fontFamily: "Noto Sans KR",
-                  }}
                 >
                   비밀번호를 잊어버리셨나요?
-                </button>
+                </ForgotPasswordButton>
               </div>
+
               <StyledButton
                 type="submit"
                 style={{
                   marginTop: "45px",
                   marginBottom: "10px",
                   cursor: isLoading ? "not-allowed" : "pointer",
-                  opacity: isLoading ? 0.7 : 1,
                 }}
                 disabled={isLoading}
               >
                 <span>{isLoading ? "로그인 중..." : "로그인"}</span>
               </StyledButton>
+              
               <Link
                 to="/signup"
                 style={{
@@ -319,10 +311,15 @@ export default function LoginPage() {
                   textDecoration: "none",
                 }}
               >
-                <StyledButton type="button">
+                <StyledButton type="button"
+                  style={{
+                    animationDelay: "1.1s", // 회원가입 버튼에 1.2초 딜레이
+                  }}
+                >
                   <span>회원가입</span>
                 </StyledButton>
               </Link>
+              
             </form>
           )}
         </Paper>
