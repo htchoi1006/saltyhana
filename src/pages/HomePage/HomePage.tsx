@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PageContainer } from "./styles";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
@@ -11,6 +11,18 @@ import {
   Dot,
 } from "./styles";
 import { ProductType, WeekDayType } from "../../type";
+import GoalAchieveCheck from "../../components/Modals/GoalAchieveCheck";
+
+export interface Goal {
+  id: number;
+  name: string;
+  iconUrl: string;
+  category: string;
+  amount: number;
+  startAt: string;
+  endAt: string;
+  achieved: boolean;
+}
 
 interface DashBoardResponseDTO {
   goal: {
@@ -48,6 +60,10 @@ export default function HomePage() {
     [],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [endedGoals, setEndedGoals] = useState<Goal[]>([]);
+  const [currentModalIndex, setCurrentModalIndex] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -71,7 +87,29 @@ export default function HomePage() {
       }
     };
 
+    const fetchEndedGoals = async () => {
+      try {
+        const response = await fetch("http://localhost:9090/api/goals/end", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch accounts");
+        }
+
+        const data: Goal[] = await response.json();
+        setEndedGoals(data);
+        setCurrentModalIndex(0); // 다음 목표 달성 확인 모달
+      } catch (error) {
+        console.error("Error fetching accounts:", error);
+      }
+    };
+
     fetchDashboardData();
+    fetchEndedGoals();
   }, []);
 
   if (dashBoardData.length === 0) {
@@ -111,6 +149,16 @@ export default function HomePage() {
     const itemWidth = container.offsetWidth;
     const newIndex = Math.round(scrollPosition / itemWidth);
     setCurrentIndex(newIndex);
+  };
+
+  const handleCloseModal = () => {
+    if (currentModalIndex !== null) {
+      if (currentModalIndex < endedGoals.length - 1) {
+        setCurrentModalIndex(currentModalIndex + 1); // 다음 목표 달성 확인 모달
+      } else {
+        setCurrentModalIndex(null); // 모든 목표 달성 확인 모달 닫기
+      }
+    }
   };
 
   return (
@@ -153,6 +201,12 @@ export default function HomePage() {
       </CarouselContainer>
       <WeekdayCalendar dates={weekDays} />
       <ProductList products={products} />
+      {currentModalIndex !== null && (
+        <GoalAchieveCheck
+          goal={endedGoals[currentModalIndex]}
+          onClose={handleCloseModal}
+        />
+      )}
     </PageContainer>
   );
 }
