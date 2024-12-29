@@ -30,6 +30,21 @@ export const ModalContainer = styled.div`
   padding: 30px;
 `;
 
+//모달 레이아웃
+export const ModalSmallContainer = styled.div`
+  width: 400px;
+  height: 400px;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 30px;
+  padding: 30px;
+`;
+
 // 카카오맵 레이아웃
 export const MapContainer = styled.div`
   width: 90%;
@@ -192,6 +207,25 @@ export const CloseButton = styled.button`
 
   &:hover {
     background: #757575;
+  }
+`;
+
+export const Button = styled.button`
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  background: #efefef;
+  color: #404040;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 20px 30px 0px 0px;
+  width: 200px;
+  cursor: pointer;
+  box-shadow: 3px 4px 10px 4px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: scale(1.05);
   }
 `;
 

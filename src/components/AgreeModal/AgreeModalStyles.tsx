@@ -116,3 +116,16 @@ export const CloseButton = styled.button`
   color: #555;
   font-size: 20px;
 `;
+
+export const DeleteButton = styled.button`
+  background: #9e9e9e;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #757575;
+  }
+`;

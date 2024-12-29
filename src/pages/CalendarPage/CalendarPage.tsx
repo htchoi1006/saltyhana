@@ -1,12 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CalendarContainer, Container } from "./styles";
+import {
+  CalendarContainer,
+  Container,
+  AuthMessage,
+  ButtonConnect,
+  WarningIcon,
+  ButtonWrapper,
+} from "./styles";
 import { DayCellContentArg, DayCellMountArg } from "@fullcalendar/core";
 import travel from "../../images/goal_icon_travel.png";
-import beer from "../../images/goal_icon_beer.png";
-import phone from "../../images/goal_icon_phone.webp";
 import MonthCalendar from "../../components/MonthCalendar/MonthCalendar";
 import GoalList from "../../components/GoalList/GoalList";
+
+import { getUserIdFromToken } from "../../utils/TokenUtils";
 
 interface APIGoal {
   id: number;
@@ -45,16 +52,18 @@ const transformAPIGoals = (apiGoals: APIGoal[]): Goal[] => {
 
 export default function Calendar() {
   const navigate = useNavigate();
-  const apiKey: string | undefined = process.env.REACT_APP_CAL_API_KEY;
   const [goals, setGoals] = useState<Goal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<Goal | undefined>(undefined);
   const [calendarKey, setCalendarKey] = useState(0);
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthMessage, setShowAuthMessage] = useState(false);
 
   useEffect(() => {
     const fetchGoals = async () => {
       try {
         const response = await fetch(
-          "http://localhost:9090/api/goals?activeOnly=false",
+          `${process.env.REACT_APP_API_URL}/goals?activeOnly=false`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -170,22 +179,166 @@ export default function Calendar() {
     navigate("/goal", { state: { selectedDate: date } }); // 날짜를 목표 정하기 페이지 state로 전달
   };
 
+  const fetchCalendarEvents = async () => {
+    try {
+      const eventsResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "application/json",
+          },
+        },
+      );
+
+      if (eventsResponse.ok) {
+        const events = await eventsResponse.json();
+        const formattedEvents = events.map((event: any) => ({
+          id: event.id,
+          title: event.summary,
+          start: event.start,
+          url: event.htmlLink,
+        }));
+        setCalendarEvents(formattedEvents);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      console.error("Error fetching calendar events:", error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  // 인증 상태 체크 및 이벤트 가져오기
+  const authenticateAndFetchEvents = async (forceAuth = false) => {
+    try {
+      // 먼저 저장된 credential로 이벤트 가져오기 시도
+      const eventsResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "application/json",
+          },
+        },
+      );
+
+      if (eventsResponse.ok) {
+        const events = await eventsResponse.json();
+        const formattedEvents = events.map((event: any) => ({
+          id: event.id,
+          title: event.summary,
+          start: event.start,
+          url: event.htmlLink,
+        }));
+        setCalendarEvents(formattedEvents);
+        setIsAuthenticated(true);
+        return;
+      }
+
+      // 권한 없고, 강제 인증이 아닌 경우 여기서 중단
+      if (!forceAuth) {
+        setIsAuthenticated(false);
+        setShowAuthMessage(true); // 인증 필요함 메시지 2초간 표시
+        setTimeout(() => {
+          setShowAuthMessage(false);
+        }, 2000);
+        return;
+      }
+
+      // 강제 인증(버튼 클릭)의 경우에만 OAuth 프로세스 시작
+      const authResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/google-calendar/auth`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        },
+      );
+
+      if (!authResponse.ok) throw new Error("Failed to authenticate");
+
+      const authUrl = await authResponse.text();
+      const userState = getUserIdFromToken(localStorage.getItem("accessToken"));
+      const urlWithState = `${authUrl}&state=${userState}`;
+
+      const popup = window.open(
+        urlWithState,
+        "googleAuth",
+        "width=600,height=600,left=100,top=100",
+      );
+
+      await new Promise<void>((resolve, reject) => {
+        const checkPopup = setInterval(() => {
+          if (!popup || popup.closed) {
+            clearInterval(checkPopup);
+            resolve();
+          }
+        }, 1000);
+        setTimeout(() => {
+          clearInterval(checkPopup);
+          reject(new Error("Authentication timeout"));
+        }, 60000);
+      });
+
+      // 팝업이 닫힌 후 이벤트 다시 가져오기
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await fetchCalendarEvents();
+    } catch (error) {
+      console.error("구글 인증 오류입니다, ", error);
+      setIsAuthenticated(false);
+    }
+  };
+
+  // 페이지 로드 시 credential 확인만
+  useEffect(() => {
+    authenticateAndFetchEvents(false); // 인증 없이 가진 credential로 이벤트 호출
+  }, []);
+
+  // 연동 버튼 클릭 시 인증 시작
+  const handleLoadCalendar = async () => {
+    try {
+      await authenticateAndFetchEvents(true); // 강제 인증 모드로 호출
+    } catch (error) {
+      console.error("Error handling calendar load:", error);
+    }
+  };
+
   return (
-    <Container>
-      <CalendarContainer>
-        <MonthCalendar
-          calendarKey={calendarKey}
-          apiKey={apiKey}
-          handleDayCellDidMount={handleDayCellDidMount}
-          handleDayCellContent={handleDayCellContent}
-          onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달
+    <>
+      {showAuthMessage && (
+        <div>
+          <AuthMessage>
+            {" "}
+            <WarningIcon>⚠️</WarningIcon>
+            <span>구글 캘린더 연동이 필요합니다</span>
+            <WarningIcon>⚠️</WarningIcon>{" "}
+          </AuthMessage>
+        </div>
+      )}
+      <Container>
+        <CalendarContainer>
+          <ButtonWrapper>
+            <ButtonConnect onClick={handleLoadCalendar}>
+              구글 캘린더 불러오기
+            </ButtonConnect>
+          </ButtonWrapper>
+          <MonthCalendar
+            calendarKey={calendarKey}
+            events={calendarEvents}
+            handleDayCellDidMount={handleDayCellDidMount}
+            handleDayCellContent={handleDayCellContent}
+            onDateClick={handleDateSelect} // 날짜 클릭 핸들러 전달
+          />
+        </CalendarContainer>
+        <GoalList
+          goals={goals}
+          onGoalClick={handleGoalClick}
+          setGoals={setGoals}
         />
-      </CalendarContainer>
-      <GoalList
-        goals={goals}
-        onGoalClick={handleGoalClick}
-        setGoals={setGoals}
-      />
-    </Container>
+      </Container>
+    </>
   );
 }

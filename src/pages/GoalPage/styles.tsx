@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import setGoalPen from "../../images/set_goal_pen.png";
 import setGoalMoney from "../../images/set_goal_money.png";
 import setGoalCalendar from "../../images/set_goal_calendar.png";
@@ -24,6 +24,18 @@ interface IconBackgroundProps {
   $isSelected?: boolean;
   disabled?: boolean;
 }
+
+// Fade-in 애니메이션 정의
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 // Export grouped icons (optional for easier reuse)
 export const commonIcons = {
@@ -59,6 +71,9 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const ContainerHeader = styled.div`
@@ -70,6 +85,9 @@ export const ContainerHeader = styled.div`
   letter-spacing: -0.02em;
 
   color: #343434;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const InputWrapper = styled.div`
@@ -78,6 +96,9 @@ export const InputWrapper = styled.div`
   gap: 20px;
   align-items: flex-start;
   margin-top: 30px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const InputContainer = styled.div`
@@ -96,6 +117,9 @@ export const InputContainer = styled.div`
   &:focus-within {
     outline: 2px solid #008485;
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const CategoryContainer = styled.div`
@@ -103,6 +127,9 @@ export const CategoryContainer = styled.div`
   /* padding: 3px 12px; */
   height: 53px;
   font-family: "Noto Sans KR";
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const CategorySelect = styled.select`
@@ -128,21 +155,33 @@ export const CategorySelect = styled.select`
     font-size: 16px;
     padding: 8px;
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const SetGoalPen = styled.img`
   width: 29px;
   height: auto;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const SetGoalMoney = styled.img`
   width: 36px;
   height: auto;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const SetGoalCalendar = styled.img`
   width: 36px;
   height: auto;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const Input = styled.input`
@@ -213,23 +252,35 @@ export const Input = styled.input`
       }
     }
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const UnitText = styled.span`
   color: #666;
   font-size: 16px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const SubText = styled.p`
   font-size: 16px;
   color: #666;
   margin-top: 12px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const SelectIconText = styled.p`
   font-size: 14px;
   color: #666;
   margin-top: 12px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const IconList = styled.div`
@@ -239,6 +290,9 @@ export const IconList = styled.div`
   /* width: 60%; */
   align-items: flex-start;
   margin-bottom: 20px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const IconBackground = styled.button<IconBackgroundProps>`
@@ -274,6 +328,9 @@ export const RegisterDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const RegisterContent = styled.div`
@@ -282,10 +339,16 @@ export const RegisterContent = styled.div`
   gap: 24px;
   margin-top: 20px;
   margin-bottom: 100px;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const ImageUploadSection = styled.div`
   /* flex: 0 0 344px; */
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const ImageUploadBox = styled.div`
@@ -304,6 +367,9 @@ export const ImageUploadBox = styled.div`
   &:hover {
     background-color: #e9ecef;
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const ImagePlaceholder = styled.div`
@@ -331,12 +397,18 @@ export const ImagePlaceholder = styled.div`
     left: 15px;
     top: 0;
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const UploadedImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const CancelButton = styled.button`
@@ -359,12 +431,18 @@ export const CancelButton = styled.button`
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const UploadedImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;
 
 export const RegisterButton = styled.button`
@@ -390,4 +468,7 @@ export const RegisterButton = styled.button`
   &:active {
     background-color: #005858;
   }
+
+  /* fade-in 효과 적용 */
+  animation: ${fadeIn} 1s ease-in-out;
 `;

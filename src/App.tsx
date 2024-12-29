@@ -18,6 +18,29 @@ import TestResultPage from "./pages/TestResultPage/TestResultPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyPage from "./pages/MyPage/MyPage";
 import AccountConnectionPage from "./pages/AccountConnectionPage/AccountConnectionPage";
+import TestWaitingAdPage from "./pages/TestWaitingAdPage/TestWaitingAdPage";
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTokenRefresh } from "../src/hooks/useTokenRefresh";
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const navigate = useNavigate();
+  useTokenRefresh();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  return <>{children}</>;
+};
 
 const router = createBrowserRouter([
   {
@@ -37,7 +60,11 @@ const router = createBrowserRouter([
     element: <AccountConnectionPage />,
   },
   {
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -67,7 +94,11 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",
@@ -80,6 +111,10 @@ const router = createBrowserRouter([
       {
         path: "/test/consumption",
         element: <TestPage />,
+      },
+      {
+        path: "/ad",
+        element: <TestWaitingAdPage />,
       },
       {
         path: "/result/consumption",

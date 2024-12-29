@@ -39,10 +39,12 @@ export default function AssetsPage() {
   const [cumulativeSum, setCumulativeSum] = useState<number>(0);
   const [zoomedRange, setZoomedRange] = useState<string>("");
 
+  const userName = localStorage.getItem("name");
+
   const fetchAssetDataApi = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/accounts/transfers`,
+        `${process.env.REACT_APP_API_URL}/accounts/transfers`,
         {
           method: "GET",
           headers: {
@@ -151,9 +153,9 @@ export default function AssetsPage() {
   return (
     <PageContainer>
       {/* 개인 자산 페이지 헤더 */}
-      <Header>최혁태 님의 자산 현황</Header>
+      <Header>{userName}님의 자산 현황</Header>
       <HeaderDescription>
-        최혁태 님이 가지고 계신 계좌 잔액과 기간 별 지출 현황을 확인하실 수
+        {userName}님이 가지고 계신 계좌 잔액과 기간 별 지출 현황을 확인하실 수
         있어요.
       </HeaderDescription>
       <div style={{ flex: 1 }}>

@@ -34,9 +34,6 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
             const { latitude, longitude } = position.coords;
             const newPosition = { lat: latitude, lng: longitude };
 
-            console.log("현재 위치:", newPosition);
-            console.log("마킹된 위치:", initialPosition);
-
             setInitialPosition(newPosition); // 초기 위치를 사용자의 현재 위치로 설정
             setCurrentPosition(newPosition); // 지도 중심도 현재 위치로 설정
             onUpdatePosition(newPosition); // 부모에게 위치 정보 전달
@@ -66,7 +63,7 @@ const KakaoMap = forwardRef<KakaoMapRef, KakaoMapProps>(
           { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
         );
       } else {
-        console.log("이 브라우저에서는 Geolocation을 지원하지 않습니다.");
+        console.error("이 브라우저에서는 Geolocation을 지원하지 않습니다.");
         // Geolocation을 지원하지 않을 경우 기본 위치 설정
         setCurrentPosition(defaultPosition);
         onUpdatePosition(defaultPosition);

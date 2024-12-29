@@ -49,6 +49,13 @@ interface ImageUploadBoxProps {
   onCancelClick: () => void;
 }
 
+interface Icon {
+  id: number;
+  name: string;
+  imageUrl: string;
+  color: string;
+}
+
 const categoryToNumber: Record<string, number> = {
   예금: 1,
   적금: 2,
@@ -59,26 +66,6 @@ const categoryToNumber: Record<string, number> = {
 };
 
 const categories = ["예금", "적금", "펀드", "단순 저축", "여행", "소비"];
-
-const iconToNumber: Record<string, number> = {
-  travel: 23,
-  anniversary: 8,
-  shopping: 21,
-  money: 17,
-  beer: 10,
-  coffee: 14,
-  car: 12,
-  ticket: 22,
-  cake: 11,
-  lobstar: 16,
-  beach: 9,
-  pet: 19,
-  party: 18,
-  cruise: 15,
-  amusementpark: 7,
-  christmas: 13,
-  phone: 20,
-};
 
 const ImageUploadBox: React.FC<ImageUploadBoxProps> = ({
   image,
@@ -138,23 +125,44 @@ export default function GoalPage() {
   });
 
   const [accounts, setAccounts] = useState<Account[]>([]);
-  const [selectedIcon, setSelectedIcon] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
   const modalManagerRef = useRef<ModalManagerType>(null);
   const [selectedDate, setSelectedDate] = useState<string>(
     location.state?.selectedDate || "",
   );
+  const [icons, setIcons] = useState<Icon[]>([]);
+  const [selectedIconId, setSelectedIconId] = useState<number | null>(
+    goalData?.iconId,
+  );
+
+  useEffect(() => {
+    const fetchIcons = async () => {
+      try {
+        const response = await fetch("http://localhost:9090/api/icons/goal", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            accept: "*/*",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch icons");
+        }
+
+        const data = await response.json();
+        setIcons(data);
+      } catch (error) {
+        console.error("Error fetching icons:", error);
+      }
+    };
+
+    fetchIcons();
+  }, []);
 
   useEffect(() => {
     if (goalData?.iconId) {
-      const iconEntries = Object.entries(iconToNumber);
-      const iconName = iconEntries.find(
-        ([_, value]) => value === goalData.iconId,
-      )?.[0];
-      if (iconName) {
-        setSelectedIcon(iconName);
-      }
+      setSelectedIconId(goalData.iconId);
     }
   }, [goalData]);
 
@@ -187,13 +195,9 @@ export default function GoalPage() {
     setValues((prev) => ({ ...prev, category }));
   };
 
-  const handleDirectCategoryChange = (category: string) => {
-    setValues((prev) => ({ ...prev, directCategory: category }));
-  };
-
-  const handleIconClick = (iconName: string) => {
-    if (selectedIcon === iconName) {
-      setSelectedIcon("");
+  const handleIconClick = (iconId: number) => {
+    if (selectedIconId === iconId) {
+      setSelectedIconId(null);
       return;
     }
 
@@ -201,7 +205,7 @@ export default function GoalPage() {
       return;
     }
 
-    setSelectedIcon(iconName);
+    setSelectedIconId(iconId);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,7 +264,7 @@ export default function GoalPage() {
             ...prev,
             image: croppedImage,
           }));
-          setSelectedIcon("");
+          setSelectedIconId(null);
         };
         img.src = reader.result as string;
       };
@@ -270,7 +274,7 @@ export default function GoalPage() {
 
   const handleImageClick = () => {
     // 이미지 선택 시 기존 선택된 아이콘 취소
-    setSelectedIcon("");
+    setSelectedIconId(null);
     fileInputRef.current?.click();
   };
 
@@ -285,7 +289,6 @@ export default function GoalPage() {
   };
 
   const handleRegister = async () => {
-    // 필수 필드만 체크
     const requiredFields = {
       name: values.name,
       amount: values.amount,
@@ -307,18 +310,10 @@ export default function GoalPage() {
           startDate: values.startDate || selectedDate,
           endDate: values.endDate,
           goalType: categoryToNumber[values.category],
-          // 사용자 정의 이미지가 있으면 iconId는 null로, 없으면 선택된 아이콘의 ID
-          iconId: values.image
-            ? null
-            : selectedIcon
-              ? iconToNumber[selectedIcon]
-              : null,
-          // 사용자 정의 이미지가 있으면 해당 이미지를, 없으면 null
+          iconId: values.image ? null : selectedIconId,
           goalImg: values.image || null,
           connectedAccount: parseInt(values.accountId),
         };
-
-        console.log("Request body:", goalRequest);
 
         const method = isEdit ? "PUT" : "POST";
         const url = isEdit
@@ -335,22 +330,25 @@ export default function GoalPage() {
           body: JSON.stringify(goalRequest),
         });
 
-        console.log("Response status:", response.status);
-        const responseData = await response.json();
-        console.log("Response data:", responseData);
-
         if (!response.ok) {
           throw new Error(`Failed to ${isEdit ? "update" : "register"} goal`);
         }
 
-        modalManagerRef.current?.openModal(isEdit ? "목표수정" : "목표등록");
-        navigate("/calendar");
+        // 응답을 기다린 후 모달을 열고 네비게이트
+        await response.json();
+
+        // 모달 열기를 try 블록 안에서 실행
+        if (modalManagerRef.current) {
+          modalManagerRef.current.openModal("목표수정등록");
+        }
       } catch (error) {
         console.error(
           `Failed to ${isEdit ? "update" : "register"} goal:`,
           error,
         );
-        alert(`목표 ${isEdit ? "수정" : "등록"}에 실패했습니다.`);
+        if (modalManagerRef.current) {
+          modalManagerRef.current.openModal("목표관리실패");
+        }
       }
     } else {
       alert(
@@ -403,7 +401,8 @@ export default function GoalPage() {
     const diffTime = targetDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const dailyAmount = Math.ceil(targetAmount / diffDays);
+    // const dailyAmount = Math.ceil(targetAmount / diffDays);
+    const dailyAmount = targetAmount / diffDays;
 
     return (
       <AnimatedSavingContainer dailyAmount={dailyAmount} days={diffDays} />
@@ -526,129 +525,40 @@ export default function GoalPage() {
           <span>아래에서 원하는 아이콘을 선택해주세요.</span>
         </styled.SelectIconText>
         <styled.IconList>
-          <styled.IconBackground
-            onClick={() => handleIconClick("travel")}
-            $isSelected={selectedIcon === "travel"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconTravel} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("anniversary")}
-            $isSelected={selectedIcon === "anniversary"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconAnniversary} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("shopping")}
-            $isSelected={selectedIcon === "shopping"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconShopping} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("money")}
-            $isSelected={selectedIcon === "money"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconMoney} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("beer")}
-            $isSelected={selectedIcon === "beer"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconBeer} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("coffee")}
-            $isSelected={selectedIcon === "coffee"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconCoffee} />
-          </styled.IconBackground>
+          {icons.slice(0, 6).map((icon) => (
+            <styled.IconBackground
+              key={icon.id}
+              onClick={() => handleIconClick(icon.id)}
+              $isSelected={selectedIconId === icon.id}
+              disabled={!!values.image}
+            >
+              <styled.Icons src={icon.imageUrl} alt={icon.name} />
+            </styled.IconBackground>
+          ))}
         </styled.IconList>
         <styled.IconList>
-          <styled.IconBackground
-            onClick={() => handleIconClick("car")}
-            $isSelected={selectedIcon === "car"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconCar} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("ticket")}
-            $isSelected={selectedIcon === "ticket"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconTicket} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("cake")}
-            $isSelected={selectedIcon === "cake"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconCake} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("lobstar")}
-            $isSelected={selectedIcon === "lobstar"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconLobster} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("beach")}
-            $isSelected={selectedIcon === "beach"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconBeach} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("pet")}
-            $isSelected={selectedIcon === "pet"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconPet} />
-          </styled.IconBackground>
+          {icons.slice(6, 12).map((icon) => (
+            <styled.IconBackground
+              key={icon.id}
+              onClick={() => handleIconClick(icon.id)}
+              $isSelected={selectedIconId === icon.id}
+              disabled={!!values.image}
+            >
+              <styled.Icons src={icon.imageUrl} alt={icon.name} />
+            </styled.IconBackground>
+          ))}
         </styled.IconList>
         <styled.IconList>
-          <styled.IconBackground
-            onClick={() => handleIconClick("party")}
-            $isSelected={selectedIcon === "party"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconParty} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("cruise")}
-            $isSelected={selectedIcon === "cruise"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconCruise} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("amusementpark")}
-            $isSelected={selectedIcon === "amusementpark"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconAmusementPark} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("christmas")}
-            $isSelected={selectedIcon === "christmas"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconChristmas} />
-          </styled.IconBackground>
-          <styled.IconBackground
-            onClick={() => handleIconClick("phone")}
-            $isSelected={selectedIcon === "phone"}
-            disabled={!!values.image}
-          >
-            <styled.Icons src={goalIcons.iconPhone} />
-          </styled.IconBackground>
+          {icons.slice(12).map((icon) => (
+            <styled.IconBackground
+              key={icon.id}
+              onClick={() => handleIconClick(icon.id)}
+              $isSelected={selectedIconId === icon.id}
+              disabled={!!values.image}
+            >
+              <styled.Icons src={icon.imageUrl} alt={icon.name} />
+            </styled.IconBackground>
+          ))}
           <styled.ImageUploadSection>
             <ImageUploadBox
               image={values.image}
@@ -668,7 +578,11 @@ export default function GoalPage() {
         <styled.RegisterButton onClick={handleRegister}>
           {isEdit ? "수정하기" : "등록하기"}
         </styled.RegisterButton>
-        <ModalManager ref={modalManagerRef} />
+        <ModalManager
+          ref={modalManagerRef}
+          isGoalEdit={isEdit}
+          state={isEdit ? "수정" : "등록"}
+        />
       </styled.Container>
     </>
   );

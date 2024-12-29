@@ -2,6 +2,9 @@ import React, { useRef, useState, memo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as styled from "./styles";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
+import ModalManager, {
+  ModalManagerType,
+} from "../../components/Modals/ModalManager";
 
 // Props 타입 정의
 interface AuthDisplayProps {
@@ -208,6 +211,7 @@ const MyPage: React.FC = () => {
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [modifiedFields, setModifiedFields] = useState<UpdateUserData>({});
+  const modalManagerRef = useRef<ModalManagerType>(null);
 
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -222,12 +226,13 @@ const MyPage: React.FC = () => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
     confirmPassword: "",
   });
   const [passwordError, setPasswordError] = useState("");
+
+  const [isInfoEdit, setIsInfoEdit] = useState(0);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -238,12 +243,15 @@ const MyPage: React.FC = () => {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("http://localhost:9090/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -345,6 +353,14 @@ const MyPage: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
+      if (Object.keys(modifiedFields).length === 0) {
+        if (modalManagerRef.current) {
+          setIsInfoEdit(1);
+          modalManagerRef.current.openModal("내정보");
+        }
+        return;
+      }
+
       const token = localStorage.getItem("accessToken");
       if (!token) {
         throw new Error("No authentication token found");
@@ -369,11 +385,6 @@ const MyPage: React.FC = () => {
         updateData.profileImage = profileImage;
       }
 
-      if (Object.keys(updateData).length === 0) {
-        alert("변경된 정보가 없습니다.");
-        return;
-      }
-
       // 비밀번호 검증
       if (updateData.password) {
         if (
@@ -385,15 +396,18 @@ const MyPage: React.FC = () => {
         }
       }
 
-      const response = await fetch(`http://localhost:9090/api/users/me`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: "*/*",
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/me`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
         },
-        body: JSON.stringify(updateData),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update user data");
@@ -407,11 +421,16 @@ const MyPage: React.FC = () => {
       });
       setPasswordError("");
 
-      alert("정보가 성공적으로 업데이트되었습니다.");
-      window.location.reload();
+      if (modalManagerRef.current) {
+        setIsInfoEdit(2);
+        modalManagerRef.current.openModal("내정보");
+      }
     } catch (err) {
       console.error("Error updating user data:", err);
-      alert("정보 업데이트에 실패했습니다.");
+      if (modalManagerRef.current) {
+        setIsInfoEdit(0);
+        modalManagerRef.current.openModal("내정보");
+      }
     }
   };
 
@@ -490,7 +509,7 @@ const MyPage: React.FC = () => {
         throw new Error("No authentication token found");
       }
 
-      await fetch(`http://localhost:9090/api/auth/unsubscribe`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/auth/unsubscribe`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -575,6 +594,7 @@ const MyPage: React.FC = () => {
       <styled.RegisterButton onClick={handleSubmit}>
         변경하기
       </styled.RegisterButton>
+      <ModalManager ref={modalManagerRef} isInfoEdit={isInfoEdit} />
     </styled.Container>
   );
 };

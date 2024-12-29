@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as styled from "./AgreeModalStyles";
 import ModalsBackground from "../Modals/ModalsBackground";
 
@@ -18,6 +18,7 @@ const AgreeModal: React.FC<AgreeModalProps> = ({
   const [isChecked3, setIsChecked3] = useState(false); // 선택 약관
   const [isAllChecked, setIsAllChecked] = useState(false); // 전체 동의
   const [showWarning, setShowWarning] = useState(false); // 필수 약관 미체크 시 경고 메시지
+  const modalContentRef = useRef<HTMLDivElement | null>(null); // 모달 콘텐츠 영역을 참조하는 ref
 
   // 부모의 체크박스가 클릭된 채 모달을 열면 체크박스 선택 되어있게
   useEffect(() => {
@@ -42,6 +43,11 @@ const AgreeModal: React.FC<AgreeModalProps> = ({
     setIsChecked1(newValue);
     setIsChecked2(newValue);
     setIsChecked3(newValue); // 선택 약관도 함께 적용
+
+    // "약관 전체 동의" 클릭 시 스크롤을 모달 내용 부분으로 이동
+    if (modalContentRef.current) {
+      modalContentRef.current.scrollTo({ top: 400, behavior: "smooth" });
+    }
   };
 
   const handleSubmit = () => {
@@ -59,7 +65,7 @@ const AgreeModal: React.FC<AgreeModalProps> = ({
         ✖
       </styled.CloseButton>
 
-      <styled.ModalContainer>
+      <styled.ModalContainer ref={modalContentRef}>
         <styled.ModalTitle>서비스 이용 동의</styled.ModalTitle>
 
         {/* 전체 약관 동의 */}

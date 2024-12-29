@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate import
+import { Link, useNavigate } from "react-router-dom";
 
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
 import LockPasswordIcon from "../../icons/lock-password-stroke-rounded.svg";
 import SmartphoneIcon from "../../icons/smart-phone-01-stroke-rounded.svg";
 import AuthInput from "../../components/AuthInput";
-import CalendarIcon from "../../images/signup_calendar.png";
+
 import ModalManager, {
   ModalManagerType,
 } from "../../components/Modals/ModalManager";
@@ -21,10 +21,9 @@ import {
   FooterParagraph,
   AgreementCheckWrapper,
 } from "./styles";
-import { off } from "process";
 
 export default function SignupPage() {
-  const navigate = useNavigate(); // useNavigate hook
+  const navigate = useNavigate();
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const idInputRef = useRef<HTMLInputElement | null>(null);
   const emailInputRef = useRef<HTMLInputElement | null>(null);
@@ -46,7 +45,6 @@ export default function SignupPage() {
     const checked = e.target.checked;
     if (checked) {
       const isConfirmed = window.confirm("이용약관을 읽고 진행해주세요.");
-
       if (isConfirmed) {
         handleOpenModal();
       } else {
@@ -59,14 +57,14 @@ export default function SignupPage() {
   };
 
   const today = new Date();
-  const maxDate = today.toISOString().split("T")[0]; // 오늘
+  const maxDate = today.toISOString().split("T")[0];
   const minDate = new Date(
     today.getFullYear() - 100,
     today.getMonth(),
     today.getDate(),
   )
     .toISOString()
-    .split("T")[0]; // 100년 전
+    .split("T")[0];
 
   const handlePasswordChange = () => {
     const password = passwordInputRef.current?.value;
@@ -105,7 +103,7 @@ export default function SignupPage() {
       });
 
       const response = await fetch(
-        `http://localhost:9090/api/auth/signup?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/signup?${params.toString()}`,
         {
           method: "POST",
           headers: {
@@ -128,6 +126,81 @@ export default function SignupPage() {
     }
   };
 
+  const handleIdCheck = async () => {
+    const identifier = idInputRef.current?.value?.trim();
+
+    if (!identifier) {
+      alert("아이디를 입력해주세요.");
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams({ identifier });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/auth/check-identifier?${params.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: null, // 빈 body가 백엔드와 동일한 요청 형식을 유지함
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("아이디 중복 확인 실패");
+      }
+
+      const data = await response.json();
+
+      if (data.exists) {
+        alert("이미 사용 중인 아이디입니다.");
+      } else {
+        alert("사용 가능한 아이디입니다.");
+      }
+    } catch (error) {
+      alert("아이디 중복 확인 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleEmailCheck = async () => {
+    const email = emailInputRef.current?.value?.trim();
+
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    }
+
+    try {
+      // URLSearchParams를 사용해 URL에 쿼리 파라미터 추가
+      const params = new URLSearchParams({ email });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/auth/check-email?${params.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: null, // Swagger와 동일하게 빈 body 설정
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("이메일 중복 확인 실패");
+      }
+
+      const data = await response.json();
+
+      if (data.exists) {
+        alert("이미 사용 중인 이메일입니다.");
+      } else {
+        alert("사용 가능한 이메일입니다.");
+      }
+    } catch (error) {
+      alert("이메일 중복 확인 중 오류가 발생했습니다.");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -138,7 +211,6 @@ export default function SignupPage() {
     const confirmPassword = passwordConfirmRef.current?.value?.trim();
     const birth = birthInputRef.current?.value;
 
-    // 입력값 검증
     if (
       !name ||
       !identifier ||
@@ -161,7 +233,6 @@ export default function SignupPage() {
       return;
     }
 
-    // API 호출
     setIsLoading(true);
     try {
       await handleSignup({
@@ -184,26 +255,6 @@ export default function SignupPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleEmailCheck = () => {
-    const email = emailInputRef.current?.value?.trim();
-    if (!email) {
-      alert("이메일을 입력해주세요.");
-      return;
-    }
-    // 여기에 이메일 중복 확인 로직 구현
-    alert("이메일 중복 확인이 필요합니다.");
-  };
-
-  const handleIdCheck = () => {
-    const id = idInputRef.current?.value?.trim();
-    if (!id) {
-      alert("아이디를 입력해주세요.");
-      return;
-    }
-    // 여기에 아이디 중복 확인 로직 구현
-    alert("아이디 중복 확인이 필요합니다.");
   };
 
   return (
@@ -336,7 +387,7 @@ export default function SignupPage() {
               disabled={isLoading}
               style={{
                 cursor: isLoading ? "not-allowed" : "pointer",
-                opacity: isLoading ? 0.7 : 1,
+                // opacity: isLoading ? 0.7 : 1,
               }}
             >
               {isLoading ? "처리중..." : "회원가입"}

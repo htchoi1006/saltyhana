@@ -49,6 +49,21 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
       image:
         "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_6.png",
     },
+    {
+      color: "#FFEDFC",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_7.png",
+    },
+    {
+      color: "#F6EDFF",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_8.png",
+    },
+    {
+      color: "#FFF7ED",
+      image:
+        "https://saltyhana-image-bucket.s3.ap-northeast-2.amazonaws.com/icon/card_9.png",
+    },
   ];
 
   const settings = {
@@ -71,9 +86,9 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
     ],
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (productLink: string) => {
     if (modalManagerRef.current) {
-      modalManagerRef.current.openModal("상담선택"); // 상담 선택 모달 열기
+      modalManagerRef.current.openModal("상담선택", productLink); // 링크 전달
     }
   };
 
@@ -82,7 +97,11 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
       <ModalManager ref={modalManagerRef} />
       <StyledSlider {...settings}>
         {products.map((product, index) => (
-          <div key={index} onClick={handleCardClick}>
+          // <div key={index} onClick={handleCardClick}>
+          <div
+            key={index}
+            onClick={() => handleCardClick(product.productLink || "")}
+          >
             <ProductCard
               product={product}
               color={fixedStyles[index]?.color}
