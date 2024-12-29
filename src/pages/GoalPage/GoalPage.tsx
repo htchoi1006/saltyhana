@@ -401,7 +401,8 @@ export default function GoalPage() {
     const diffTime = targetDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const dailyAmount = Math.ceil(targetAmount / diffDays);
+    // const dailyAmount = Math.ceil(targetAmount / diffDays);
+    const dailyAmount = targetAmount / diffDays;
 
     return (
       <AnimatedSavingContainer dailyAmount={dailyAmount} days={diffDays} />
