@@ -71,7 +71,7 @@ export default function GoalList(props: GoalListProps) {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/calendar/goals/${selectedGoalId}`,
+        `${process.env.REACT_APP_API_URL}/calendar/goals/${selectedGoalId}`,
         {
           method: "DELETE",
           headers: {
@@ -111,12 +111,15 @@ export default function GoalList(props: GoalListProps) {
   const getIconId = (imageUrl: string) => {
     const fetchIcons = async (imageUrl: string) => {
       try {
-        const response = await fetch("http://localhost:9090/api/icons/goal", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/icons/goal`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch icons");
@@ -143,7 +146,7 @@ export default function GoalList(props: GoalListProps) {
     try {
       // 전체 목표 리스트 조회
       const response = await fetch(
-        "http://localhost:9090/api/goals?activeOnly=false",
+        `${process.env.REACT_APP_API_URL}/goals?activeOnly=false`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
