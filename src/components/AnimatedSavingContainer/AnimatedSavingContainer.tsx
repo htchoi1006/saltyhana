@@ -10,15 +10,17 @@ export default function AnimatedSavingContainer(
 ) {
   const { dailyAmount, days } = props;
 
+  const roundedDailyAmount = Math.round(dailyAmount);
+
   const [displayAmount, setDisplayAmount] = useState<number[]>([]);
   const [currentDays, setCurrentDays] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    if (dailyAmount && days) {
+    if (roundedDailyAmount && days) {
       setIsAnimating(true);
       // 금액을 자릿수별로 분리
-      const amountStr = dailyAmount.toString();
+      const amountStr = roundedDailyAmount.toString();
       const initialDigits = new Array(amountStr.length).fill(0);
       setDisplayAmount(initialDigits);
 
@@ -51,7 +53,7 @@ export default function AnimatedSavingContainer(
 
       return () => clearInterval(interval);
     }
-  }, [dailyAmount, days]);
+  }, [roundedDailyAmount, days]);
 
   const formatAmount = (digits: number[]) => {
     if (digits.length === 0) return "0";
@@ -61,12 +63,12 @@ export default function AnimatedSavingContainer(
 
   const getFormattedAmount = () => {
     if (!isAnimating) {
-      return dailyAmount.toLocaleString();
+      return roundedDailyAmount.toLocaleString();
     }
     return formatAmount(displayAmount);
   };
 
-  if (!dailyAmount || !days) return null;
+  if (!roundedDailyAmount || !days) return null;
 
   return (
     <span style={{ fontSize: "20px" }}>
