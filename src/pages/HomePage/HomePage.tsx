@@ -124,9 +124,9 @@ export default function HomePage() {
     (data) => data.goal && !data.goal.ended,
   );
 
-  const weekDays: WeekDayType[] = dashBoardData[currentIndex]?.weekdayCalendar
+  const weekDays: WeekDayType[] = activeGoals[currentIndex]?.weekdayCalendar
     ?.weekday
-    ? dashBoardData[currentIndex]?.weekdayCalendar?.weekday.map((day) => ({
+    ? activeGoals[currentIndex]?.weekdayCalendar?.weekday.map((day) => ({
         date: new Date(day.date),
         isAchieve: day.isAchieve,
       }))
@@ -135,7 +135,6 @@ export default function HomePage() {
         .map((_, index) => {
           const date = new Date();
           date.setDate(date.getDate() - (10 - index));
-
           return {
             date,
             isAchieve: false,

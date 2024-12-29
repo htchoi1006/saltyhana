@@ -57,7 +57,8 @@ export default function ChatModal(props: ModalsProps) {
   const fetchMessages = async () => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL || "";
-      const response = await axios.get(`${apiUrl.split("/api")[0]}/chat/1`);
+      let socketUrl = apiUrl.split("//")[1].split("/api")[0];
+      const response = await axios.get(`http://${socketUrl}/chat/1`);
       setMessages(response.data);
     } catch (error) {
       console.error("Failed to fetch chat messages:", error);
