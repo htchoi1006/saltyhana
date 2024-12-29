@@ -25,7 +25,7 @@ const TestPage: React.FC = () => {
   const fetchConsumptionTestData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/test/${currentQuestionIndex + 1}`,
+        `${process.env.REACT_APP_API_URL}/test/${currentQuestionIndex + 1}`,
         {
           method: "GET",
           headers: {
@@ -61,14 +61,17 @@ const TestPage: React.FC = () => {
         answerNum: answer ?? 0, // 값이 null이면 0으로 대체
       }));
 
-      const response = await fetch(`http://localhost:9090/api/test/result`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/test/result`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(testResult),
         },
-        body: JSON.stringify(testResult),
-      });
+      );
 
       if (!response.ok) {
         // 서버에서 보낸 에러 메시지를 파싱
@@ -87,13 +90,16 @@ const TestPage: React.FC = () => {
 
   const fetchTestResult = async () => {
     try {
-      const response = await fetch(`http://localhost:9090/api/test/result`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/test/result`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         // 서버에서 보낸 에러 메시지를 파싱
@@ -117,7 +123,7 @@ const TestPage: React.FC = () => {
   const fetchRecommendedProducts = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/products/recommend`,
+        `${process.env.REACT_APP_API_URL}/products/recommend`,
         {
           method: "GET",
           headers: {

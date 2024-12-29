@@ -44,7 +44,7 @@ export default function AssetsPage() {
   const fetchAssetDataApi = async () => {
     try {
       const response = await fetch(
-        `http://localhost:9090/api/accounts/transfers`,
+        `${process.env.REACT_APP_API_URL}/accounts/transfers`,
         {
           method: "GET",
           headers: {

@@ -243,12 +243,15 @@ const MyPage: React.FC = () => {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("http://localhost:9090/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
@@ -393,15 +396,18 @@ const MyPage: React.FC = () => {
         }
       }
 
-      const response = await fetch(`http://localhost:9090/api/users/me`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          accept: "*/*",
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/users/me`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updateData),
         },
-        body: JSON.stringify(updateData),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update user data");
@@ -503,7 +509,7 @@ const MyPage: React.FC = () => {
         throw new Error("No authentication token found");
       }
 
-      await fetch(`http://localhost:9090/api/auth/unsubscribe`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/auth/unsubscribe`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -35,7 +35,8 @@ export default function ChatModal(props: ModalsProps) {
   };
 
   const connect = () => {
-    const socket = new WebSocket("ws://localhost:9090/ws");
+    const apiUrl = process.env.REACT_APP_API_URL || "";
+    const socket = new WebSocket(`ws://${apiUrl.split("/api")[0]}/ws`);
     stompClient.current = Stomp.over(socket);
 
     stompClient.current.connect({}, () => {
@@ -54,7 +55,8 @@ export default function ChatModal(props: ModalsProps) {
 
   const fetchMessages = async () => {
     try {
-      const response = await axios.get("http://localhost:9090/chat/1");
+      const apiUrl = process.env.REACT_APP_API_URL || "";
+      const response = await axios.get(`ws://${apiUrl.split("/api")[0]}/ws`);
       setMessages(response.data);
     } catch (error) {
       console.error("Failed to fetch chat messages:", error);

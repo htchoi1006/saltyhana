@@ -41,7 +41,7 @@ interface ProductData {
 const fetchRecommendedProducts = async () => {
   try {
     const response = await fetch(
-      `http://localhost:9090/api/products/recommend`,
+      `${process.env.REACT_APP_API_URL}/products/recommend`,
       {
         method: "GET",
         headers: {
