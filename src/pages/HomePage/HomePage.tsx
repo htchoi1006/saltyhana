@@ -68,7 +68,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch("http://localhost:9090/api/home", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/home`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -89,12 +89,15 @@ export default function HomePage() {
 
     const fetchEndedGoals = async () => {
       try {
-        const response = await fetch("http://localhost:9090/api/goals/end", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/goals/end`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch accounts");

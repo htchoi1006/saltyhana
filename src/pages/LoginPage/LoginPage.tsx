@@ -8,7 +8,7 @@ import {
   FormWrapper,
   InputsWrapper,
   StyledButton,
-  ForgotPasswordButton
+  ForgotPasswordButton,
 } from "../SignupPage/styles";
 import authImage from "../../images/AuthImg.png";
 import EmailIcon from "../../icons/mail-02-stroke-rounded.svg";
@@ -32,7 +32,7 @@ export default function LoginPage() {
       }
 
       const response = await fetch(
-        "http://localhost:9090/api/users/me/simple",
+        `${process.env.REACT_APP_API_URL}/users/me/simple`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ export default function LoginPage() {
       });
 
       const response = await fetch(
-        `http://localhost:9090/api/auth/login?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/login?${params.toString()}`,
         {
           method: "POST",
           headers: {
@@ -109,7 +109,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:9090/api/password/change?email=${email}`,
+        `${process.env.REACT_APP_API_URL}/password/change?email=${email}`,
         {
           method: "GET",
           headers: {
@@ -228,7 +228,7 @@ export default function LoginPage() {
                   marginTop: "45px",
                   cursor: isLoading ? "not-allowed" : "pointer",
                   opacity: 1, // 버튼이 항상 보이도록 설정
-                  animation: "none"
+                  animation: "none",
                 }}
                 disabled={isLoading}
               >
@@ -275,8 +275,8 @@ export default function LoginPage() {
                   }
                   ref={passwordInputRef}
                 />
-              </InputsWrapper>              
-              
+              </InputsWrapper>
+
               <div
                 style={{
                   display: "flex",
@@ -303,7 +303,7 @@ export default function LoginPage() {
               >
                 <span>{isLoading ? "로그인 중..." : "로그인"}</span>
               </StyledButton>
-              
+
               <Link
                 to="/signup"
                 style={{
@@ -311,7 +311,8 @@ export default function LoginPage() {
                   textDecoration: "none",
                 }}
               >
-                <StyledButton type="button"
+                <StyledButton
+                  type="button"
                   style={{
                     animationDelay: "1.1s", // 회원가입 버튼에 1.2초 딜레이
                   }}
@@ -319,7 +320,6 @@ export default function LoginPage() {
                   <span>회원가입</span>
                 </StyledButton>
               </Link>
-              
             </form>
           )}
         </Paper>

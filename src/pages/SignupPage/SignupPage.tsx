@@ -61,7 +61,7 @@ export default function SignupPage() {
   const minDate = new Date(
     today.getFullYear() - 100,
     today.getMonth(),
-    today.getDate()
+    today.getDate(),
   )
     .toISOString()
     .split("T")[0];
@@ -103,13 +103,13 @@ export default function SignupPage() {
       });
 
       const response = await fetch(
-        `http://localhost:9090/api/auth/signup?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/signup?${params.toString()}`,
         {
           method: "POST",
           headers: {
             accept: "*/*",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -137,14 +137,14 @@ export default function SignupPage() {
     try {
       const params = new URLSearchParams({ identifier });
       const response = await fetch(
-        `http://localhost:9090/api/auth/check-identifier?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/check-identifier?${params.toString()}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: null, // 빈 body가 백엔드와 동일한 요청 형식을 유지함
-        }
+        },
       );
 
       if (!response.ok) {
@@ -175,14 +175,14 @@ export default function SignupPage() {
       // URLSearchParams를 사용해 URL에 쿼리 파라미터 추가
       const params = new URLSearchParams({ email });
       const response = await fetch(
-        `http://localhost:9090/api/auth/check-email?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/check-email?${params.toString()}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: null, // Swagger와 동일하게 빈 body 설정
-        }
+        },
       );
 
       if (!response.ok) {

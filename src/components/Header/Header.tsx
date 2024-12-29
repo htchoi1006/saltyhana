@@ -52,12 +52,15 @@ export default function Header() {
           return;
         }
 
-        const response = await fetch("http://localhost:9090/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("사용자 데이터 가져오기 실패");

@@ -23,7 +23,7 @@ export const useTokenRefresh = () => {
       });
 
       const response = await fetch(
-        `http://localhost:9090/api/auth/refresh?${params.toString()}`,
+        `${process.env.REACT_APP_API_URL}/auth/refresh?${params.toString()}`,
         {
           method: "POST",
           headers: {
