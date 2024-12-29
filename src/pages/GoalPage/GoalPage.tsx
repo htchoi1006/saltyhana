@@ -139,12 +139,15 @@ export default function GoalPage() {
   useEffect(() => {
     const fetchIcons = async () => {
       try {
-        const response = await fetch("http://localhost:9090/api/icons/goal", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/icons/goal`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch icons");
@@ -170,12 +173,15 @@ export default function GoalPage() {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await fetch("http://localhost:9090/api/accounts", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            accept: "*/*",
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/accounts`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              accept: "*/*",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch accounts");
@@ -317,8 +323,8 @@ export default function GoalPage() {
 
         const method = isEdit ? "PUT" : "POST";
         const url = isEdit
-          ? `http://localhost:9090/api/goals/${goalId}`
-          : "http://localhost:9090/api/goals";
+          ? `${process.env.REACT_APP_API_URL}/goals/${goalId}`
+          : `${process.env.REACT_APP_API_URL}/goals`;
 
         const response = await fetch(url, {
           method: method,
