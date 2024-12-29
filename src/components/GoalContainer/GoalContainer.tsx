@@ -33,6 +33,7 @@ interface GoalContainerProps {
   currentMoney: number | 0;
   totalMoney: number | 0;
   percentage: number | 0;
+  ended: boolean | undefined;
 }
 
 const GoalProgressContainer = (props: GoalContainerProps) => {
@@ -181,6 +182,7 @@ export default function GoalContainer(props: GoalContainerProps) {
     userName,
     iconImage,
     customImage,
+    ended,
   } = props;
 
   return goal == null ? (
@@ -195,6 +197,7 @@ export default function GoalContainer(props: GoalContainerProps) {
       userName={userName}
       iconImage={iconImage}
       customImage={customImage}
+      ended={ended}
     />
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { PageContainer } from "./styles";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import WeekdayCalendar from "../../components/WeekdayCalendar/WeekdayCalendar";
@@ -35,6 +35,7 @@ interface DashBoardResponseDTO {
     currentMoney: number;
     totalMoney: number;
     percentage: number;
+    ended: boolean;
   } | null;
   weekdayCalendar: {
     weekday: {
@@ -119,6 +120,10 @@ export default function HomePage() {
     return <LoadingSpinner />;
   }
 
+  const activeGoals = dashBoardData.filter(
+    (data) => data.goal && !data.goal.ended,
+  );
+
   const weekDays: WeekDayType[] = dashBoardData[currentIndex]?.weekdayCalendar
     ?.weekday
     ? dashBoardData[currentIndex]?.weekdayCalendar?.weekday.map((day) => ({
@@ -146,6 +151,7 @@ export default function HomePage() {
       productLink: product.productLink,
       color: "#FFFFFF",
     })) || [];
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
     const scrollPosition = container.scrollLeft;
@@ -168,23 +174,25 @@ export default function HomePage() {
     <PageContainer>
       <CarouselContainer>
         <CarouselWrapper className="carousel-container" onScroll={handleScroll}>
-          {dashBoardData.map((data, index) => (
-            <div className="carousel-item" key={data?.goal?.id || index}>
+          {activeGoals.map((data, index) => (
+            <div className="carousel-item" key={data.goal?.id || index}>
               <GoalContainer
-                goal={data?.goal?.title || null}
-                goalPeriod={data?.goal?.goalPeriod || null}
-                iconImage={data?.goal?.iconImage || undefined}
-                customImage={data?.goal?.customImage || undefined}
-                percentage={data?.goal?.percentage || 0}
-                totalMoney={data?.goal?.totalMoney || 0}
-                currentMoney={data?.goal?.currentMoney || 0}
-                userName={data?.goal?.userName || null}
+                goal={data.goal?.title || null}
+                goalPeriod={data.goal?.goalPeriod || null}
+                iconImage={data.goal?.iconImage || undefined}
+                customImage={data.goal?.customImage || undefined}
+                percentage={data.goal?.percentage || 0}
+                totalMoney={data.goal?.totalMoney || 0}
+                currentMoney={data.goal?.currentMoney || 0}
+                userName={data.goal?.userName || null}
+                ended={data.goal?.ended}
               />
             </div>
           ))}
         </CarouselWrapper>
+
         <NavigationDots>
-          {dashBoardData.map((_, index) => (
+          {activeGoals.map((_, index) => (
             <Dot
               key={index}
               active={currentIndex === index}
@@ -202,6 +210,7 @@ export default function HomePage() {
           ))}
         </NavigationDots>
       </CarouselContainer>
+
       <WeekdayCalendar dates={weekDays} />
       <ProductList products={products} />
       {currentModalIndex !== null && (
