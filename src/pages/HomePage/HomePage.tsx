@@ -120,9 +120,13 @@ export default function HomePage() {
     return <LoadingSpinner />;
   }
 
-  const activeGoals = dashBoardData.filter(
+  let activeGoals = dashBoardData.filter(
     (data) => data.goal && !data.goal.ended,
   );
+
+  if (activeGoals.length < 1) {
+    activeGoals = dashBoardData;
+  }
 
   const weekDays: WeekDayType[] = activeGoals[currentIndex]?.weekdayCalendar
     ?.weekday
